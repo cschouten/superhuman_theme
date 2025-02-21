@@ -1,4 +1,28 @@
 @charset "UTF-8";
+
+/***** CUSTOM FONTS *****/
+@font-face {
+    font-family: "Adelle Sans";
+    font-weight: 400;
+    src: url("https://superhuman.com/fonts/AdelleSans-Regular.otf") format("opentype");
+  }
+  
+@font-face {
+    font-family: "Adelle Sans";
+    font-weight: 600;
+    src: url("https://superhuman.com/fonts/AdelleSans-SemiBold.otf") format("opentype");
+}
+
+@font-face {
+    font-family: "Adelle Sans Semibold";
+    src: url("https://superhuman.com/fonts/AdelleSans-SemiBold.otf") format("opentype");
+}
+
+@font-face {
+    font-family: "Operator Mono";
+    src: url("https://superhuman.com/fonts/OperatorMono-Book.otf") format("opentype");
+}
+
 /***** Normalize.css *****/
 /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
 html {
