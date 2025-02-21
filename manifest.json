@@ -1,7 +1,7 @@
 {
   "name": "Superhuman",
   "author": "Zendesk",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "api_version": 4,
   "default_locale": "en-us",
   "settings": [
