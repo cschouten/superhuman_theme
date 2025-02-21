@@ -4,23 +4,23 @@
 @font-face {
     font-family: "Adelle Sans";
     font-weight: 400;
-    src: url($assets-fonts-adellesans-regular-otf);
+    src: $assets-fonts-adellesans-regular-otf;
   }
   
 @font-face {
     font-family: "Adelle Sans";
     font-weight: 600;
-    src: url($assets-fonts-adellesans-semibold-otf);
+    src: $assets-fonts-adellesans-semibold-otf;
 }
 
 @font-face {
     font-family: "Adelle Sans Semibold";
-    src: url($assets-fonts-adellesans-semibold-otf);
+    src: $assets-fonts-adellesans-semibold-otf;
 }
 
 @font-face {
     font-family: "Operator Mono";
-    src: url($assets-fonts-operatormono-book-otf);
+    src: $assets-fonts-operatormono-book-otf;
 }
 
 /***** Normalize.css *****/
