@@ -4,23 +4,23 @@
 @font-face {
     font-family: "Adelle Sans";
     font-weight: 400;
-    src: url("https://superhuman.com/fonts/AdelleSans-Regular.otf") format("opentype");
+    src: url("../assets/fonts/AdelleSans-Regular.otf") format("opentype");
   }
   
 @font-face {
     font-family: "Adelle Sans";
     font-weight: 600;
-    src: url("https://superhuman.com/fonts/AdelleSans-SemiBold.otf") format("opentype");
+    src: url("../assets/fonts/AdelleSans-SemiBold.otf") format("opentype");
 }
 
 @font-face {
     font-family: "Adelle Sans Semibold";
-    src: url("https://superhuman.com/fonts/AdelleSans-SemiBold.otf") format("opentype");
+    src: url("../assets/fonts/AdelleSans-SemiBold.otf") format("opentype");
 }
 
 @font-face {
     font-family: "Operator Mono";
-    src: url("https://superhuman.com/fonts/OperatorMono-Book.otf") format("opentype");
+    src: url("../assets/fonts/OperatorMono-Book.otf") format("opentype");
 }
 
 /***** Normalize.css *****/
