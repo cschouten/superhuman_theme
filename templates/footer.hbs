@@ -1,25 +1,66 @@
-<footer class="footer">
-  <div class="footer-inner">
-    {{#link 'help_center'}}{{help_center.name}}{{/link}}
-
-    <div class="footer-language-selector">
-      {{#if alternative_locales}}
-        <div class="dropdown language-selector">
-          <button class="dropdown-toggle" aria-haspopup="true">
-            {{current_locale.name}}
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" focusable="false" viewBox="0 0 12 12" class="dropdown-chevron-icon">
-              <path fill="none" stroke="currentColor" stroke-linecap="round" d="M3 4.5l2.6 2.6c.2.2.5.2.7 0L9 4.5"/>
-            </svg>
-          </button>
-          <span class="dropdown-menu dropdown-menu-end" role="menu">
-            {{#each alternative_locales}}
-              <a href="{{url}}" dir="{{direction}}" rel="nofollow" role="menuitem">
-                {{name}}
-              </a>
-            {{/each}}
-          </span>
+<footer>
+    <div class="footerContent">
+        <div class="footerTop">
+            <div>
+                <h2 class="tagline wide">The Fastest Email<br>Experience Ever Made</h2>
+                <h2 class="tagline narrow">The Fastest<br>Email Experience<br>Ever Made</h2>
+            </div>
+            <div class="footerLinks">
+                <div class="linkColumn">
+                    <p class="linkColumnTitle">Company</p>
+                    <ul>
+                        <li><a href="https://blog.superhuman.com" rel="noopener">Blog</a></li>
+                        <li><a href="https://superhuman.com/jobs" rel="noopener">Careers</a></li>
+                        <li><a href="https://superhuman.com/love" rel="noopener">Love <img class="heartEmoji"
+                                    src="https://storage.googleapis.com/superhuman.com/help_center/heart.svg"
+                                    alt="heart emoji"></a></li>
+                    </ul>
+                </div>
+                <div class="linkColumn">
+                    <p class="linkColumnTitle">Product</p>
+                    <ul>
+                        <li><a href="https://superhuman.com/pricing" rel="noopener">Pricing</a></li>
+                        <li><a href="https://superhuman.com/download" rel="noopener">Download</a></li>
+                        <li><a href="https://superhuman.com/ai" rel="noopener">AI</a></li>
+                        <li><a href="https://superhuman.com/sales" rel="noopener">Sales</a></li>
+                        <li><a href="https://superhuman.com/enterprise" rel="noopener">Enterprise</a></li>
+                        <li><a href="https://superhuman.com/outlook-alternative" rel="noopener">Outlook</a></li>
+                    </ul>
+                </div>
+                <div class="linkColumn">
+                    <p class="linkColumnTitle">Support</p>
+                    <ul>
+                        <li><a href="//help.superhuman.com/" rel="noopener">Help Center</a></li>
+                        <li><a href="https://superhuman.com/contact" rel="noopener">Contact Us</a></li>
+                        <li><a href="https://youtube.com/playlist?list=PLqlCA7LOaqbwGsT4QSvf0t4B5nKMEut3V"
+                                rel="noopener">Tutorials</a></li>
+                    </ul>
+                </div>
+                <div class="linkColumn">
+                    <p class="linkColumnTitle">Legal</p>
+                    <ul>
+                        <li><a href="https://superhuman.com/privacy" rel="noopener">Privacy</a></li>
+                        <li><a href="https://superhuman.com/terms" rel="noopener">Terms</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
-      {{/if}}
+        <div class="footerDivider"></div>
+        <div class="footerBottom">
+            <div class="footerLogotype"><a href="https://superhuman.com/"><img class="large" alt="Superhuman logotype"
+                        src="https://storage.googleapis.com/superhuman.com/images/logotype-large.svg"><img
+                        class="medium" alt="Superhuman logotype"
+                        src="https://storage.googleapis.com/superhuman.com/images/logotype-medium.svg"><img
+                        class="small" alt="Superhuman logotype"
+                        src="https://storage.googleapis.com/superhuman.com/images/logotype-small.svg"></a></div>
+            <div class="socialLinks"><a href="https://twitter.com/superhuman"><img alt="Twitter"
+                        src="https://storage.googleapis.com/superhuman.com/images/twitter-logo.svg"></a><a
+                    href="https://linkedin.com/company/superhuman-co/"><img alt="LinkedIn"
+                        src="https://storage.googleapis.com/superhuman.com/images/linkedin-logo.svg"></a><a
+                    href="https://tiktok.com/@superhumanco"><img alt="TikTok"
+                        src="https://storage.googleapis.com/superhuman.com/images/tiktok-logo.svg"></a><a
+                    href="https://youtube.com/@SuperhumanCo"><img alt="YouTube"
+                        src="https://storage.googleapis.com/superhuman.com/images/youtube-logo.svg"></a></div>
+        </div>
     </div>
-  </div>
 </footer>
