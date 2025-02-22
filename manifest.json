@@ -136,6 +136,13 @@
           "label": "logo_label"
         },
         {
+          "identifier": "show_brand_name",
+          "type": "checkbox",
+          "description": "show_brand_name_description",
+          "label": "show_brand_name_label",
+          "value": false
+        },
+        {
           "identifier": "favicon",
           "type": "file",
           "description": "favicon_description",
