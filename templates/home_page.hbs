@@ -15,7 +15,7 @@
           {{#if ../has_multiple_categories}}
             <li class="blocks-item">
               <a href='{{url}}' class="blocks-item-link">
-                <div class="category-icon {{name_to_css_class name}}"></div>
+                <div class="category-icon" data-category="{{name}}"></div>
                 <div class="blocks-item-content">
                   <span class="blocks-item-title">{{name}}</span>
                   <span class="blocks-item-description">{{excerpt description}}</span>
@@ -26,7 +26,7 @@
             {{#each sections}}
               <li class="blocks-item">
                 <a href='{{url}}' class="blocks-item-link">
-                  <div class="category-icon {{name_to_css_class name}}"></div>
+                  <div class="category-icon" data-category="{{name}}"></div>
                   <div class="blocks-item-content">
                     <span class="blocks-item-title">{{name}}</span>
                     <span class="blocks-item-description">{{excerpt description}}</span>
