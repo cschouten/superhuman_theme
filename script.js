@@ -703,7 +703,7 @@
           'Level Up': 'rocket',
           'Supercharge Your Team': 'lightning',
           'Account Setup': 'post-box-usa',
-          'Billing': 'credit-card', 
+          'Billing': 'credit-card',
           'Support': 'heart',
           'Features': 'magnifying-glass',
           'Integrations': 'handshake',
@@ -717,7 +717,8 @@
           const categoryName = icon.getAttribute('data-category');
           if (categoryName && iconMapping[categoryName]) {
             const img = document.createElement('img');
-            img.src = `{{asset 'settings/'}}${iconMapping[categoryName]}.svg`;
+            // Use the correct path format - this is important!
+            img.src = `{{asset "settings/${iconMapping[categoryName]}.svg"}}`;
             img.alt = `${categoryName} icon`;
             icon.appendChild(img);
           }
