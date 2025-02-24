@@ -697,51 +697,31 @@
     }
   
     function addCategoryIcons() {
-      // Icon mapping for categories
-      const iconMapping = {
-        'Get Started': 'lightbulb',
-        'Level Up': 'rocket',
-        'Supercharge Your Team': 'lightning',
-        'Account Setup': 'post-box-usa',
-        'Billing': 'credit-card',
-        'Support': 'heart',
-        'Features': 'magnifying-glass',
-        'Integrations': 'handshake',
-        'Use Cases': 'sparkles'
-      };
-  
-      // Base URL for the SVG icons
-      const baseURL = 'https://storage.googleapis.com/superhuman.com/help_center/';
+        // Icon mapping for categories
+        const iconMapping = {
+          'Get Started': 'lightbulb',
+          'Level Up': 'rocket',
+          'Supercharge Your Team': 'lightning',
+          'Account Setup': 'post-box-usa',
+          'Billing': 'credit-card', 
+          'Support': 'heart',
+          'Features': 'magnifying-glass',
+          'Integrations': 'handshake',
+          'Use Cases': 'sparkles'
+        };
       
-      // Find all category blocks on the home page
-      const categoryItems = document.querySelectorAll('.blocks-item');
-      
-      categoryItems.forEach(item => {
-        const titleElement = item.querySelector('.blocks-item-title');
-        if (titleElement) {
-          const categoryName = titleElement.textContent.trim();
-          const iconName = iconMapping[categoryName] || 'sparkles'; // Default to sparkles if not found
-          
-          // Create the icon container if it doesn't exist
-          if (!item.querySelector('.category-icon')) {
-            const iconContainer = document.createElement('div');
-            iconContainer.className = 'category-icon';
-            
-            // Create the image element
+        // Find all category icons
+        const categoryIcons = document.querySelectorAll('.category-icon');
+        
+        categoryIcons.forEach(icon => {
+          const categoryName = icon.getAttribute('data-category');
+          if (categoryName && iconMapping[categoryName]) {
             const img = document.createElement('img');
-            img.src = `${baseURL}${iconName}.svg`;
+            img.src = `{{asset 'settings/'}}${iconMapping[categoryName]}.svg`;
             img.alt = `${categoryName} icon`;
-            
-            iconContainer.appendChild(img);
-            
-            // Insert at the beginning of the link
-            const link = item.querySelector('a');
-            if (link) {
-              link.insertBefore(iconContainer, link.firstChild);
-            }
+            icon.appendChild(img);
           }
-        }
-      });
-    }
+        });
+      }
   
   })();
