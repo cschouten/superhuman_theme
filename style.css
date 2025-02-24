@@ -239,9 +239,10 @@ h1 {
 }
 
 h2 {
-  font-size: 22px;
-}
-
+    font-family: "Adelle Sans Semibold";
+    font-size: 48px;
+    line-height: 64px;
+  }
 h3 {
   font-size: 18px;
   font-weight: 600;
