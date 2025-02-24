@@ -696,35 +696,35 @@
       }
     }
   
-    function addCategoryIcons() {
-        // Icon mapping for categories
-        const iconMapping = {
-          'Get Started': 'lightbulb',
-          'Level Up': 'rocket',
-          'Supercharge Your Team': 'lightning',
-          'Account Setup': 'post-box-usa',
-          'Billing': 'credit-card',
-          'Support': 'heart',
-          'Features': 'magnifying-glass',
-          'Integrations': 'handshake',
-          'Use Cases': 'sparkles'
-        };
+    // function addCategoryIcons() {
+    //     // Icon mapping for categories
+    //     const iconMapping = {
+    //       'Get Started': 'lightbulb',
+    //       'Level Up': 'rocket',
+    //       'Supercharge Your Team': 'lightning',
+    //       'Account Setup': 'post-box-usa',
+    //       'Billing': 'credit-card',
+    //       'Support': 'heart',
+    //       'Features': 'magnifying-glass',
+    //       'Integrations': 'handshake',
+    //       'Use Cases': 'sparkles'
+    //     };
       
-        // Find all category icons
-        const categoryIcons = document.querySelectorAll('.category-icon');
+    //     // Find all category icons
+    //     const categoryIcons = document.querySelectorAll('.category-icon');
         
-        categoryIcons.forEach(icon => {
-          const categoryName = icon.getAttribute('data-category');
-          if (categoryName && iconMapping[categoryName]) {
-            const img = document.createElement('img');
+    //     categoryIcons.forEach(icon => {
+    //       const categoryName = icon.getAttribute('data-category');
+    //       if (categoryName && iconMapping[categoryName]) {
+    //         const img = document.createElement('img');
             
-            // Use the correct Zendesk theme settings path format
-            img.src = `{{settings.${iconMapping[categoryName]}_svg}}`;
-            img.alt = `${categoryName} icon`;
+    //         // Use the correct Zendesk theme settings path format
+    //         img.src = `{{settings.${iconMapping[categoryName]}_svg}}`;
+    //         img.alt = `${categoryName} icon`;
             
-            icon.appendChild(img);
-          }
-        });
-      }
+    //         icon.appendChild(img);
+    //       }
+    //     });
+    //   }
   
   })();

@@ -9,34 +9,78 @@
 
 <div class="container">
   <section class="section knowledge-base">
-    <section class="categories blocks">
-      <ul class="blocks-list">
-        {{#each categories}}
-          {{#if ../has_multiple_categories}}
+  <section class="categories blocks">
+    <ul class="blocks-list">
+      {{#each categories}}
+        {{#if ../has_multiple_categories}}
+          <li class="blocks-item">
+            <a href='{{url}}' class="blocks-item-link">
+              <div class="category-icon">
+                {{#eq name "Get Started"}}
+                  <img src="{{../settings.lightbulb_svg}}" alt="Get Started icon">
+                {{else}}{{#eq name "Level Up"}}
+                  <img src="{{../settings.rocket_svg}}" alt="Level Up icon">
+                {{else}}{{#eq name "Supercharge Your Team"}}
+                  <img src="{{../settings.lightning_svg}}" alt="Supercharge Your Team icon">
+                {{else}}{{#eq name "Account Setup"}}
+                  <img src="{{../settings.post_box_usa_svg}}" alt="Account Setup icon">
+                {{else}}{{#eq name "Billing"}}
+                  <img src="{{../settings.credit_card_svg}}" alt="Billing icon">
+                {{else}}{{#eq name "Support"}}
+                  <img src="{{../settings.heart_svg}}" alt="Support icon">
+                {{else}}{{#eq name "Features"}}
+                  <img src="{{../settings.magnifying_glass_svg}}" alt="Features icon">
+                {{else}}{{#eq name "Integrations"}}
+                  <img src="{{../settings.handshake_svg}}" alt="Integrations icon">
+                {{else}}{{#eq name "Use Cases"}}
+                  <img src="{{../settings.sparkles_svg}}" alt="Use Cases icon">
+                {{else}}
+                  <img src="{{../settings.sparkles_svg}}" alt="Category icon">
+                {{/eq}}{{/eq}}{{/eq}}{{/eq}}{{/eq}}{{/eq}}{{/eq}}{{/eq}}{{/eq}}
+              </div>
+              <div class="blocks-item-content">
+                <span class="blocks-item-title">{{name}}</span>
+                <span class="blocks-item-description">{{excerpt description}}</span>
+              </div>
+            </a>
+          </li>
+        {{else}}
+          {{#each sections}}
             <li class="blocks-item">
               <a href='{{url}}' class="blocks-item-link">
-                <div class="category-icon" data-category="{{name}}"></div>
+                <div class="category-icon">
+                  {{#eq name "Get Started"}}
+                    <img src="{{../../settings.lightbulb_svg}}" alt="Get Started icon">
+                  {{else}}{{#eq name "Level Up"}}
+                    <img src="{{../../settings.rocket_svg}}" alt="Level Up icon">
+                  {{else}}{{#eq name "Supercharge Your Team"}}
+                    <img src="{{../../settings.lightning_svg}}" alt="Supercharge Your Team icon">
+                  {{else}}{{#eq name "Account Setup"}}
+                    <img src="{{../../settings.post_box_usa_svg}}" alt="Account Setup icon">
+                  {{else}}{{#eq name "Billing"}}
+                    <img src="{{../../settings.credit_card_svg}}" alt="Billing icon">
+                  {{else}}{{#eq name "Support"}}
+                    <img src="{{../../settings.heart_svg}}" alt="Support icon">
+                  {{else}}{{#eq name "Features"}}
+                    <img src="{{../../settings.magnifying_glass_svg}}" alt="Features icon">
+                  {{else}}{{#eq name "Integrations"}}
+                    <img src="{{../../settings.handshake_svg}}" alt="Integrations icon">
+                  {{else}}{{#eq name "Use Cases"}}
+                    <img src="{{../../settings.sparkles_svg}}" alt="Use Cases icon">
+                  {{else}}
+                    <img src="{{../../settings.sparkles_svg}}" alt="Category icon">
+                  {{/eq}}{{/eq}}{{/eq}}{{/eq}}{{/eq}}{{/eq}}{{/eq}}{{/eq}}{{/eq}}
+                </div>
                 <div class="blocks-item-content">
                   <span class="blocks-item-title">{{name}}</span>
                   <span class="blocks-item-description">{{excerpt description}}</span>
                 </div>
               </a>
             </li>
-          {{else}}
-            {{#each sections}}
-              <li class="blocks-item">
-                <a href='{{url}}' class="blocks-item-link">
-                  <div class="category-icon" data-category="{{name}}"></div>
-                  <div class="blocks-item-content">
-                    <span class="blocks-item-title">{{name}}</span>
-                    <span class="blocks-item-description">{{excerpt description}}</span>
-                  </div>
-                </a>
-              </li>
-            {{/each}}
-          {{/if}}
-        {{/each}}
-      </ul>
-    </section>
+          {{/each}}
+        {{/if}}
+      {{/each}}
+    </ul>
   </section>
+</section>
 </div>
