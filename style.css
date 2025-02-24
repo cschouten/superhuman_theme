@@ -5319,18 +5319,7 @@ zd-summary-block {
     border-bottom: none;
     margin: 0;
     padding-top: 88px;
-    padding-bottom: 80px; /* Adjusted to match the second image */
-  }
-  
-  /* Search title styling */
-  #docsSearch h2 {
-    margin: 0;
-    font-size: 48px; /* Larger size to match the image */
-    line-height: 1.2;
-    background: radial-gradient(70.54% 70.54% at 50% 50%, #ffffff 0%, rgba(255, 255, 255, 0.6) 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    padding-bottom: 136px;
   }
   
   /* Search form styling */
@@ -5338,26 +5327,27 @@ zd-summary-block {
     display: flex;
     gap: 8px;
     padding: 0;
-    width: 800px; /* Wider to match the second image */
+    width: 625px; /* Width adjusted to match the second image */
     max-width: 90%;
   }
   
   /* Search input styling */
   #docsSearch #searchBar .search-query {
     flex: 1;
-    padding: 10px 20px;
-    height: 50px;
+    padding: 8px 20px;
+    height: 56px; /* Taller height */
     background: rgba(255, 255, 255, 0.05);
     color: #ffffff;
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 8px;
-    font-size: 18px;
+    font-size: 16px;
     outline: none;
-    min-width: 0; /* Prevents flex issues */
+    font-family: "Adelle Sans";
   }
   
   #docsSearch #searchBar .search-query:focus {
     border-color: #ffffff;
+    outline: 1px solid #ffffff;
     box-shadow: none;
   }
   
@@ -5367,29 +5357,31 @@ zd-summary-block {
     color: white;
     border: none;
     border-radius: 8px;
-    font-size: 18px;
+    font-size: 16px;
     padding: 0 24px;
-    min-width: 120px;
-    height: 50px;
+    height: 56px; /* Match input height */
+    min-width: 100px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-family: "Adelle Sans";
   }
   
   #docsSearch #searchBar button:hover {
     background: linear-gradient(273.81deg, #914694, #62438B);
   }
   
+  /* Button text */
+  #docsSearch #searchBar button span {
+    position: relative;
+  }
+  
   /* Responsive adjustments */
   @media (max-width: 767px) {
     #docsSearch {
-      padding: 60px 24px;
+      padding: 40px 24px 80px;
       gap: 32px;
-    }
-    
-    #docsSearch h2 {
-      font-size: 32px;
     }
     
     #docsSearch #searchBar {
@@ -5400,11 +5392,11 @@ zd-summary-block {
     
     #docsSearch #searchBar .search-query {
       width: 100%;
-      height: 44px;
+      height: 48px;
     }
     
     #docsSearch #searchBar button {
       width: 100%;
-      height: 44px;
+      height: 48px;
     }
   }
