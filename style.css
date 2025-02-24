@@ -5309,8 +5309,7 @@ zd-summary-block {
     }
   }
 
-  /* Search container styling */
-#docsSearch {
+  #docsSearch {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -5321,82 +5320,319 @@ zd-summary-block {
     padding-top: 88px;
     padding-bottom: 136px;
   }
-  
-  /* Search form styling */
+  @media (min-width: 768px) and (max-width: 1199px) {
+    #docsSearch {
+      gap: 40px;
+      padding-bottom: 104px;
+    }
+  }
+  @media (max-width: 767px) {
+    #docsSearch {
+      padding: 40px 24px 80px 24px;
+      margin: 0;
+      gap: 32px;
+    }
+  }
+  @media (max-width: 767px) {
+    #docsSearch {
+      padding: 24px 24px 40px 24px;
+      margin: 0;
+      gap: 16px;
+    }
+  }
+  #docsSearch h2 {
+    margin: 0;
+    background: radial-gradient(70.54% 70.54% at 50% 50%, #ffffff 0%, rgba(255, 255, 255, 0.5729) 92.71%, rgba(255, 255, 255, 0.6) 92.72%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
   #docsSearch #searchBar {
     display: flex;
     gap: 8px;
     padding: 0;
-    width: 625px; /* Width adjusted to match the second image */
-    max-width: 90%;
+    width: 528px;
   }
-  
-  /* Search input styling */
+  @media (max-width: 767px) {
+    #docsSearch #searchBar {
+      width: 100%;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+  }
   #docsSearch #searchBar .search-query {
     flex: 1;
-    padding: 8px 20px;
-    height: 56px; /* Taller height */
+    max-width: 372px;
+    padding: 4px 24px 0px 24px;
+    outline-style: solid;
+    outline-color: rgba(255, 255, 255, 0.2);
+    transition: outline-color 0.3s ease;
     background: rgba(255, 255, 255, 0.05);
     color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-    font-size: 16px;
-    outline: none;
+    border: none;
     font-family: "Adelle Sans";
+    font-size: 24px;
+    line-height: 100%;
+    height: 64px;
+    outline-width: 2px;
+    border-radius: 8px;
   }
-  
   #docsSearch #searchBar .search-query:focus {
-    border-color: #ffffff;
-    outline: 1px solid #ffffff;
+    outline-color: #ffffff;
     box-shadow: none;
   }
-  
-  /* Search button styling */
+  #docsSearch #searchBar .search-query::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  @media (min-width: 768px) and (max-width: 1199px) {
+    #docsSearch #searchBar .search-query {
+      font-size: 20px;
+    }
+  }
+  @media (max-width: 767px) {
+    #docsSearch #searchBar .search-query {
+      font-size: 18px;
+    }
+  }
+  @media (min-width: 768px) and (max-width: 1199px) {
+    #docsSearch #searchBar .search-query {
+      height: 48px;
+      outline-width: 1px;
+      border-radius: 4px;
+    }
+  }
+  @media (max-width: 767px) {
+    #docsSearch #searchBar .search-query {
+      height: 40px;
+      outline-width: 1px;
+      border-radius: 4px;
+    }
+  }
+  #docsSearch #searchBar .search-query:focus {
+    outline: 2px solid white !important;
+  }
+  @media (min-width: 768px) and (max-width: 1199px) {
+    #docsSearch #searchBar .search-query:focus {
+      outline: 1px solid white !important;
+    }
+  }
+  @media (max-width: 767px) {
+    #docsSearch #searchBar .search-query {
+      flex: unset;
+      max-width: unset;
+      margin: 0;
+    }
+    #docsSearch #searchBar .search-query:focus {
+      outline: 1px solid white !important;
+    }
+  }
   #docsSearch #searchBar button {
-    background: linear-gradient(273.81deg, #FA75F8, #9E6EE5);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    padding: 0 24px;
-    height: 56px; /* Match input height */
-    min-width: 100px;
-    cursor: pointer;
+    color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 8px;
+    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), linear-gradient(273.81deg, #FA75F8, #9E6EE5);
+    border: none;
+    cursor: pointer;
+    position: relative;
     font-family: "Adelle Sans";
+    font-size: 24px;
+    line-height: 100%;
+    height: 64px;
+    padding: 22px 32px 18px 32px;
+    border-radius: 6px;
+    flex: 0.4;
+    position: relative;
+    top: 0;
+    padding: 0;
+    border: none;
+    text-shadow: none;
   }
-  
   #docsSearch #searchBar button:hover {
-    background: linear-gradient(273.81deg, #914694, #62438B);
+    text-decoration: none;
   }
-  
-  /* Button text */
+  #docsSearch #searchBar button:hover::after {
+    opacity: 1;
+  }
+  #docsSearch #searchBar button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    -webkit-mask-composite: xor;
+    inset: -1px;
+    background: linear-gradient(#FA75F8, #9E6EE5) border-box;
+  }
+  #docsSearch #searchBar button div, #docsSearch #searchBar button span {
+    z-index: 1;
+  }
+  #docsSearch #searchBar button::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 3px;
+    background: linear-gradient(273.81deg, #914694, #62438B);
+    z-index: 0;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  #docsSearch #searchBar button:disabled {
+    background: transparent;
+    cursor: not-allowed;
+  }
+  #docsSearch #searchBar button:disabled:hover::after {
+    opacity: 0;
+  }
+  @media (min-width: 768px) and (max-width: 1199px) {
+    #docsSearch #searchBar button {
+      font-size: 20px;
+    }
+  }
+  @media (max-width: 767px) {
+    #docsSearch #searchBar button {
+      font-size: 18px;
+    }
+  }
+  #docsSearch #searchBar button::before {
+    border-radius: 8px;
+    border: 2px solid transparent;
+    inset: -2px;
+  }
+  #docsSearch #searchBar button::after {
+    border-radius: 6px;
+  }
+  @media (min-width: 768px) and (max-width: 1199px) {
+    #docsSearch #searchBar button {
+      height: 48px;
+      padding: 2px 16px 0 16px;
+      border-radius: 3px;
+    }
+    #docsSearch #searchBar button::before {
+      inset: -1px;
+      border-width: 1px;
+      border-radius: 4px;
+    }
+    #docsSearch #searchBar button::after {
+      border-radius: 3px;
+    }
+  }
+  @media (max-width: 767px) {
+    #docsSearch #searchBar button {
+      height: 40px;
+      padding: 2px 16px 0 16px;
+      border-radius: 3px;
+    }
+    #docsSearch #searchBar button::before {
+      inset: -1px;
+      border-width: 1px;
+      border-radius: 4px;
+    }
+    #docsSearch #searchBar button::after {
+      border-radius: 3px;
+    }
+  }
+  @media (max-width: 767px) {
+    #docsSearch #searchBar button {
+      flex: unset;
+      padding: 0;
+      right: 0;
+      width: 100%;
+    }
+  }
+  @media (max-width: 767px) {
+    #docsSearch #searchBar button .icon-search {
+      display: none;
+    }
+  }
   #docsSearch #searchBar button span {
     position: relative;
+    top: 2px;
   }
-  
-  /* Responsive adjustments */
+  @media (min-width: 768px) and (max-width: 1199px) {
+    #docsSearch #searchBar button span {
+      top: 1px;
+    }
+  }
   @media (max-width: 767px) {
-    #docsSearch {
-      padding: 40px 24px 80px;
-      gap: 32px;
-    }
-    
-    #docsSearch #searchBar {
-      flex-direction: column;
+    #docsSearch #searchBar button span {
       width: 100%;
-      gap: 16px;
+      font-size: 18px;
+      text-indent: 0;
     }
-    
-    #docsSearch #searchBar .search-query {
-      width: 100%;
-      height: 48px;
+  }
+  #docsSearch #searchBar #serp-dd {
+    box-shadow: none;
+    border-radius: 4px;
+    background: linear-gradient(315deg, rgba(53, 36, 77, 0.6) 0%, rgba(6, 6, 8, 0.6) 100%);
+    backdrop-filter: blur(29px);
+    -webkit-backdrop-filter: blur(29px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+  }
+  #docsSearch #searchBar #serp-dd.sb {
+    width: 100%;
+    border-width: 1px;
+    border-radius: 4px;
+    box-sizing: border-box;
+    top: 42px;
+  }
+  #docsSearch #searchBar #serp-dd .result a {
+    font-family: "Adelle Sans";
+    font-size: 16px;
+    line-height: 24px;
+    color: rgba(255, 255, 255, 0.7);
+    transition: color 0.3s ease;
+    padding-left: 24px;
+  }
+  @media (min-width: 768px) and (max-width: 1199px) {
+    #docsSearch #searchBar #serp-dd .result a {
+      font-size: 15px;
+      line-height: 24px;
     }
-    
-    #docsSearch #searchBar button {
-      width: 100%;
-      height: 48px;
+  }
+  @media (max-width: 767px) {
+    #docsSearch #searchBar #serp-dd .result a {
+      font-size: 15px;
+      line-height: 24px;
+    }
+  }
+  #docsSearch #searchBar #serp-dd .result a:hover {
+    background: transparent;
+  }
+  #docsSearch #searchBar #serp-dd .result .active {
+    background: transparent;
+  }
+  #docsSearch #searchBar #serp-dd .result .active a {
+    color: #ffffff;
+  }
+  #docsSearch #searchBar #serp-dd .result .noResults {
+    font-family: "Adelle Sans";
+    font-size: 16px;
+    line-height: 24px;
+    padding-left: 24px;
+    color: rgba(255, 255, 255, 0.7);
+  }
+  @media (min-width: 768px) and (max-width: 1199px) {
+    #docsSearch #searchBar #serp-dd .result .noResults {
+      font-size: 15px;
+      line-height: 24px;
+    }
+  }
+  @media (max-width: 767px) {
+    #docsSearch #searchBar #serp-dd .result .noResults {
+      font-size: 15px;
+      line-height: 24px;
     }
   }
