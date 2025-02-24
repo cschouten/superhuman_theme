@@ -717,9 +717,11 @@
           const categoryName = icon.getAttribute('data-category');
           if (categoryName && iconMapping[categoryName]) {
             const img = document.createElement('img');
-            // Use the correct path format - this is important!
-            img.src = `{{asset "settings/${iconMapping[categoryName]}.svg"}}`;
+            
+            // Use the correct Zendesk theme settings path format
+            img.src = `{{settings.${iconMapping[categoryName]}_svg}}`;
             img.alt = `${categoryName} icon`;
+            
             icon.appendChild(img);
           }
         });
