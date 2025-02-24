@@ -965,7 +965,7 @@ ul {
   width: 17px;
 }
 
-/***** Footer *****/
+/* **** Footer ****
 .footer {
     border-top: 1px solid #ddd;
     margin-top: 60px;
@@ -990,7 +990,7 @@ ul {
   .footer-language-selector button {
     color: lighten($text_color, 20%);
     display: inline-block;
-  }
+  } */
 
 /***** Breadcrumbs *****/
 .breadcrumbs {
