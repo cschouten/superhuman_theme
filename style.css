@@ -5308,3 +5308,103 @@ zd-summary-block {
       height: 36px;
     }
   }
+
+  /* Search container styling */
+#docsSearch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 48px;
+    background: transparent;
+    border-bottom: none;
+    margin: 0;
+    padding-top: 88px;
+    padding-bottom: 80px; /* Adjusted to match the second image */
+  }
+  
+  /* Search title styling */
+  #docsSearch h2 {
+    margin: 0;
+    font-size: 48px; /* Larger size to match the image */
+    line-height: 1.2;
+    background: radial-gradient(70.54% 70.54% at 50% 50%, #ffffff 0%, rgba(255, 255, 255, 0.6) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  /* Search form styling */
+  #docsSearch #searchBar {
+    display: flex;
+    gap: 8px;
+    padding: 0;
+    width: 800px; /* Wider to match the second image */
+    max-width: 90%;
+  }
+  
+  /* Search input styling */
+  #docsSearch #searchBar .search-query {
+    flex: 1;
+    padding: 10px 20px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    font-size: 18px;
+    outline: none;
+    min-width: 0; /* Prevents flex issues */
+  }
+  
+  #docsSearch #searchBar .search-query:focus {
+    border-color: #ffffff;
+    box-shadow: none;
+  }
+  
+  /* Search button styling */
+  #docsSearch #searchBar button {
+    background: linear-gradient(273.81deg, #FA75F8, #9E6EE5);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    padding: 0 24px;
+    min-width: 120px;
+    height: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  #docsSearch #searchBar button:hover {
+    background: linear-gradient(273.81deg, #914694, #62438B);
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 767px) {
+    #docsSearch {
+      padding: 60px 24px;
+      gap: 32px;
+    }
+    
+    #docsSearch h2 {
+      font-size: 32px;
+    }
+    
+    #docsSearch #searchBar {
+      flex-direction: column;
+      width: 100%;
+      gap: 16px;
+    }
+    
+    #docsSearch #searchBar .search-query {
+      width: 100%;
+      height: 44px;
+    }
+    
+    #docsSearch #searchBar button {
+      width: 100%;
+      height: 44px;
+    }
+  }
