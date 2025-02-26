@@ -364,7 +364,7 @@ ul {
 }
 
 /***** Buttons *****/
-.button, .pagination-next-link, .pagination-prev-link, .pagination-first-link, .pagination-last-link, .subscriptions-subscribe button, .requests-table-toolbar .organization-subscribe button, .community-follow button, .article-subscribe button, .section-subscribe button, .split-button button {
+/* .button, .pagination-next-link, .pagination-prev-link, .pagination-first-link, .pagination-last-link, .subscriptions-subscribe button, .requests-table-toolbar .organization-subscribe button, .community-follow button, .article-subscribe button, .section-subscribe button, .split-button button {
   background-color: transparent;
   border: 1px solid $brand_color;
   border-radius: 4px;
@@ -442,10 +442,10 @@ ul {
   color: $text_color;
   border: 1px solid #87929D;
   background-color: darken($background_color, 3%);
-}
+} */
 
 /***** Split button *****/
-.split-button {
+/* .split-button {
   display: flex;
 }
 
@@ -484,10 +484,10 @@ ul {
 [dir=ltr] .split-button button:not(:only-child):last-child {
   border-top-left-radius: unset;
   border-bottom-left-radius: unset;
-}
+} */
 
 /***** Tables *****/
-.table {
+/* .table {
   width: 100%;
   table-layout: fixed;
   border-collapse: collapse;
@@ -536,10 +536,10 @@ ul {
     padding: 10px 20px;
     height: 60px;
   }
-}
+} */
 
 /***** Forms *****/
-.form {
+/* .form {
   max-width: 650px;
 }
 
@@ -642,10 +642,10 @@ ul {
 }
 .form .suggestion-list li a:visited {
   color: $visited_link_color;
-}
+} */
 
 /***** Header *****/
-.header {
+/* .header {
   max-width: 1160px;
   margin: 0 auto;
   padding: 0 5%;
@@ -887,10 +887,10 @@ ul {
 
 #zd-modal-container ~ .skip-navigation {
   display: none;
-}
+} */
 
 /***** User info in header *****/
-.user-info {
+/* .user-info {
   display: inline-block;
 }
 .user-info .dropdown-toggle::after {
@@ -932,10 +932,10 @@ ul {
 }
 #user #user-name:hover {
   text-decoration: underline;
-}
+} */
 
 /***** User avatar *****/
-.user-avatar {
+/* .user-avatar {
   height: 25px;
   width: 25px;
   border-radius: 50%;
@@ -964,10 +964,10 @@ ul {
   right: -2px;
   text-align: center;
   width: 17px;
-}
+} */
 
 /***** Breadcrumbs *****/
-.breadcrumbs {
+/* .breadcrumbs {
   margin: 0 0 15px 0;
   padding: 0;
   display: flex;
@@ -990,7 +990,7 @@ ul {
 }
 .breadcrumbs li a:visited {
   color: $link_color;
-}
+} */
 
 /***** Search field *****/
 .search-container {
@@ -1118,7 +1118,7 @@ ul {
 }
 
 /***** Hero component *****/
-.hero {
+/* .hero {
   background-image: url($homepage_background_image);
   background-position: center;
   background-size: cover;
@@ -1210,7 +1210,7 @@ ul {
 }
 .sub-nav input[type=search]::after {
   font-size: 15px;
-}
+} */
 
 /***** Blocks *****/
 /* Used in Homepage#categories and Community#topics */
@@ -1306,53 +1306,9 @@ ul {
   text-align: center;
 }
 
-/***** Promoted articles *****/
-.promoted-articles {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-}
-@media (min-width: 1024px) {
-  .promoted-articles {
-    flex-direction: row;
-  }
-}
-.promoted-articles-item {
-  flex: 1 0 auto;
-}
-@media (min-width: 1024px) {
-  .promoted-articles-item {
-    align-self: flex-end;
-    flex: 0 0 auto;
-    padding-right: 30px;
-    width: 33%; /* Three columns on desktop */
-  }
-  [dir=rtl] .promoted-articles-item {
-    padding: 0 0 0 30px;
-  }
-}
-.promoted-articles-item:nth-child(3n) {
-  padding-right: 0;
-}
-.promoted-articles-item a {
-  display: block;
-  border-bottom: 1px solid #ddd;
-  padding: 15px 0;
-}
-.promoted-articles-item .icon-lock {
-  vertical-align: baseline;
-}
-.promoted-articles-item:last-child a {
-  border: 0;
-}
-@media (min-width: 1024px) {
-  .promoted-articles-item:last-child a {
-    border-bottom: 1px solid #ddd;
-  }
-}
 
 /***** Community section in homepage *****/
-.community {
+/* .community {
   text-align: center;
 }
 .community-image {
@@ -1378,10 +1334,10 @@ ul {
 .activity {
   border-top: 1px solid #ddd;
   padding: 30px 0;
-}
+} */
 
 /***** Recent activity *****/
-.recent-activity-header {
+/* .recent-activity-header {
   margin-bottom: 10px;
   text-align: center;
 }
@@ -1482,70 +1438,7 @@ ul {
 [dir=rtl] .recent-activity-comment-icon:after {
   margin-left: 0;
   margin-right: 3px;
-}
-
-/***** Category pages *****/
-.category-container {
-  display: flex;
-  justify-content: flex-end;
-}
-.category-content {
-  flex: 1;
-  max-width: 100%;
-}
-@media (min-width: 1024px) {
-  .category-content {
-    flex: 0 0 80%;
-  }
-}
-
-.section-tree {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-@media (min-width: 768px) {
-  .section-tree {
-    flex-direction: row;
-  }
-}
-.section-tree .section {
-  flex: initial;
-  max-width: 100%;
-}
-@media (min-width: 768px) {
-  .section-tree .section {
-    flex: 0 0 45%; /* Two columns for tablet and desktop. Leaving 5% separation between columns */
-  }
-}
-.section-tree-title {
-  margin-bottom: 0;
-  font-size: 18px;
-  font-weight: 600;
-}
-.section-tree-title a {
-  color: $text_color;
-}
-.section-tree .see-all-articles {
-  display: block;
-  padding: 15px 0;
-}
-
-.article-list-item {
-  font-size: 16px;
-  padding: 15px 0;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-.article-list-item a {
-  color: $text_color;
-}
-
-.icon-star {
-  color: $brand_color;
-  font-size: 18px;
-}
+} */
 
 /***** Section pages *****/
 .section-container {
