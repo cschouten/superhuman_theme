@@ -82,7 +82,7 @@
       });
       
       // Initialize Dark Theme Components
-      initDarkTheme();
+      // initDarkTheme();
     });
   
     const isPrintableChar = (str) => {
