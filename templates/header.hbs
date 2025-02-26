@@ -1,4 +1,17 @@
-<a class="skip-navigation" tabindex="1" href="#main-content">{{t 'skip_navigation' }}</a>
+<nav class="navbar">
+    <div class="navbarContent">
+        <div class="navbarLeft">
+            <div class="navbarWordmark"><a href="https://superhuman.com/"><img
+                        src="{{settings.logo}}"
+                        alt="Superhuman wordmark"></a></div>
+        </div>
+        <div class="navbarRight"><a class="navbarHomeLink" href="/">
+                <div>Help Center Home</div>
+            </a></div>
+    </div>
+</nav>
+
+{{!-- <a class="skip-navigation" tabindex="1" href="#main-content">{{t 'skip_navigation' }}</a>
 
 <header class="header">
   <div class="logo">
@@ -8,9 +21,9 @@
         <span aria-hidden="true">{{help_center.name}}</span>
       {{/if}}
     {{/link}}
-  </div>
+  </div> --}}
 
-  <div class="nav-wrapper-desktop">
+  {{!-- <div class="nav-wrapper-desktop">
     <nav class="user-nav" id="user-nav" aria-label="{{t 'user_navigation'}}">
       <ul class="user-nav-list">
         <li>{{link 'new_request' class='submit-a-request'}}</li>
@@ -45,9 +58,9 @@
         </div>
       </div>
     {{/if}}
-  </div>
+  </div> --}}
 
-  <div class="nav-wrapper-mobile">
+  {{!-- <div class="nav-wrapper-mobile">
     <button class="menu-button-mobile" aria-controls="user-nav-mobile" aria-expanded="false" aria-label="{{t 'toggle_navigation'}}">
       {{#if signed_in}}
         {{user_avatar class="user-avatar"}}
@@ -90,6 +103,6 @@
         {{/if}}
       </ul>
     </nav>
-  </div>
+  </div> --}}
 
 </header>

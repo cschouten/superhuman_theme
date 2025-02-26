@@ -5638,3 +5638,90 @@ zd-summary-block {
       line-height: 24px;
     }
   }
+
+   /* Navbar */
+
+  .navbar, #main-content {
+    margin: 0;
+  }
+  
+  .navbar .brand {
+    display: none;
+  }
+  
+  .navbar {
+    display: flex;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.6);
+  }
+  .navbar .navbarContent {
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1312px;
+    padding: 24px 64px;
+    gap: 8px;
+  }
+  @media (min-width: 768px) and (max-width: 1199px) {
+    .navbar .navbarContent {
+      max-width: 1200px;
+      padding: 24px 32px;
+    }
+  }
+  @media (max-width: 767px) {
+    .navbar .navbarContent {
+      max-width: 768px;
+      padding: 24px 12px 24px 24px;
+    }
+  }
+  .navbar .navbarContent .navbarLeft {
+    display: flex;
+    gap: 48px;
+  }
+  @media (min-width: 768px) and (max-width: 1199px) {
+    .navbar .navbarContent .navbarLeft {
+      gap: 24px;
+    }
+  }
+  .navbar .navbarContent .navbarLeft .navbarWordmark {
+    z-index: 3;
+  }
+  .navbar .navbarContent .navbarLeft .navbarWordmark img {
+    width: 187.24px;
+  }
+  @media (min-width: 768px) and (max-width: 1199px) {
+    .navbar .navbarContent .navbarLeft .navbarWordmark img {
+      width: 133.74px;
+    }
+  }
+  @media (max-width: 767px) {
+    .navbar .navbarContent .navbarLeft .navbarWordmark img {
+      width: 106.96px;
+    }
+  }
+  .navbar .navbarContent .navbarRight {
+    z-index: 2;
+  }
+  .navbar .navbarContent .navbarRight a {
+    font-family: "Adelle Sans";
+    font-size: 16px;
+    line-height: 24px;
+    color: #ffffff;
+  }
+  @media (min-width: 768px) and (max-width: 1199px) {
+    .navbar .navbarContent .navbarRight a {
+      font-size: 15px;
+      line-height: 24px;
+    }
+  }
+  @media (max-width: 767px) {
+    .navbar .navbarContent .navbarRight a {
+      font-size: 15px;
+      line-height: 24px;
+    }
+  }
+  .navbar .navbarContent .navbarRight a:hover, .navbar .navbarContent .navbarRight a:active, .navbar .navbarContent .navbarRight a:focus {
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.8);
+  }
