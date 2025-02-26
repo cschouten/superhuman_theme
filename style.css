@@ -1214,7 +1214,7 @@ ul {
 
 /***** Blocks *****/
 /* Used in Homepage#categories and Community#topics */
-.blocks-list {
+/* .blocks-list {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
@@ -1289,7 +1289,7 @@ ul {
 }
 .blocks-item-description:not(:empty) {
   margin-top: 10px;
-}
+} */
 
 /***** Homepage *****/
 .section {
@@ -5310,6 +5310,7 @@ zd-summary-block {
     }
   }
 
+  /* Home Page Search styling */
   #docsSearch {
     display: flex;
     flex-direction: column;
