@@ -5240,7 +5240,7 @@ zd-summary-block {
     border-radius: 10px;
     transition: transform 0.3s ease;
     position: relative;
-    margin-bottom: 2rem;
+    /* margin-bottom: 2rem; */
     min-height: 200px;
     display: flex;
   }
