@@ -4802,152 +4802,80 @@ zd-summary-block {
   
   /* Category blocks styling */
   .blocks-list {
-  display: flex;
-  flex-flow: wrap;
-  justify-content: space-between;
-  gap: 32px;
-  margin: 0;
-  padding-bottom: 80px;
-}
-
-@media (min-width: 768px) and (max-width: 1199px) {
-  .blocks-list {
-    padding-bottom: 120px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
   }
-}
-
-@media (max-width: 767px) {
-  .blocks-list {
-    padding-bottom: 0;
-    gap: 24px;
-  }
-}
-
-.blocks-item {
-  position: relative;
-  box-sizing: border-box;
-  flex-grow: 0.333333;
-  margin: 0;
-  padding: 32px;
-  background: linear-gradient(273.81deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.15));
-  border: none;
-  border-radius: 10px;
-}
-
-@media (min-width: 768px) and (max-width: 1199px) {
+  
   .blocks-item {
-    flex-grow: 0.5;
+    background: linear-gradient(273.81deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.15));
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    position: relative;
+    padding: 0;
+    margin-bottom: 2rem;
   }
-}
-
-.blocks-item::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 10px;
-  border: 2px solid transparent;
-  mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  -webkit-mask-composite: xor;
-  background: linear-gradient(93.9deg, rgba(255, 255, 255, 0.3) 2.26%, rgba(255, 255, 255, 0.15)) border-box;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.blocks-item:hover::before {
-  opacity: 1;
-}
-
-@media (min-width: 768px) and (max-width: 1199px) {
+  
+  .blocks-item:hover {
+    transform: translateY(-5px);
+  }
+  
   .blocks-item::before {
-    border-width: 1px;
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background: linear-gradient(93.9deg, rgba(255, 255, 255, 0.3) 2.26%, rgba(255, 255, 255, 0.15)) border-box;
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.3s ease;
   }
-}
-
-@media (max-width: 767px) {
-  .blocks-item {
-    padding: 24px;
+  
+  .blocks-item:hover::before {
+    opacity: 1;
   }
-  .blocks-item::before {
-    border-width: 1px;
+  
+  .blocks-item-link {
+    padding: 2rem;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    color: var(--text-color);
   }
-}
-
-.blocks-item h3, .blocks-item p {
-  color: #ffffff;
-}
-
-.blocks-item h3 {
-  font-family: "Adelle Sans Semibold";
-  font-size: 24px;
-  line-height: 32px;
-}
-
-@media (min-width: 768px) and (max-width: 1199px) {
-  .blocks-item h3 {
-    font-size: 20px;
-    line-height: 28px;
+  
+  .blocks-item-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
   }
-}
-
-@media (max-width: 767px) {
-  .blocks-item h3 {
-    font-size: 18px;
-    line-height: 24px;
+  
+  .blocks-item-description {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    text-align: center;
   }
-}
-
-.blocks-item p {
-  font-family: "Adelle Sans";
-  font-size: 16px;
-  line-height: 24px;
-}
-
-@media (min-width: 768px) and (max-width: 1199px) {
-  .blocks-item p {
-    font-size: 15px;
-    line-height: 24px;
+  
+  .category-icon {
+    margin-bottom: 1.5rem;
+    display: block;
   }
-}
-
-@media (max-width: 767px) {
-  .blocks-item p {
-    font-size: 15px;
-    line-height: 24px;
+  
+  .category-icon img {
+    width: 48px;
+    height: 48px;
   }
-}
-
-.blocks-item-link {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  height: 100%;
-  color: var(--text-color);
-}
-
-.blocks-item-title {
-  font-family: "Adelle Sans Semibold", sans-serif;
-  font-size: 24px;
-  line-height: 32px;
-  margin-bottom: 8px;
-  color: #ffffff;
-  font-weight: 600;
-}
-
-.blocks-item-description {
-  font-family: "Adelle Sans", sans-serif;
-  font-size: 16px;
-  line-height: 24px;
-  color: rgba(255, 255, 255, 0.7);
-  text-align: center;
-  margin: 0;
-}
   
   /* Hide article count */
   .article-count {
