@@ -211,6 +211,7 @@ template {
 }
 
 body {
+  margin: 0;
   background-color: #000000;
   color: $text_color;
   font-family: $text_font;
