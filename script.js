@@ -82,7 +82,7 @@
       });
       
       // Initialize Dark Theme Components
-      // initDarkTheme();
+      initDarkTheme();
     });
   
     const isPrintableChar = (str) => {
@@ -663,25 +663,48 @@
     });
   
     // Dark Theme functionality
-    // function initDarkTheme() {
-    //   addBackground();
+    function initDarkTheme() {
+      addBackground();
+      updateArticleFooter();
     //   addSearchHeader();
     //   addCategoryIcons();
-    // }
+    }
   
-    // function addBackground() {
-    //   const background = document.createElement('div');
-    //   const blueGradient = document.createElement('div');
-    //   const pinkGradient = document.createElement('div');
+    function addBackground() {
+      const background = document.createElement('div');
+      const blueGradient = document.createElement('div');
+      const pinkGradient = document.createElement('div');
   
-    //   background.className = 'background';
-    //   blueGradient.className = 'blue';
-    //   pinkGradient.className = 'pink';
+      background.className = 'background';
+      blueGradient.className = 'blue';
+      pinkGradient.className = 'pink';
   
-    //   background.appendChild(blueGradient);
-    //   background.appendChild(pinkGradient);
-    //   document.body.prepend(background);
-    // }
+      background.appendChild(blueGradient);
+      background.appendChild(pinkGradient);
+      document.body.prepend(background);
+    }
+
+    function updateArticleFooter() {
+        const articleFoot = document.querySelector('.articleFoot')
+        if (!articleFoot) return
+    
+        const feedbackDiv = document.createElement('div')
+        feedbackDiv.innerText = 'Have feedback? '
+        feedbackDiv.className = 'feedbackDiv'
+    
+        const feedbackLink = document.createElement('a')
+        feedbackLink.className = 'feedbackLink'
+        feedbackLink.innerText = 'Let us know!'
+        feedbackLink.href = 'mailto:hello@superhuman.com?subject=Help%20Center%20Feedback'
+    
+        feedbackDiv.append(feedbackLink)
+        articleFoot.prepend(feedbackDiv)
+    
+        const articleRatings = document.querySelector('.articleRatings')
+        if (articleRatings) {
+          articleFoot.append(articleRatings)
+        }
+      }
   
     // function addSearchHeader() {
     //   const searchSection = document.querySelector('section.hero');

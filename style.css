@@ -3047,6 +3047,87 @@ zd-summary-block {
     }
   }
 
+  /* Background Styling */
+  body {
+    background: #000000;
+    padding: 0;
+  }
+  @media (max-width: 767px) {
+    body {
+      padding: 0;
+    }
+  }
+  body .background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+  body .background .blue {
+    width: 1845px;
+    height: 1230px;
+    background: radial-gradient(50% 50% at 50% 50%, rgba(92, 195, 250, 0.28) 0%, rgba(92, 195, 250, 0) 100%);
+    opacity: 0.8;
+    position: absolute;
+    left: -665px;
+    top: 40px;
+  }
+  @media (min-width: 768px) and (max-width: 1199px) {
+    body .background .blue {
+      width: 1200px;
+      height: 806px;
+    }
+  }
+  @media (max-width: 767px) {
+    body .background .blue {
+      width: 1731.88px;
+      height: 1127.35px;
+    }
+  }
+  @media (min-width: 768px) and (max-width: 1199px) {
+    body .background .blue {
+      left: -440px;
+    }
+  }
+  @media (max-width: 767px) {
+    body .background .blue {
+      left: -1000px;
+    }
+  }
+  body .background .pink {
+    width: 1845px;
+    height: 1230px;
+    background: radial-gradient(50% 50% at 50% 50%, rgba(250, 117, 248, 0.28) 0%, rgba(250, 117, 248, 0) 100%);
+    opacity: 0.7;
+    position: absolute;
+    left: 483px;
+    top: 12px;
+  }
+  @media (min-width: 768px) and (max-width: 1199px) {
+    body .background .pink {
+      width: 1200px;
+      height: 806px;
+    }
+  }
+  @media (max-width: 767px) {
+    body .background .pink {
+      width: 1731.88px;
+      height: 1127.35px;
+    }
+  }
+  @media (min-width: 768px) and (max-width: 1199px) {
+    body .background .pink {
+      left: 300px;
+    }
+  }
+  @media (max-width: 767px) {
+    body .background .pink {
+      left: 20px;
+    }
+  }
+
    /* Navbar */
 
   .navbar, #main-content {
@@ -3060,7 +3141,7 @@ zd-summary-block {
   .navbar {
     display: flex;
     justify-content: center;
-    background-color: rgba(0, 0, 0, 0.6);
+    /*background-color: rgba(0, 0, 0, 0.6);*/
   }
   .navbar .navbarContent {
     display: flex;
