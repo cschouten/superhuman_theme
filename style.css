@@ -4731,7 +4731,7 @@ zd-summary-block {
   }
   
   /* Background gradients */
-  .background {
+  /* .background {
     position: fixed;
     top: 0;
     left: 0;
@@ -4758,7 +4758,7 @@ zd-summary-block {
     position: absolute;
     left: 483px;
     top: 12px;
-  }
+  } */
   
   /* Hero/Search section styling */
   .hero {
