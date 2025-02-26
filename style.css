@@ -4817,7 +4817,7 @@ zd-summary-block {
     transition: transform 0.3s ease;
     position: relative;
     padding: 0;
-    margin-bottom: 2rem;
+    /* margin-bottom: 2rem; */
   }
   
   .blocks-item:hover {
