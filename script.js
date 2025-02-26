@@ -663,38 +663,38 @@
     });
   
     // Dark Theme functionality
-    function initDarkTheme() {
-      addBackground();
-      addSearchHeader();
-      addCategoryIcons();
-    }
+    // function initDarkTheme() {
+    //   addBackground();
+    //   addSearchHeader();
+    //   addCategoryIcons();
+    // }
   
-    function addBackground() {
-      const background = document.createElement('div');
-      const blueGradient = document.createElement('div');
-      const pinkGradient = document.createElement('div');
+    // function addBackground() {
+    //   const background = document.createElement('div');
+    //   const blueGradient = document.createElement('div');
+    //   const pinkGradient = document.createElement('div');
   
-      background.className = 'background';
-      blueGradient.className = 'blue';
-      pinkGradient.className = 'pink';
+    //   background.className = 'background';
+    //   blueGradient.className = 'blue';
+    //   pinkGradient.className = 'pink';
   
-      background.appendChild(blueGradient);
-      background.appendChild(pinkGradient);
-      document.body.prepend(background);
-    }
+    //   background.appendChild(blueGradient);
+    //   background.appendChild(pinkGradient);
+    //   document.body.prepend(background);
+    // }
   
-    function addSearchHeader() {
-      const searchSection = document.querySelector('section.hero');
-      if (searchSection) {
-        // Check if we need to add the heading
-        const existingHeading = searchSection.querySelector('h2');
-        if (!existingHeading) {
-          const heading = document.createElement('h2');
-          heading.textContent = 'Looking for help?';
-          searchSection.querySelector('.hero-inner').prepend(heading);
-        }
-      }
-    }
+    // function addSearchHeader() {
+    //   const searchSection = document.querySelector('section.hero');
+    //   if (searchSection) {
+    //     // Check if we need to add the heading
+    //     const existingHeading = searchSection.querySelector('h2');
+    //     if (!existingHeading) {
+    //       const heading = document.createElement('h2');
+    //       heading.textContent = 'Looking for help?';
+    //       searchSection.querySelector('.hero-inner').prepend(heading);
+    //     }
+    //   }
+    // }
   
     // function addCategoryIcons() {
     //     // Icon mapping for categories
