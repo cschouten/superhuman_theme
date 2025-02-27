@@ -10,77 +10,71 @@
 </section>
 
 <div id="contentArea" class="container-fluid">
-    <section class="category-list">
-      <ul >
-        {{#each categories}}
-          {{#if ../has_multiple_categories}}
-            <li class="blocks-item">
-              <a href='{{url}}' class="blocks-item-link">
-                <div class="category-icon">
-                  {{#is name "Get Started"}}
-                    <img src="{{asset 'lightbulb.svg'}}" alt="Get Started icon">
-                  {{else}}{{#is name "Level Up"}}
-                    <img src="{{asset 'rocket.svg'}}" alt="Level Up icon">
-                  {{else}}{{#is name "Supercharge Your Team"}}
-                    <img src="{{asset 'lightning.svg'}}" alt="Supercharge Your Team icon">
-                  {{else}}{{#is name "Account Setup"}}
-                    <img src="{{asset 'post-box-usa.svg'}}" alt="Account Setup icon">
-                  {{else}}{{#is name "Billing"}}
-                    <img src="{{asset 'credit-card.svg'}}" alt="Billing icon">
-                  {{else}}{{#is name "Support"}}
-                    <img src="{{asset 'heart.svg'}}" alt="Support icon">
-                  {{else}}{{#is name "Features"}}
-                    <img src="{{asset 'magnifying-glass.svg'}}" alt="Features icon">
-                  {{else}}{{#is name "Integrations"}}
-                    <img src="{{asset 'handshake.svg'}}" alt="Integrations icon">
-                  {{else}}{{#is name "Use Cases"}}
-                    <img src="{{asset 'sparkles.svg'}}" alt="Use Cases icon">
-                  {{else}}
-                    <img src="{{asset 'sparkles.svg'}}" alt="Category icon">
-                  {{/is}}{{/is}}{{/is}}{{/is}}{{/is}}{{/is}}{{/is}}{{/is}}{{/is}}
-                </div>
-                <div class="blocks-item-content">
-                  <h3 class="blocks-item-title">{{name}}</h3>
-                  <p class="blocks-item-description">{{excerpt description}}</p>
-                </div>
-              </a>
-            </li>
+  <div id="noResults" style="display:none;">No results found</div>
+  
+  <section class="category-list">
+    {{#each categories}}
+      {{#if ../has_multiple_categories}}
+        <a class="category" id="category-{{id}}" href="{{url}}">
+          {{#is name "Get Started"}}
+            <img class="categoryIcon" src="{{asset 'lightbulb.svg'}}" alt="Get Started icon">
+          {{else}}{{#is name "Level Up"}}
+            <img class="categoryIcon" src="{{asset 'rocket.svg'}}" alt="Level Up icon">
+          {{else}}{{#is name "Supercharge Your Team"}}
+            <img class="categoryIcon" src="{{asset 'lightning.svg'}}" alt="Supercharge Your Team icon">
+          {{else}}{{#is name "Account Setup"}}
+            <img class="categoryIcon" src="{{asset 'post-box-usa.svg'}}" alt="Account Setup icon">
+          {{else}}{{#is name "Billing"}}
+            <img class="categoryIcon" src="{{asset 'credit-card.svg'}}" alt="Billing icon">
+          {{else}}{{#is name "Support"}}
+            <img class="categoryIcon" src="{{asset 'heart.svg'}}" alt="Support icon">
+          {{else}}{{#is name "Features"}}
+            <img class="categoryIcon" src="{{asset 'magnifying-glass.svg'}}" alt="Features icon">
+          {{else}}{{#is name "Integrations"}}
+            <img class="categoryIcon" src="{{asset 'handshake.svg'}}" alt="Integrations icon">
+          {{else}}{{#is name "Use Cases"}}
+            <img class="categoryIcon" src="{{asset 'sparkles.svg'}}" alt="Use Cases icon">
           {{else}}
-            {{#each sections}}
-              <li class="blocks-item">
-                <a href='{{url}}' class="blocks-item-link">
-                  <div class="category-icon">
-                    {{#is name "Get Started"}}
-                      <img src="{{asset 'lightbulb.svg'}}" alt="Get Started icon">
-                    {{else}}{{#is name "Level Up"}}
-                      <img src="{{asset 'rocket.svg'}}" alt="Level Up icon">
-                    {{else}}{{#is name "Supercharge Your Team"}}
-                      <img src="{{asset 'lightning.svg'}}" alt="Supercharge Your Team icon">
-                    {{else}}{{#is name "Account Setup"}}
-                      <img src="{{asset 'post-box-usa.svg'}}" alt="Account Setup icon">
-                    {{else}}{{#is name "Billing"}}
-                      <img src="{{asset 'credit-card.svg'}}" alt="Billing icon">
-                    {{else}}{{#is name "Support"}}
-                      <img src="{{asset 'heart.svg'}}" alt="Support icon">
-                    {{else}}{{#is name "Features"}}
-                      <img src="{{asset 'magnifying-glass.svg'}}" alt="Features icon">
-                    {{else}}{{#is name "Integrations"}}
-                      <img src="{{asset 'handshake.svg'}}" alt="Integrations icon">
-                    {{else}}{{#is name "Use Cases"}}
-                      <img src="{{asset 'sparkles.svg'}}" alt="Use Cases icon">
-                    {{else}}
-                      <img src="{{asset 'sparkles.svg'}}" alt="Category icon">
-                    {{/is}}{{/is}}{{/is}}{{/is}}{{/is}}{{/is}}{{/is}}{{/is}}{{/is}}
-                  </div>
-                  <div class="blocks-item-content">
-                    <h3 class="blocks-item-title">{{name}}</h3>
-                    <p class="blocks-item-description">{{excerpt description}}</p>
-                  </div>
-                </a>
-              </li>
-            {{/each}}
-          {{/if}}
+            <img class="categoryIcon" src="{{asset 'sparkles.svg'}}" alt="Category icon">
+          {{/is}}{{/is}}{{/is}}{{/is}}{{/is}}{{/is}}{{/is}}{{/is}}{{/is}}
+          <h3>{{name}}</h3>
+          <p>{{excerpt description}}</p>
+          <p class="article-count">
+            <span class="notranslate">{{article_count}}</span> articles
+          </p>
+        </a>
+      {{else}}
+        {{#each sections}}
+          <a class="category" id="category-{{id}}" href="{{url}}">
+            {{#is name "Get Started"}}
+              <img class="categoryIcon" src="{{asset 'lightbulb.svg'}}" alt="Get Started icon">
+            {{else}}{{#is name "Level Up"}}
+              <img class="categoryIcon" src="{{asset 'rocket.svg'}}" alt="Level Up icon">
+            {{else}}{{#is name "Supercharge Your Team"}}
+              <img class="categoryIcon" src="{{asset 'lightning.svg'}}" alt="Supercharge Your Team icon">
+            {{else}}{{#is name "Account Setup"}}
+              <img class="categoryIcon" src="{{asset 'post-box-usa.svg'}}" alt="Account Setup icon">
+            {{else}}{{#is name "Billing"}}
+              <img class="categoryIcon" src="{{asset 'credit-card.svg'}}" alt="Billing icon">
+            {{else}}{{#is name "Support"}}
+              <img class="categoryIcon" src="{{asset 'heart.svg'}}" alt="Support icon">
+            {{else}}{{#is name "Features"}}
+              <img class="categoryIcon" src="{{asset 'magnifying-glass.svg'}}" alt="Features icon">
+            {{else}}{{#is name "Integrations"}}
+              <img class="categoryIcon" src="{{asset 'handshake.svg'}}" alt="Integrations icon">
+            {{else}}{{#is name "Use Cases"}}
+              <img class="categoryIcon" src="{{asset 'sparkles.svg'}}" alt="Use Cases icon">
+            {{else}}
+              <img class="categoryIcon" src="{{asset 'sparkles.svg'}}" alt="Category icon">
+            {{/is}}{{/is}}{{/is}}{{/is}}{{/is}}{{/is}}{{/is}}{{/is}}{{/is}}
+            <h3>{{name}}</h3>
+            <p>{{excerpt description}}</p>
+            <p class="article-count">
+              <span class="notranslate">{{article_count}}</span> articles
+            </p>
+          </a>
         {{/each}}
-      </ul>
+      {{/if}}
+    {{/each}}
   </section>
 </div>
