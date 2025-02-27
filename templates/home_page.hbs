@@ -10,9 +10,8 @@
 </section>
 
 <div id="contentArea" class="container-fluid">
-  <section class="section knowledge-base">
-    <section class="categories blocks">
-      <ul class="blocks-list">
+    <section class="category-list">
+      <ul >
         {{#each categories}}
           {{#if ../has_multiple_categories}}
             <li class="blocks-item">
@@ -83,6 +82,5 @@
           {{/if}}
         {{/each}}
       </ul>
-    </section>
   </section>
 </div>
