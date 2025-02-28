@@ -1092,7 +1092,7 @@ footer p {
   border-radius: 6px;
   flex: 0.4;
   position: relative;
-  top: 0;
+  top: 0 !important; /* Adding this to override the default button styles */
   padding: 0;
   border: none;
   text-shadow: none;
@@ -1771,6 +1771,13 @@ footer p {
     height: 28px;
     padding: 4px 16px 2px;
   }
+}
+
+/* Adding a specific text-decorator since Zendesk ignores other ones*/
+#contentArea .category-list .category:hover,
+#contentArea .category-list .category:focus,
+#contentArea .category-list .category:active {
+  text-decoration: none !important;
 }
 
 #main-content {
