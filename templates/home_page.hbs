@@ -11,20 +11,11 @@
 
 <div id="contentArea" class="container-fluid">
     <section class="category-list">
-      <ul>
+      <ul >
         {{#each categories}}
           {{#if ../has_multiple_categories}}
-            <li>
-              {{!-- Determine whether to link to article or category based on name --}}
-              {{#is name "Get Started"}}
-                <a href='{{../articles.[get_started_article_id].url}}' class="blocks-item-link">
-              {{else}}{{#is name "Level Up"}}
-                <a href='{{../articles.[level_up_article_id].url}}' class="blocks-item-link">
-              {{else}}{{#is name "Supercharge Your Team"}}
-                <a href='{{../articles.[supercharge_article_id].url}}' class="blocks-item-link">
-              {{else}}
-                <a href='{{url}}' class="blocks-item-link">
-              {{/is}}{{/is}}{{/is}}
+            <li class="blocks-item">
+              <a href='{{url}}' class="blocks-item-link">
                 <div class="category-icon">
                   {{#is name "Get Started"}}
                     <img src="{{asset 'lightbulb.svg'}}" alt="Get Started icon">
@@ -56,17 +47,8 @@
             </li>
           {{else}}
             {{#each sections}}
-              <li>
-                {{!-- Determine whether to link to article or category based on name --}}
-                {{#is name "Get Started"}}
-                  <a href='{{../../articles.[get_started_article_id].url}}' class="blocks-item-link">
-                {{else}}{{#is name "Level Up"}}
-                  <a href='{{../../articles.[level_up_article_id].url}}' class="blocks-item-link">
-                {{else}}{{#is name "Supercharge Your Team"}}
-                  <a href='{{../../articles.[supercharge_article_id].url}}' class="blocks-item-link">
-                {{else}}
-                  <a href='{{url}}' class="blocks-item-link">
-                {{/is}}{{/is}}{{/is}}
+              <li class="blocks-item">
+                <a href='{{url}}' class="blocks-item-link">
                   <div class="category-icon">
                     {{#is name "Get Started"}}
                       <img src="{{asset 'lightbulb.svg'}}" alt="Get Started icon">
@@ -100,5 +82,6 @@
           {{/if}}
         {{/each}}
       </ul>
+    </section>
   </section>
 </div>
