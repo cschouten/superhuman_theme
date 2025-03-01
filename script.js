@@ -733,7 +733,27 @@
             }
           }
         });
-      }
+        
+        // Remove the duplicate "Up Next" text appearing at the bottom
+        // Look for the parent container of "Splits Inbox Basics" link that contains "Up Next"
+        const articleBlocks = document.querySelectorAll('article');
+        
+        articleBlocks.forEach(article => {
+          // Find any "Up Next" text outside of nextPageButton divs
+          const upNextElements = Array.from(article.querySelectorAll('p'))
+            .filter(p => 
+              p.textContent.includes('Up Next') && 
+              !p.closest('.nextPageButton') &&
+              p.nextElementSibling && 
+              p.nextElementSibling.tagName === 'A'
+            );
+          
+          upNextElements.forEach(element => {
+            // Remove or hide the standalone "Up Next" text
+            element.remove();
+          });
+        });
+    }
       
   
   })();
