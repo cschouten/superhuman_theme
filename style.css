@@ -1369,7 +1369,7 @@ footer p {
 }
 @media (min-width: 768px) and (max-width: 1199px) {
   #contentArea .category-list .category {
-    flex-grow: 0.5;
+    flex: 0 0 calc(50% - 16px);
   }
 }
 #contentArea .category-list .category::before {
@@ -1399,6 +1399,7 @@ footer p {
 }
 @media (max-width: 767px) {
   #contentArea .category-list .category {
+    flex: 0 0 100%;
     padding: 24px;
   }
   #contentArea .category-list .category::before {
