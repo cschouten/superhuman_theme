@@ -1358,6 +1358,12 @@ footer p {
   }
 }
 #contentArea .category-list .category {
+  text-align: center;
+  display: inline-block;
+  width: 29%;
+  cursor: pointer; /* taking styles from help scout */
+  transition: background .15s;
+  vertical-align: top;
   position: relative;
   box-sizing: border-box;
   flex: 0 0 calc(33.333% - 22px);
