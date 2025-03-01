@@ -609,6 +609,8 @@ h6 {
   font-size: 16px;
   line-height: 24px;
   color: #ffffff;
+  text-decoration: none !important;
+  border-bottom: none !important;
 }
 @media (min-width: 768px) and (max-width: 1199px) {
   .navbar .navbarContent .navbarRight a {
@@ -623,8 +625,9 @@ h6 {
   }
 }
 .navbar .navbarContent .navbarRight a:hover, .navbar .navbarContent .navbarRight a:active, .navbar .navbarContent .navbarRight a:focus {
-  text-decoration: none;
+  text-decoration: none !important; 
   color: rgba(255, 255, 255, 0.8);
+  border-bottom: none !important;
 }
 
 footer {
