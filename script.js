@@ -721,35 +721,37 @@
         const nextPageButtons = document.querySelectorAll('.nextPageButton');
         
         nextPageButtons.forEach(button => {
-          // Get the current content
-          const content = button.innerHTML;
+          // Get the current content structure
+          const paragraphs = button.querySelectorAll('p');
           
-          // Check if we need to restructure (look for the pattern with &nbsp; in first paragraph)
-          if (content.includes('&nbsp;')) {
-            // Find the second paragraph that contains "Up Next" and the link
-            const secondParagraph = button.querySelector('p:nth-child(2)');
+          // Check if we have the non-breaking space paragraph followed by the "Up Next" paragraph with link
+          if (paragraphs.length >= 2) {
+            const firstP = paragraphs[0];
+            const secondP = paragraphs[1];
             
-            if (secondParagraph) {
-              // Get the text content and the link
-              const paragraphHTML = secondParagraph.innerHTML;
+            // Check if first paragraph only has &nbsp;
+            if (firstP.innerHTML.trim() === '&nbsp;' && secondP) {
+              // Extract the "Up Next" text and link from the second paragraph
+              const upNextContent = secondP.innerHTML;
               
-              // Check if there's a link within the paragraph
-              if (paragraphHTML.includes('<a href=')) {
-                // Split the content into "Up Next" text and the link
-                const parts = paragraphHTML.split(/<a\s+href=/);
+              // Check for text and link in the second paragraph
+              if (upNextContent.includes('Up Next') && upNextContent.includes('<a href=')) {
+                // Extract the link element
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = upNextContent;
+                const linkElement = tempDiv.querySelector('a');
                 
-                if (parts.length > 1) {
-                  const upNextText = parts[0].trim();
-                  const linkHTML = '<a href=' + parts[1];
-                  
-                  // Create the proper structure
+                if (linkElement) {
+                  // Create the new structure
                   button.innerHTML = '';
-                  const newParagraph = document.createElement('p');
-                  newParagraph.textContent = upNextText;
                   
-                  // Add the paragraph and link as direct children of the button
-                  button.appendChild(newParagraph);
-                  button.insertAdjacentHTML('beforeend', linkHTML);
+                  // Create paragraph with just "Up Next" text
+                  const newP = document.createElement('p');
+                  newP.textContent = 'Up Next';
+                  button.appendChild(newP);
+                  
+                  // Add the link element directly to the button (not inside a paragraph)
+                  button.appendChild(linkElement);
                 }
               }
             }
