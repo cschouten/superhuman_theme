@@ -666,8 +666,6 @@
     function initDarkTheme() {
       addBackground();
       updateArticleFooter();
-    //   addSearchHeader();
-    //   addCategoryIcons();
     }
   
     function addBackground() {
@@ -699,55 +697,22 @@
     
         feedbackDiv.append(feedbackLink)
         articleFoot.prepend(feedbackDiv)
-    
+
+        // Add new code here - format the date in the time element
+        const timeElement = articleFoot.querySelector('time.lu')
+        if (timeElement) {
+          const timestamp = timeElement.textContent.replace('Last updated on ', '')
+          const date = new Date(timestamp)
+          if (!isNaN(date)) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' }
+            timeElement.textContent = 'Last updated on ' + date.toLocaleDateString('en-US', options)
+          }
+        }
+        
         const articleRatings = document.querySelector('.articleRatings')
         if (articleRatings) {
           articleFoot.append(articleRatings)
         }
       }
-  
-    // function addSearchHeader() {
-    //   const searchSection = document.querySelector('section.hero');
-    //   if (searchSection) {
-    //     // Check if we need to add the heading
-    //     const existingHeading = searchSection.querySelector('h2');
-    //     if (!existingHeading) {
-    //       const heading = document.createElement('h2');
-    //       heading.textContent = 'Looking for help?';
-    //       searchSection.querySelector('.hero-inner').prepend(heading);
-    //     }
-    //   }
-    // }
-  
-    // function addCategoryIcons() {
-    //     // Icon mapping for categories
-    //     const iconMapping = {
-    //       'Get Started': 'lightbulb',
-    //       'Level Up': 'rocket',
-    //       'Supercharge Your Team': 'lightning',
-    //       'Account Setup': 'post-box-usa',
-    //       'Billing': 'credit-card',
-    //       'Support': 'heart',
-    //       'Features': 'magnifying-glass',
-    //       'Integrations': 'handshake',
-    //       'Use Cases': 'sparkles'
-    //     };
-      
-    //     // Find all category icons
-    //     const categoryIcons = document.querySelectorAll('.category-icon');
-        
-    //     categoryIcons.forEach(icon => {
-    //       const categoryName = icon.getAttribute('data-category');
-    //       if (categoryName && iconMapping[categoryName]) {
-    //         const img = document.createElement('img');
-            
-    //         // Use the correct Zendesk theme settings path format
-    //         img.src = `{{settings.${iconMapping[categoryName]}_svg}}`;
-    //         img.alt = `${categoryName} icon`;
-            
-    //         icon.appendChild(img);
-    //       }
-    //     });
-    //   }
   
   })();
