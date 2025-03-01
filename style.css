@@ -1340,8 +1340,8 @@ footer p {
 }
 #contentArea .category-list {
   display: flex;
-  flex-flow: wrap;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  justify-content: flex-start;
   gap: 32px;
   margin: 0;
   padding-bottom: 80px;
@@ -1360,9 +1360,8 @@ footer p {
 #contentArea .category-list .category {
   position: relative;
   box-sizing: border-box;
-  flex-grow: 0.333333;
+  flex: 0 0 calc(33.333% - 22px);
   margin: 0;
-  padding: 32px;
   background: linear-gradient(273.81deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.15));
   border: none;
   border-radius: 10px;
