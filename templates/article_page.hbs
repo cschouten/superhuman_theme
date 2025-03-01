@@ -13,7 +13,7 @@
           {{#if settings.show_article_sharing}}
             <div class="article-share">{{share}}</div>
           {{/if}}
-          <time class="lu" datetime="{{article.updated_at 'yyyy-MM-dd'}}">Last updated on {{article.updated_at 'MMMM d, yyyy'}}</time>
+          <time class="lu" datetime="{{updated_at 'yyyy-MM-dd'}}">Last updated on {{ updated_at 'MMMM d, yyyy'}}</time>
         </section>
       </div>
     </section>
@@ -27,14 +27,14 @@
         </button>
       </form>
 
-      <h3>Categories</h3>
+      {{!-- <h3>Categories</h3>
       <ul class="nav nav-list">
         {{#each categories}}
           <li {{#if active}}class="active"{{/if}}>
             <a href="{{url}}">{{name}} <i class="icon-arrow"></i></a>
           </li>
         {{/each}}
-      </ul>
+      </ul> --}}
     </aside>
   </div>
 </section>
