@@ -1811,6 +1811,29 @@ footer p {
   }
 }
 
+/* Center the container-fluid */
+.container-fluid {
+    max-width: 1312px;
+    margin: 0 auto;
+    padding-left: 64px;
+    padding-right: 64px;
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+    .container-fluid {
+        padding-left: 32px;
+        padding-right: 32px;
+    }
+}
+
+@media (max-width: 767px) {
+    .container-fluid {
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+}
+
+
 /* Remove underlines from category links in all states */
 /* #contentArea .category-list .category,
 #contentArea .category-list .category:link,
