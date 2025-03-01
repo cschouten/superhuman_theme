@@ -1773,10 +1773,20 @@ footer p {
   }
 }
 
-/* Adding a specific text-decorator since Zendesk ignores other ones*/
+/* Remove underlines from category links in all states */
+#contentArea .category-list .category,
+#contentArea .category-list .category:link,
+#contentArea .category-list .category:visited,
 #contentArea .category-list .category:hover,
-#contentArea .category-list .category:focus,
-#contentArea .category-list .category:active {
+#contentArea .category-list .category:active,
+#contentArea .category-list .category:focus {
+  text-decoration: none !important;
+}
+
+/* Also target any text inside these links */
+#contentArea .category-list .category *,
+#contentArea .category-list .category h3,
+#contentArea .category-list .category p {
   text-decoration: none !important;
 }
 
