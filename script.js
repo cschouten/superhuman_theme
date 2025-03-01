@@ -721,11 +721,38 @@
         const nextPageButtons = document.querySelectorAll('.nextPageButton');
         
         nextPageButtons.forEach(button => {
-          // Check if the first child is a paragraph with only &nbsp;
-          const firstParagraph = button.querySelector('p:first-child');
-          if (firstParagraph && firstParagraph.innerHTML.trim() === '&nbsp;') {
-            // Remove the empty first paragraph
-            firstParagraph.remove();
+          // Get the current content
+          const content = button.innerHTML;
+          
+          // Check if we need to restructure (look for the pattern with &nbsp; in first paragraph)
+          if (content.includes('&nbsp;')) {
+            // Find the second paragraph that contains "Up Next" and the link
+            const secondParagraph = button.querySelector('p:nth-child(2)');
+            
+            if (secondParagraph) {
+              // Get the text content and the link
+              const paragraphHTML = secondParagraph.innerHTML;
+              
+              // Check if there's a link within the paragraph
+              if (paragraphHTML.includes('<a href=')) {
+                // Split the content into "Up Next" text and the link
+                const parts = paragraphHTML.split(/<a\s+href=/);
+                
+                if (parts.length > 1) {
+                  const upNextText = parts[0].trim();
+                  const linkHTML = '<a href=' + parts[1];
+                  
+                  // Create the proper structure
+                  button.innerHTML = '';
+                  const newParagraph = document.createElement('p');
+                  newParagraph.textContent = upNextText;
+                  
+                  // Add the paragraph and link as direct children of the button
+                  button.appendChild(newParagraph);
+                  button.insertAdjacentHTML('beforeend', linkHTML);
+                }
+              }
+            }
           }
         });
     }
