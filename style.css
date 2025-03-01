@@ -23,6 +23,40 @@
     src: url("$assets-operatormono-book-otf");
 }
 
+/* Modern CSS Reset */
+*, *::before, *::after {
+    box-sizing: border-box;
+  }
+  
+  body, h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd, ul, ol {
+    margin: 0;
+    padding: 0;
+  }
+  
+  ul, ol {
+    list-style: none;
+  }
+  
+  html:focus-within {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    min-height: 100vh;
+    text-rendering: optimizeSpeed;
+    line-height: 1.5;
+  }
+  
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  img, picture, svg {
+    max-width: 100%;
+    display: block;
+  }
+
 body {
   color: #ffffff;
   -webkit-font-smoothing: antialiased;
