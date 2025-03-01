@@ -673,8 +673,8 @@ footer {
   align-items: center;
   padding-top: 112px;
   padding-bottom: 64px;
-  box-sizing: border-box; /* Add this */
-  width: 100%; /* Add this to ensure the footer itself is full width */
+  box-sizing: border-box; 
+  width: 100%; 
 }
 @media (min-width: 768px) and (max-width: 1199px) {
   footer {
@@ -693,7 +693,7 @@ footer .footerContent {
   width: 100%;
   max-width: 1312px;
   padding: 0 64px;
-  box-sizing: border-box; /* Add this */
+  box-sizing: border-box; 
 }
 @media (min-width: 768px) and (max-width: 1199px) {
   footer .footerContent {
