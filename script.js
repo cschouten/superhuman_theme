@@ -721,43 +721,19 @@
         const nextPageButtons = document.querySelectorAll('.nextPageButton');
         
         nextPageButtons.forEach(button => {
-          // Get the current content structure
+          // Get all paragraphs
           const paragraphs = button.querySelectorAll('p');
           
-          // Check if we have the non-breaking space paragraph followed by the "Up Next" paragraph with link
-          if (paragraphs.length >= 2) {
-            const firstP = paragraphs[0];
-            const secondP = paragraphs[1];
-            
-            // Check if first paragraph only has &nbsp;
-            if (firstP.innerHTML.trim() === '&nbsp;' && secondP) {
-              // Extract the "Up Next" text and link from the second paragraph
-              const upNextContent = secondP.innerHTML;
-              
-              // Check for text and link in the second paragraph
-              if (upNextContent.includes('Up Next') && upNextContent.includes('<a href=')) {
-                // Extract the link element
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = upNextContent;
-                const linkElement = tempDiv.querySelector('a');
-                
-                if (linkElement) {
-                  // Create the new structure
-                  button.innerHTML = '';
-                  
-                  // Create paragraph with just "Up Next" text
-                  const newP = document.createElement('p');
-                  newP.textContent = 'Up Next';
-                  button.appendChild(newP);
-                  
-                  // Add the link element directly to the button (not inside a paragraph)
-                  button.appendChild(linkElement);
-                }
-              }
+          // Look for the paragraph containing &nbsp;
+          for (const p of paragraphs) {
+            if (p.innerHTML.includes('&nbsp;')) {
+              // Replace the &nbsp; with "Up Next"
+              p.innerHTML = "Up Next";
+              break; // Stop after finding the first match
             }
           }
         });
-    }
+      }
       
   
   })();
