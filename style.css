@@ -790,6 +790,8 @@ footer .footerContent .footerTop .footerLinks ul {
   list-style: none;
 }
 footer .footerContent .footerTop .footerLinks ul li a {
+  display: flex;
+  align-items: center;
   font-family: "Adelle Sans";
   font-size: 16px;
   line-height: 24px;
