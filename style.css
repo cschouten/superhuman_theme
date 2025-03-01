@@ -2223,6 +2223,7 @@ a > * {
   font-size: 16px;
   line-height: 24px;
   font-style: normal;
+  color: #a0a0a0;
 }
 @media (min-width: 768px) and (max-width: 1199px) {
   #main-content .contentWrapper .articleFoot .lu {
