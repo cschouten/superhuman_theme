@@ -815,9 +815,7 @@ footer .footerContent .footerTop .footerLinks ul li a:hover {
   color: #ffffff;
 }
 footer .footerContent .footerTop .footerLinks ul li .heartEmoji {
-  width: 19.4px;
-  height: 17px;
-  padding-bottom: 2px;
+  padding: 0 0 2px 4px;
 }
 footer .footerContent .footerDivider {
   width: 100%;
