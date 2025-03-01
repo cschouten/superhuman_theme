@@ -704,7 +704,9 @@ footer .footerContent .footerTop .tagline.narrow {
 }
 footer .footerContent .footerTop .footerLinks {
   display: flex;
-  gap: 16px;
+  justify-content: space-between;
+  width: 100%;
+  gap: 32px;
 }
 @media (max-width: 767px) {
   footer .footerContent .footerTop .footerLinks {
@@ -716,7 +718,8 @@ footer .footerContent .footerTop .footerLinks .linkColumn {
   display: flex;
   flex-direction: column;
   gap: 24px;
-  width: 120px;
+  min-width: 86px;
+  flex: 1;
 }
 @media (min-width: 768px) and (max-width: 1199px) {
   footer .footerContent .footerTop .footerLinks .linkColumn {
