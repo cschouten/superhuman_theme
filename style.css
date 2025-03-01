@@ -54,7 +54,9 @@
   
   img, picture, svg {
     max-width: 100%;
-    display: block;
+    height: auto;
+    vertical-align: middle;
+    border: 0;
   }
 
 body {
