@@ -1774,19 +1774,35 @@ footer p {
 }
 
 /* Remove underlines from category links in all states */
-#contentArea .category-list .category,
+/* #contentArea .category-list .category,
 #contentArea .category-list .category:link,
 #contentArea .category-list .category:visited,
 #contentArea .category-list .category:hover,
 #contentArea .category-list .category:active,
 #contentArea .category-list .category:focus {
   text-decoration: none !important;
-}
+} */
 
 /* Also target any text inside these links */
-#contentArea .category-list .category *,
+/* #contentArea .category-list .category *,
 #contentArea .category-list .category h3,
 #contentArea .category-list .category p {
+  text-decoration: none !important;
+} */
+
+/* Remove underlines from all links in all states */
+a,
+a:link,
+a:visited,
+a:hover,
+a:active,
+a:focus {
+  text-decoration: none !important;
+}
+
+/* Ensure no elements inside links get underlines */
+a *,
+a > * {
   text-decoration: none !important;
 }
 
