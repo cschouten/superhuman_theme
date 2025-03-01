@@ -721,33 +721,17 @@
         const nextPageButtons = document.querySelectorAll('.nextPageButton');
         
         nextPageButtons.forEach(button => {
-          // Get all paragraphs
-          const paragraphs = button.querySelectorAll('p');
+          // Get the current HTML structure
+          const currentHTML = button.innerHTML;
           
-          // Check if we have the correct structure with two paragraphs
-          if (paragraphs.length >= 2) {
-            const firstP = paragraphs[0];
-            const secondP = paragraphs[1];
+          // Check if we have the problematic structure
+          if (currentHTML.includes('&nbsp;') && currentHTML.includes('Up Next')) {
+            // Extract the link to preserve it
+            const linkMatch = currentHTML.match(/<a[^>]*>([^<]*)<\/a>/);
+            const link = linkMatch ? linkMatch[0] : '';
             
-            // Check if first paragraph contains only "Up Next"
-            if (firstP.textContent.trim() === "Up Next" && 
-                secondP.textContent.includes("Up Next") && 
-                secondP.querySelector('a')) {
-              
-              // Extract the link from the second paragraph
-              const link = secondP.querySelector('a');
-              const linkHTML = link.outerHTML;
-              
-              // Remove the "Up Next" text from the second paragraph
-              secondP.innerHTML = secondP.innerHTML.replace("Up Next", "");
-              
-              // If the second paragraph now only contains the link, we can simplify
-              if (secondP.textContent.trim() === "") {
-                button.innerHTML = ''; // Clear the button
-                button.appendChild(firstP); // Add back the first paragraph with "Up Next"
-                button.appendChild(link); // Add the link directly
-              }
-            }
+            // Create the correct structure with just one "Up Next" followed by the link
+            button.innerHTML = `<p>Up Next</p>${link}`;
           }
         });
       }
