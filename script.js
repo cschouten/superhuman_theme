@@ -724,36 +724,33 @@
           // Get all paragraphs
           const paragraphs = button.querySelectorAll('p');
           
-          // Look for the paragraph containing &nbsp;
-          for (const p of paragraphs) {
-            if (p.innerHTML.includes('&nbsp;')) {
-              // Replace the &nbsp; with "Up Next"
-              p.innerHTML = "Up Next";
-              break; // Stop after finding the first match
+          // Check if we have the correct structure with two paragraphs
+          if (paragraphs.length >= 2) {
+            const firstP = paragraphs[0];
+            const secondP = paragraphs[1];
+            
+            // Check if first paragraph contains only "Up Next"
+            if (firstP.textContent.trim() === "Up Next" && 
+                secondP.textContent.includes("Up Next") && 
+                secondP.querySelector('a')) {
+              
+              // Extract the link from the second paragraph
+              const link = secondP.querySelector('a');
+              const linkHTML = link.outerHTML;
+              
+              // Remove the "Up Next" text from the second paragraph
+              secondP.innerHTML = secondP.innerHTML.replace("Up Next", "");
+              
+              // If the second paragraph now only contains the link, we can simplify
+              if (secondP.textContent.trim() === "") {
+                button.innerHTML = ''; // Clear the button
+                button.appendChild(firstP); // Add back the first paragraph with "Up Next"
+                button.appendChild(link); // Add the link directly
+              }
             }
           }
         });
-        
-        // Remove the duplicate "Up Next" text appearing at the bottom
-        // Look for the parent container of "Splits Inbox Basics" link that contains "Up Next"
-        const articleBlocks = document.querySelectorAll('article');
-        
-        articleBlocks.forEach(article => {
-          // Find any "Up Next" text outside of nextPageButton divs
-          const upNextElements = Array.from(article.querySelectorAll('p'))
-            .filter(p => 
-              p.textContent.includes('Up Next') && 
-              !p.closest('.nextPageButton') &&
-              p.nextElementSibling && 
-              p.nextElementSibling.tagName === 'A'
-            );
-          
-          upNextElements.forEach(element => {
-            // Remove or hide the standalone "Up Next" text
-            element.remove();
-          });
-        });
-    }
+      }
       
   
   })();
