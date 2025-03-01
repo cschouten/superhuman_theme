@@ -666,6 +666,7 @@
     function initDarkTheme() {
       addBackground();
       updateArticleFooter();
+      fixNextPageButtons(); 
     }
   
     function addBackground() {
@@ -713,6 +714,21 @@
         if (articleRatings) {
           articleFoot.append(articleRatings)
         }
-      }
+    }
+
+    function fixNextPageButtons() {
+        // Find all nextPageButton divs
+        const nextPageButtons = document.querySelectorAll('.nextPageButton');
+        
+        nextPageButtons.forEach(button => {
+          // Check if the first child is a paragraph with only &nbsp;
+          const firstParagraph = button.querySelector('p:first-child');
+          if (firstParagraph && firstParagraph.innerHTML.trim() === '&nbsp;') {
+            // Remove the empty first paragraph
+            firstParagraph.remove();
+          }
+        });
+    }
+      
   
   })();
