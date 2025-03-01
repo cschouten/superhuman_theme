@@ -29,7 +29,7 @@
   }
   
   body, h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd, ul, ol {
-    margin: 0;
+    margin: 9px 0;
     padding: 0;
   }
   
@@ -1418,7 +1418,6 @@ footer p {
   color: #ffffff;
 }
 #contentArea .category-list .category h3 {
-  font-family: "Adelle Sans Semibold";
   font-size: 24px;
   line-height: 32px;
 }
@@ -1436,7 +1435,7 @@ footer p {
 }
 #contentArea .category-list .category p {
   font-family: "Adelle Sans";
-  font-size: 16px;
+  font-size: 15px;
   line-height: 24px;
 }
 @media (min-width: 768px) and (max-width: 1199px) {
