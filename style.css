@@ -1014,7 +1014,7 @@ footer p {
 #docsSearch #searchBar .search-query {
   flex: 1;
   max-width: 372px;
-  padding: 4px 24px 0px 24px;
+  padding: 0px 24px;
   outline-style: solid;
   outline-color: rgba(255, 255, 255, 0.2);
   transition: outline-color 0.3s ease;
