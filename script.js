@@ -676,7 +676,7 @@
     function initDarkTheme() {
       addBackground();
       updateArticleFooter();
-      fixNextPageButtons(); 
+      // fixNextPageButtons(); 
       setupTutorialNavigation(); 
       updateSidebarActiveClass();
     }
@@ -728,33 +728,33 @@
         }
     }
 
-    function fixNextPageButtons() {
-        // Find all nextPageButton divs
-        const nextPageButtons = document.querySelectorAll('.nextPageButton');
+    // function fixNextPageButtons() {
+    //     // Find all nextPageButton divs
+    //     const nextPageButtons = document.querySelectorAll('.nextPageButton');
         
-        nextPageButtons.forEach(button => {
-          // Get the current HTML and text content
-          const currentHTML = button.innerHTML;
-          const textContent = button.textContent.trim();
+    //     nextPageButtons.forEach(button => {
+    //       // Get the current HTML and text content
+    //       const currentHTML = button.innerHTML;
+    //       const textContent = button.textContent.trim();
           
-          // Check for several possible patterns
-          if (
-            // Case 1: Contains &nbsp; and "Up Next" (your original check)
-            (currentHTML.includes('&nbsp;') && currentHTML.includes('Up Next')) ||
-            // Case 2: Contains "Up Next" without proper paragraph structure
-            (textContent.startsWith('Up Next') && !currentHTML.includes('<p>Up Next</p>')) ||
-            // Case 3: Has "Up Next" text directly adjacent to the link
-            /Up Next\s*<a/.test(currentHTML)
-          ) {
-            // Extract the link or links
-            const linkMatches = currentHTML.match(/<a[^>]*>([^<]*)<\/a>/g);
-            const links = linkMatches ? linkMatches.join('') : '';
+    //       // Check for several possible patterns
+    //       if (
+    //         // Case 1: Contains &nbsp; and "Up Next" (your original check)
+    //         (currentHTML.includes('&nbsp;') && currentHTML.includes('Up Next')) ||
+    //         // Case 2: Contains "Up Next" without proper paragraph structure
+    //         (textContent.startsWith('Up Next') && !currentHTML.includes('<p>Up Next</p>')) ||
+    //         // Case 3: Has "Up Next" text directly adjacent to the link
+    //         /Up Next\s*<a/.test(currentHTML)
+    //       ) {
+    //         // Extract the link or links
+    //         const linkMatches = currentHTML.match(/<a[^>]*>([^<]*)<\/a>/g);
+    //         const links = linkMatches ? linkMatches.join('') : '';
             
-            // Create the correct structure with just one "Up Next" followed by the links
-            button.innerHTML = `<p>Up Next</p>${links}`;
-          }
-        });
-      }
+    //         // Create the correct structure with just one "Up Next" followed by the links
+    //         button.innerHTML = `<p>Up Next</p>${links}`;
+    //       }
+    //     });
+    //   }
 
       function setupTutorialNavigation() {
         // Define the tutorial sequence - add all your tutorial series here
