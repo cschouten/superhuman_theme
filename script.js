@@ -479,6 +479,16 @@
         input.addEventListener("keyup", clearSearchInputOnKeypress);
         input.addEventListener("keyup", toggleClearSearchButtonAvailability);
       });
+
+        document.querySelectorAll("form[role='search'], #searchBar").forEach(form => {
+            form.addEventListener('submit', function(event) {
+            const searchInput = this.querySelector('input[type="search"], .search-query');
+            if (!searchInput || !searchInput.value.trim()) {
+                // Prevent form submission if search is empty
+                event.preventDefault();
+            }
+            });
+        });
     });
   
     const key = "returnFocusTo";
