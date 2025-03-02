@@ -2858,7 +2858,7 @@ a > * {
     border: 0
 }
 
-/* #sidebar #searchBar button {
+#sidebar #searchBar button {
     cursor: pointer;
 }
 
@@ -2876,7 +2876,7 @@ a > * {
     background-position: center;
     background-size: contain;
 }
-
+/*
 #sidebar {
   width: calc((100% - 352px) / 12 * 3 + 64px);
   margin: 32px 0 0 0;
