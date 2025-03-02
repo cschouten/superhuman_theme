@@ -2598,25 +2598,46 @@ a > * {
     border: 0
 }
 
-.icon-search:before {
-    content: "\e601"
-}
-
-.featherlight-close-icon,[class*=" icon-"],[class^=icon-] {
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 400;
-    font-variant: normal;
-    text-transform: none;
-    line-height: 1;
-    color: #C6C6C6;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale
-}
-
-.featherlight-close-icon:before,[class*=" icon-"]:before,[class^=icon-]:before {
-    text-decoration: none
-}
+/* Remove old icon styling */
+#sidebar #searchBar button .icon-search:before {
+    content: "";
+  }
+  
+  /* Create magnifying glass icon with CSS */
+  #sidebar #searchBar button .icon-search {
+    display: inline-block;
+    position: relative;
+    width: 12px;
+    height: 12px;
+    border: 2px solid white;
+    border-radius: 50%;
+    margin-right: 3px;
+  }
+  
+  /* Create the handle */
+  #sidebar #searchBar button .icon-search:after {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 7px;
+    height: 2px;
+    background: white;
+    transform: rotate(45deg);
+    transform-origin: 0 0;
+  }
+  
+  /* Ensure proper positioning */
+  #sidebar #searchBar button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 40px;
+    right: 5px;
+    top: 0;
+    background: transparent;
+  }
 
 #sidebar {
   width: calc((100% - 352px) / 12 * 3 + 64px);
