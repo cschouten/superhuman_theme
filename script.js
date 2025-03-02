@@ -732,17 +732,25 @@
         const nextPageButtons = document.querySelectorAll('.nextPageButton');
         
         nextPageButtons.forEach(button => {
-          // Get the current HTML structure
+          // Get the current HTML and text content
           const currentHTML = button.innerHTML;
+          const textContent = button.textContent.trim();
           
-          // Check if we have the problematic structure
-          if (currentHTML.includes('&nbsp;') && currentHTML.includes('Up Next')) {
-            // Extract the link to preserve it
-            const linkMatch = currentHTML.match(/<a[^>]*>([^<]*)<\/a>/);
-            const link = linkMatch ? linkMatch[0] : '';
+          // Check for several possible patterns
+          if (
+            // Case 1: Contains &nbsp; and "Up Next" (your original check)
+            (currentHTML.includes('&nbsp;') && currentHTML.includes('Up Next')) ||
+            // Case 2: Contains "Up Next" without proper paragraph structure
+            (textContent.startsWith('Up Next') && !currentHTML.includes('<p>Up Next</p>')) ||
+            // Case 3: Has "Up Next" text directly adjacent to the link
+            /Up Next\s*<a/.test(currentHTML)
+          ) {
+            // Extract the link or links
+            const linkMatches = currentHTML.match(/<a[^>]*>([^<]*)<\/a>/g);
+            const links = linkMatches ? linkMatches.join('') : '';
             
-            // Create the correct structure with just one "Up Next" followed by the link
-            button.innerHTML = `<p>Up Next</p>${link}`;
+            // Create the correct structure with just one "Up Next" followed by the links
+            button.innerHTML = `<p>Up Next</p>${links}`;
           }
         });
       }
