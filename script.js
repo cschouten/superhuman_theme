@@ -677,6 +677,7 @@
       addBackground();
       updateArticleFooter();
       fixNextPageButtons(); 
+      updateSidebarActiveClass();
     }
   
     function addBackground() {
@@ -744,6 +745,52 @@
             button.innerHTML = `<p>Up Next</p>${link}`;
           }
         });
+      }
+
+      function updateSidebarActiveClass() {
+        // Get current page URL
+        const currentPageUrl = window.location.href;
+        
+        // Get all sidebar navigation links
+        const navLinks = document.querySelectorAll('#sidebar .nav-list li a');
+        
+        // Remove any existing active classes
+        document.querySelectorAll('#sidebar .nav-list li').forEach(function(li) {
+          li.classList.remove('active');
+        });
+        
+        // Check for exact URL match first
+        let exactMatch = false;
+        
+        navLinks.forEach(function(link) {
+          const linkUrl = link.getAttribute('href');
+          
+          if (currentPageUrl === linkUrl || currentPageUrl.endsWith(linkUrl)) {
+            // Add active class to the parent li element for exact match
+            link.parentElement.classList.add('active');
+            exactMatch = true;
+          }
+        });
+        
+        // If no exact match found, check for partial matches
+        if (!exactMatch) {
+          navLinks.forEach(function(link) {
+            const linkUrl = link.getAttribute('href');
+            
+            // For category links
+            if (linkUrl.includes('/categories/') && currentPageUrl.includes(linkUrl.split('/categories/')[1])) {
+              link.parentElement.classList.add('active');
+            }
+            // For article links that are part of a category
+            else if (linkUrl.includes('/articles/') && currentPageUrl.includes(linkUrl.split('/articles/')[1])) {
+              link.parentElement.classList.add('active');
+            }
+            // For more general URL matching
+            else if (currentPageUrl.includes(linkUrl) && linkUrl !== '/') {
+              link.parentElement.classList.add('active');
+            }
+          });
+        }
       }
       
   
