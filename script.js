@@ -677,6 +677,7 @@
       addBackground();
       updateArticleFooter();
       fixNextPageButtons(); 
+      setupTutorialNavigation(); 
       updateSidebarActiveClass();
     }
   
@@ -753,6 +754,74 @@
             button.innerHTML = `<p>Up Next</p>${links}`;
           }
         });
+      }
+
+      function setupTutorialNavigation() {
+        // Define the tutorial sequence - add all your tutorial series here
+        const tutorials = {
+          'superhuman-get-started': [
+            { id: '38448760193939', title: 'Superhuman Fundamentals' },
+            { id: '38449611367187', title: 'Splits Inbox Basics' },
+            { id: '38449739437587', title: 'Achieving Inbox Zero' },
+            { id: '38449763157011', title: 'Composing & Replying' }
+          ]
+          // You can add more tutorial series here as needed
+          // 'another-tutorial-series': [ {...}, {...} ]
+        };
+      
+        // Get the current article ID from the URL
+        const currentUrl = window.location.href;
+        const currentIdMatch = currentUrl.match(/\/articles\/(\d+)/);
+        
+        if (!currentIdMatch || !currentIdMatch[1]) return;
+        
+        const currentId = currentIdMatch[1];
+        
+        // Find which tutorial series this article belongs to
+        let currentTutorial = null;
+        let currentIndex = -1;
+        
+        for (const [tutorialKey, sequence] of Object.entries(tutorials)) {
+          const foundIndex = sequence.findIndex(article => article.id === currentId);
+          if (foundIndex !== -1) {
+            currentTutorial = sequence;
+            currentIndex = foundIndex;
+            break;
+          }
+        }
+        
+        if (!currentTutorial || currentIndex === -1) return;
+        
+        // Find or create the navigation container
+        let navContainer = document.querySelector('.tutorial-navigation');
+        
+        if (!navContainer) {
+          navContainer = document.createElement('div');
+          navContainer.className = 'tutorial-navigation nextPageButton';
+          
+          // Add the navigation to the article
+          const articleContent = document.querySelector('.article-body');
+          if (articleContent) {
+            articleContent.appendChild(navContainer);
+          }
+        }
+        
+        // Determine what content to show based on position in sequence
+        if (currentIndex < currentTutorial.length - 1) {
+          // Not the last article, show "Up Next" navigation
+          const nextArticle = currentTutorial[currentIndex + 1];
+          navContainer.innerHTML = `
+            <p>Up Next</p>
+            <a href="/hc/en-us/articles/${nextArticle.id}">${nextArticle.title}</a>
+          `;
+        } else {
+          // This is the last article, show completion message
+          navContainer.innerHTML = `
+            <h3>Congratulations!</h3>
+            <p>You've completed the Superhuman Get Started Guide and are ready to fly through your inbox faster than ever! If you have any feedback, please hit <strong>Cmd+K</strong> or <strong>Ctrl+K → Help</strong> to let us know 🙏</p>
+            <p>Ready for more? <a href="/hc/en-us/articles/4406028835731">Check out our Level Up Guide</a> to become as effective as possible!</p>
+          `;
+        }
       }
 
       function updateSidebarActiveClass() {
