@@ -1,43 +1,49 @@
-{{!-- category_page.hbs template for Zendesk Help Center --}}
-
 <div class="container">
   <div class="category-content">
     <h1>{{category.name}}</h1>
     <p class="category-description">{{category.description}}</p>
 
-    {{#if articles}}
+    {{
+#if
+ category.sections}}
       <div class="articles-list">
-        {{#each articles}}
-          <a href="{{url}}" class="article-link">{{title}}</a>
-        {{/each}}
+        {{
+#each
+ category.sections}}
+          {{
+#each
+ articles}}
+            <a href="{{url}}" class="article-link">{{title}}</a>
+          {{
+/each
+}}
+        {{
+/each
+}}
       </div>
     {{else}}
       <p>No articles in this category</p>
-    {{/if}}
+    {{
+/if
+}}
   </div>
 
   <div class="sidebar">
     <h3>Categories</h3>
     <ul class="nav-list">
-      {{#each categories}}
-        <li {{#if current}}class="active"{{/if}}>
+      {{
+#each
+ help_center.categories}}
+        <li {{
+#is
+ id ../category.id}}class="active"{{
+/is
+}}>
           <a href="{{url}}">{{name}} <i class="icon-arrow"></i></a>
         </li>
-      {{/each}}
+      {{
+/each
+}}
     </ul>
   </div>
 </div>
-
-{{!-- Optional: Implement the sorting functionality --}}
-{{#if category.articles}}
-  <div class="sort">
-    <form action="{{category.url}}" method="GET">
-      <select name="sort" id="sortBy" title="sort-by" onchange="this.form.submit();" aria-label="Page reloads on selection">
-        <option value="" {{#unless sort}}selected="selected"{{/unless}}>Sort by Default</option>
-        <option value="name" {{#if sort_by_name}}selected="selected"{{/if}}>Sort A-Z</option>
-        <option value="popularity" {{#if sort_by_popularity}}selected="selected"{{/if}}>Sort by Popularity</option>
-        <option value="updatedAt" {{#if sort_by_updated_at}}selected="selected"{{/if}}>Sort by Last Updated</option>
-      </select>
-    </form>
-  </div>
-{{/if}}
