@@ -2598,8 +2598,11 @@ a > * {
     border: 0
 }
 
+.icon-search:before {
+    content: "\e601"
+}
+
 .featherlight-close-icon,[class*=" icon-"],[class^=icon-] {
-    font-family: helpscout-docs3;
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
