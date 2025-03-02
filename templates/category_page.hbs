@@ -1,63 +1,43 @@
-<div class="container-divider"></div>
+{{!-- category_page.hbs template for Zendesk Help Center --}}
+
 <div class="container">
-  <div class="sub-nav">
-    {{breadcrumbs}}
-    <div class="search-container">
-      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" focusable="false" viewBox="0 0 12 12" class="search-icon" aria-hidden="true">
-        <circle cx="4.5" cy="4.5" r="4" fill="none" stroke="currentColor"/>
-        <path stroke="currentColor" stroke-linecap="round" d="M11 11L7.5 7.5"/>
-      </svg>
-      {{search scoped=settings.scoped_kb_search submit=false}}
-    </div>
-  </div>
+  <div class="category-content">
+    <h1>{{category.name}}</h1>
+    <p class="category-description">{{category.description}}</p>
 
-  <div class="category-container">
-    <div class="category-content">
-      <header class="page-header">
-        <h1>{{category.name}}</h1>
-        {{#if category.description}}
-          <p class="page-header-description">{{category.description}}</p>
-        {{/if}}
-      </header>
-
-      <div id="main-content" class="section-tree">
-        {{#each sections}}
-          <section class="section">
-            <h2 class="section-tree-title">
-              <a href="{{url}}">{{name}}</a>
-            </h2>
-            {{#if articles}}
-              <ul class="article-list">
-                {{#each articles}}
-                  <li class="article-list-item{{#if promoted}} article-promoted{{/if}}">
-                    {{#if promoted}}
-                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" focusable="false" viewBox="0 0 12 12" class="icon-star" title="{{t 'promoted'}}">
-                        <path fill="currentColor" d="M2.88 11.73c-.19 0-.39-.06-.55-.18a.938.938 0 01-.37-1.01l.8-3L.35 5.57a.938.938 0 01-.3-1.03c.12-.37.45-.63.85-.65L4 3.73 5.12.83c.14-.37.49-.61.88-.61s.74.24.88.6L8 3.73l3.11.17a.946.946 0 01.55 1.68L9.24 7.53l.8 3a.95.95 0 01-1.43 1.04L6 9.88l-2.61 1.69c-.16.1-.34.16-.51.16z"/>
-                      </svg>
-                    {{/if}}
-                    <a href="{{url}}" class="article-list-link">{{title}}</a>
-                    {{#if internal}}
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" focusable="false" viewBox="0 0 16 16" class="icon-lock" title="{{t 'internal'}}">
-                        <rect width="12" height="9" x="2" y="7" fill="currentColor" rx="1" ry="1"/>
-                        <path fill="none" stroke="currentColor" d="M4.5 7.5V4a3.5 3.5 0 017 0v3.5"/>
-                      </svg>
-                    {{/if}}
-                  </li>
-                {{/each}}
-              </ul>
-              {{#if more_articles}}
-                <a href="{{url}}" class="see-all-articles">
-                  {{t 'show_all_articles' count=article_count}}
-                </a>
-              {{/if}}
-            {{/if}}
-          </section>
-        {{else}}
-          <i class="category-empty">
-            <a href="{{category.url}}">{{t 'empty'}}</a>
-          </i>
+    {{#if articles}}
+      <div class="articles-list">
+        {{#each articles}}
+          <a href="{{url}}" class="article-link">{{title}}</a>
         {{/each}}
       </div>
-    </div>
+    {{else}}
+      <p>No articles in this category</p>
+    {{/if}}
+  </div>
+
+  <div class="sidebar">
+    <h3>Categories</h3>
+    <ul class="nav-list">
+      {{#each categories}}
+        <li {{#if current}}class="active"{{/if}}>
+          <a href="{{url}}">{{name}} <i class="icon-arrow"></i></a>
+        </li>
+      {{/each}}
+    </ul>
   </div>
 </div>
+
+{{!-- Optional: Implement the sorting functionality --}}
+{{#if category.articles}}
+  <div class="sort">
+    <form action="{{category.url}}" method="GET">
+      <select name="sort" id="sortBy" title="sort-by" onchange="this.form.submit();" aria-label="Page reloads on selection">
+        <option value="" {{#unless sort}}selected="selected"{{/unless}}>Sort by Default</option>
+        <option value="name" {{#if sort_by_name}}selected="selected"{{/if}}>Sort A-Z</option>
+        <option value="popularity" {{#if sort_by_popularity}}selected="selected"{{/if}}>Sort by Popularity</option>
+        <option value="updatedAt" {{#if sort_by_updated_at}}selected="selected"{{/if}}>Sort by Last Updated</option>
+      </select>
+    </form>
+  </div>
+{{/if}}
