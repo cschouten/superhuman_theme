@@ -2598,6 +2598,23 @@ a > * {
     border: 0
 }
 
+.featherlight-close-icon,[class*=" icon-"],[class^=icon-] {
+    font-family: helpscout-docs3;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    color: #C6C6C6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale
+}
+
+.featherlight-close-icon:before,[class*=" icon-"]:before,[class^=icon-]:before {
+    text-decoration: none
+}
+
 #sidebar {
   width: calc((100% - 352px) / 12 * 3 + 64px);
   margin: 32px 0 0 0;
