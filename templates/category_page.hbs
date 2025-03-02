@@ -1,16 +1,19 @@
+{{!-- category_page.hbs template for Zendesk Help Center --}}
 <div class="contentWrapper">
     <hgroup id="categoryHead">
         <h1>{{category.name}}</h1>
         <p class="descrip">{{category.description}}</p>
     </hgroup><!--/categoryHead-->
 
-    {{#if category.articles}}
+    {{#if category.sections}}
         <ul class="articleList">
-            {{#each category.articles}}
-                <li><a href="{{url}}"><i class="icon-article-doc"></i><span>{{title}}</span></a></li>
+            {{#each category.sections}}
+                {{#each articles}}
+                    <li><a href="{{url}}"><i class="icon-article-doc"></i><span>{{title}}</span></a></li>
+                {{/each}}
             {{/each}}
-        </ul>
+        </ul><!--/articleList-->
     {{else}}
         <p>No articles in this category</p>
     {{/if}}
-</div>
+</div><!--/contentWrapper-->
