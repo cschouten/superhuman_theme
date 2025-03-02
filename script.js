@@ -676,8 +676,8 @@
     function initDarkTheme() {
       addBackground();
       updateArticleFooter();
-      // fixNextPageButtons(); 
-      setupTutorialNavigation(); 
+      fixNextPageButtons(); 
+      // setupTutorialNavigation(); 
       updateSidebarActiveClass();
     }
   
@@ -728,101 +728,101 @@
         }
     }
 
-    // function fixNextPageButtons() {
-    //     // Find all nextPageButton divs
-    //     const nextPageButtons = document.querySelectorAll('.nextPageButton');
+    function fixNextPageButtons() {
+        // Find all nextPageButton divs
+        const nextPageButtons = document.querySelectorAll('.nextPageButton');
         
-    //     nextPageButtons.forEach(button => {
-    //       // Get the current HTML and text content
-    //       const currentHTML = button.innerHTML;
-    //       const textContent = button.textContent.trim();
+        nextPageButtons.forEach(button => {
+          // Get the current HTML and text content
+          const currentHTML = button.innerHTML;
+          const textContent = button.textContent.trim();
           
-    //       // Check for several possible patterns
-    //       if (
-    //         // Case 1: Contains &nbsp; and "Up Next" (your original check)
-    //         (currentHTML.includes('&nbsp;') && currentHTML.includes('Up Next')) ||
-    //         // Case 2: Contains "Up Next" without proper paragraph structure
-    //         (textContent.startsWith('Up Next') && !currentHTML.includes('<p>Up Next</p>')) ||
-    //         // Case 3: Has "Up Next" text directly adjacent to the link
-    //         /Up Next\s*<a/.test(currentHTML)
-    //       ) {
-    //         // Extract the link or links
-    //         const linkMatches = currentHTML.match(/<a[^>]*>([^<]*)<\/a>/g);
-    //         const links = linkMatches ? linkMatches.join('') : '';
+          // Check for several possible patterns
+          if (
+            // Case 1: Contains &nbsp; and "Up Next" (your original check)
+            (currentHTML.includes('&nbsp;') && currentHTML.includes('Up Next')) ||
+            // Case 2: Contains "Up Next" without proper paragraph structure
+            (textContent.startsWith('Up Next') && !currentHTML.includes('<p>Up Next</p>')) ||
+            // Case 3: Has "Up Next" text directly adjacent to the link
+            /Up Next\s*<a/.test(currentHTML)
+          ) {
+            // Extract the link or links
+            const linkMatches = currentHTML.match(/<a[^>]*>([^<]*)<\/a>/g);
+            const links = linkMatches ? linkMatches.join('') : '';
             
-    //         // Create the correct structure with just one "Up Next" followed by the links
-    //         button.innerHTML = `<p>Up Next</p>${links}`;
-    //       }
-    //     });
-    //   }
-
-      function setupTutorialNavigation() {
-        // Define the tutorial sequence - add all your tutorial series here
-        const tutorials = {
-          'superhuman-get-started': [
-            { id: '38448760193939', title: 'Superhuman Fundamentals' },
-            { id: '38449611367187', title: 'Splits Inbox Basics' },
-            { id: '38449739437587', title: 'Achieving Inbox Zero' },
-            { id: '38449763157011', title: 'Composing & Replying' }
-          ]
-          // You can add more tutorial series here as needed
-          // 'another-tutorial-series': [ {...}, {...} ]
-        };
-      
-        // Get the current article ID from the URL
-        const currentUrl = window.location.href;
-        const currentIdMatch = currentUrl.match(/\/articles\/(\d+)/);
-        
-        if (!currentIdMatch || !currentIdMatch[1]) return;
-        
-        const currentId = currentIdMatch[1];
-        
-        // Find which tutorial series this article belongs to
-        let currentTutorial = null;
-        let currentIndex = -1;
-        
-        for (const [tutorialKey, sequence] of Object.entries(tutorials)) {
-          const foundIndex = sequence.findIndex(article => article.id === currentId);
-          if (foundIndex !== -1) {
-            currentTutorial = sequence;
-            currentIndex = foundIndex;
-            break;
+            // Create the correct structure with just one "Up Next" followed by the links
+            button.innerHTML = `<p>Up Next</p>${links}`;
           }
-        }
-        
-        if (!currentTutorial || currentIndex === -1) return;
-        
-        // Find or create the navigation container
-        let navContainer = document.querySelector('.tutorial-navigation');
-        
-        if (!navContainer) {
-          navContainer = document.createElement('div');
-          navContainer.className = 'tutorial-navigation nextPageButton';
-          
-          // Add the navigation to the article
-          const articleContent = document.querySelector('.article-body');
-          if (articleContent) {
-            articleContent.appendChild(navContainer);
-          }
-        }
-        
-        // Determine what content to show based on position in sequence
-        if (currentIndex < currentTutorial.length - 1) {
-          // Not the last article, show "Up Next" navigation
-          const nextArticle = currentTutorial[currentIndex + 1];
-          navContainer.innerHTML = `
-            <p>Up Next</p>
-            <a href="/hc/en-us/articles/${nextArticle.id}">${nextArticle.title}</a>
-          `;
-        } else {
-          // This is the last article, show completion message
-          navContainer.innerHTML = `
-            <h3>Congratulations!</h3>
-            <p>You've completed the Superhuman Get Started Guide and are ready to fly through your inbox faster than ever! If you have any feedback, please hit <strong>Cmd+K</strong> or <strong>Ctrl+K → Help</strong> to let us know 🙏</p>
-            <p>Ready for more? <a href="/hc/en-us/articles/4406028835731">Check out our Level Up Guide</a> to become as effective as possible!</p>
-          `;
-        }
+        });
       }
+
+    //   function setupTutorialNavigation() {
+    //     // Define the tutorial sequence - add all your tutorial series here
+    //     const tutorials = {
+    //       'superhuman-get-started': [
+    //         { id: '38448760193939', title: 'Superhuman Fundamentals' },
+    //         { id: '38449611367187', title: 'Splits Inbox Basics' },
+    //         { id: '38449739437587', title: 'Achieving Inbox Zero' },
+    //         { id: '38449763157011', title: 'Composing & Replying' }
+    //       ]
+    //       // You can add more tutorial series here as needed
+    //       // 'another-tutorial-series': [ {...}, {...} ]
+    //     };
+      
+    //     // Get the current article ID from the URL
+    //     const currentUrl = window.location.href;
+    //     const currentIdMatch = currentUrl.match(/\/articles\/(\d+)/);
+        
+    //     if (!currentIdMatch || !currentIdMatch[1]) return;
+        
+    //     const currentId = currentIdMatch[1];
+        
+    //     // Find which tutorial series this article belongs to
+    //     let currentTutorial = null;
+    //     let currentIndex = -1;
+        
+    //     for (const [tutorialKey, sequence] of Object.entries(tutorials)) {
+    //       const foundIndex = sequence.findIndex(article => article.id === currentId);
+    //       if (foundIndex !== -1) {
+    //         currentTutorial = sequence;
+    //         currentIndex = foundIndex;
+    //         break;
+    //       }
+    //     }
+        
+    //     if (!currentTutorial || currentIndex === -1) return;
+        
+    //     // Find or create the navigation container
+    //     let navContainer = document.querySelector('.tutorial-navigation');
+        
+    //     if (!navContainer) {
+    //       navContainer = document.createElement('div');
+    //       navContainer.className = 'tutorial-navigation nextPageButton';
+          
+    //       // Add the navigation to the article
+    //       const articleContent = document.querySelector('.article-body');
+    //       if (articleContent) {
+    //         articleContent.appendChild(navContainer);
+    //       }
+    //     }
+        
+    //     // Determine what content to show based on position in sequence
+    //     if (currentIndex < currentTutorial.length - 1) {
+    //       // Not the last article, show "Up Next" navigation
+    //       const nextArticle = currentTutorial[currentIndex + 1];
+    //       navContainer.innerHTML = `
+    //         <p>Up Next</p>
+    //         <a href="/hc/en-us/articles/${nextArticle.id}">${nextArticle.title}</a>
+    //       `;
+    //     } else {
+    //       // This is the last article, show completion message
+    //       navContainer.innerHTML = `
+    //         <h3>Congratulations!</h3>
+    //         <p>You've completed the Superhuman Get Started Guide and are ready to fly through your inbox faster than ever! If you have any feedback, please hit <strong>Cmd+K</strong> or <strong>Ctrl+K → Help</strong> to let us know 🙏</p>
+    //         <p>Ready for more? <a href="/hc/en-us/articles/4406028835731">Check out our Level Up Guide</a> to become as effective as possible!</p>
+    //       `;
+    //     }
+    //   }
 
       function updateSidebarActiveClass() {
         // Get current page URL
