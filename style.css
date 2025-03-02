@@ -2597,47 +2597,21 @@ a > * {
     clip: rect(0,0,0,0);
     border: 0
 }
-
-/* Remove old icon styling */
-#sidebar #searchBar button .icon-search:before {
-    content: "";
-  }
   
-  /* Create magnifying glass icon with CSS */
-  #sidebar #searchBar button .icon-search {
+#sidebar #searchBar button .icon-search {
+    display: none;
+}
+  
+#sidebar #searchBar button:before {
+    content: '';
     display: inline-block;
-    position: relative;
-    width: 12px;
-    height: 12px;
-    border: 2px solid white;
-    border-radius: 50%;
-    margin-right: 3px;
-  }
-  
-  /* Create the handle */
-  #sidebar #searchBar button .icon-search:after {
-    content: "";
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    width: 7px;
-    height: 2px;
-    background: white;
-    transform: rotate(45deg);
-    transform-origin: 0 0;
-  }
-  
-  /* Ensure proper positioning */
-  #sidebar #searchBar button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 40px;
-    width: 40px;
-    right: 5px;
-    top: 0;
-    background: transparent;
-  }
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'%3E%3C/circle%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'%3E%3C/line%3E%3C/svg%3E");
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
 
 #sidebar {
   width: calc((100% - 352px) / 12 * 3 + 64px);
