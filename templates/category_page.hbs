@@ -1,44 +1,16 @@
-<div class="container">
-    <div class="category-content">
+<div class="contentWrapper">
+    <hgroup id="categoryHead">
         <h1>{{category.name}}</h1>
-        <p class="category-description">{{category.description}}</p>
+        <p class="descrip">{{category.description}}</p>
+    </hgroup><!--/categoryHead-->
 
-        {{
-        #if
-        category.sections}}
-        <div class="articles-list">
-            {{
-            #each
-            category.sections}}
-            {{
-            #each
-            articles}}
-            <a href="{{url}}" class="article-link">{{title}}</a>
-            {{
-            /each
-            }}
-            {{
-            /each
-            }}
-        </div>
-        {{else}}
-        <p>No articles in this category</p>
-        {{
-        /if
-        }}
-    </div>
-
-    <div class="sidebar">
-        <h3>Categories</h3>
-        <ul class="nav-list">
-            {{
-            #each categories}}
-            <li {{ #is id ../category.id}}class="active" {{ /is }}>
-                <a href="{{url}}">{{name}} <i class="icon-arrow"></i></a>
-            </li>
-            {{
-            /each
-            }}
+    {{#if category.articles}}
+        <ul class="articleList">
+            {{#each category.articles}}
+                <li><a href="{{url}}"><i class="icon-article-doc"></i><span>{{title}}</span></a></li>
+            {{/each}}
         </ul>
-    </div>
+    {{else}}
+        <p>No articles in this category</p>
+    {{/if}}
 </div>
