@@ -2103,7 +2103,7 @@ a > * {
   padding-left: 0;
   float: right;
   margin-bottom: 2em;
-  padding: 32px 0 0 28px
+  padding: 32px 0;
 }
 #main-content .contentWrapper {
   background: rgba(255, 255, 255, 0.05);
