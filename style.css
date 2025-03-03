@@ -24,9 +24,9 @@
 }
 
 /* Modern CSS Reset */
-*, *::before, *::after {
+/* *, *::before, *::after {
     box-sizing: border-box;
-  }
+  } */
   
   body, h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd, ul, ol {
     margin: 9px 0;
@@ -1383,11 +1383,11 @@ footer p {
   border-radius: 10px;
   padding: 32px;
 }
-@media (min-width: 768px) and (max-width: 1199px) {
+/* @media (min-width: 768px) and (max-width: 1199px) {
   #contentArea .category-list .category {
     flex: 0 0 calc(50% - 16px);
   }
-}
+} */
 #contentArea .category-list .category::before {
   content: "";
   position: absolute;
