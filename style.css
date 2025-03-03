@@ -2509,6 +2509,34 @@ a > * {
     gap: 16px;
   }
 }
+
+.contentWrapper p.descrip {
+    font-size: 15px;
+    margin-bottom: 20px;
+    color: #757575
+}
+
+.articleList {
+    list-style: none;
+    margin: 0 0 38px 0;
+    font-size: 1.3em;
+}
+
+.articleList li {
+    margin: 1.4em 0;
+    padding-left: 25px
+}
+
+.articleList a {
+    line-height: 1.5em;
+    margin-left: -24px;
+    text-decoration: none
+}
+
+.articleList a:hover span {
+    text-decoration: underline
+}
+
 #main-content .related {
   border: none;
   border-radius: 10px;
