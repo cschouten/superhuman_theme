@@ -1,19 +1,76 @@
-{{!-- category_page.hbs template for Zendesk Help Center --}}
-<div class="contentWrapper">
-    <hgroup id="categoryHead">
-        <h1>{{category.name}}</h1>
-        <p class="descrip">{{category.description}}</p>
-    </hgroup><!--/categoryHead-->
+<section id="contentArea" class="container-fluid">
+    <div class="row-fluid">
+        <section id="main-content" class="span9">
+            <div class="contentWrapper">
+                <hgroup id="categoryHead">
+                    <h1>{{category.name}}</h1>
+                    <p class="descrip">{{category.description}}</p>
+                    <div class="sort">
+                        <form action="/category/{{category.id}}" method="GET">
+                            <select name="sort" id="sortBy" title="sort-by" onchange="this.form.submit();"
+                                aria-label="Page reloads on selection">
+                                <option value="">Sort by Default</option>
+                                <option value="name">Sort A-Z</option>
+                                <option value="popularity">Sort by Popularity</option>
+                                <option value="updatedAt">Sort by Last Updated</option>
+                            </select>
+                        </form>
+                    </div>
+                </hgroup><!--/categoryHead-->
 
-    {{#if category.sections}}
-        <ul class="articleList">
-            {{#each category.sections}}
-                {{#each articles}}
+                {{
+                #if
+                category.sections}}
+                <ul class="articleList">
+                    {{
+                    #each
+                    category.sections}}
+                    {{
+                    #each
+                    articles}}
                     <li><a href="{{url}}"><i class="icon-article-doc"></i><span>{{title}}</span></a></li>
-                {{/each}}
-            {{/each}}
-        </ul><!--/articleList-->
-    {{else}}
-        <p>No articles in this category</p>
-    {{/if}}
-</div><!--/contentWrapper-->
+                    {{
+                    /each
+                    }}
+                    {{
+                    /each
+                    }}
+                </ul><!--/articleList-->
+                {{else}}
+                <p>No articles in this category</p>
+                {{
+                /if
+                }}
+            </div><!--/contentWrapper-->
+        </section><!--/content-->
+
+        <aside id="sidebar" class="span3">
+            <form action="/search" method="GET" id="searchBar" class="sm" autocomplete="off">
+                <input type="hidden" name="collectionId" value="6452dfb15c495950b949776a">
+                <input type="text" name="query" title="search-query" class="search-query" placeholder="Search" value=""
+                    aria-label="Search">
+                <button type="submit">
+                    <span class="sr-only">Toggle Search</span>
+                    <i class="icon-search"></i>
+                </button>
+                <div id="serp-dd" style="display: none;" class="sb">
+                    <ul class="result"></ul>
+                </div>
+            </form>
+
+            <h3>Categories</h3>
+            <ul class="nav nav-list">
+                {{
+                #each
+                categories}}
+                <li{{ #if ../category.id}} {{ #eq ../category.id id}}class="active" {{ /eq }}{{ /if }}>
+                    <a href="/category/{{id}}">{{name}} <i class="icon-arrow"></i></a>
+                    </li>
+                    {{
+                    /each
+                    }}
+            </ul>
+        </aside><!--/span-->
+    </div><!--/row-->
+
+    <div id="noResults" style="display:none;">No results found</div>
