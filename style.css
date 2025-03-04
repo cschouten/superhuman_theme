@@ -3948,3 +3948,7 @@ a > * {
     line-height: 24px;
   }
 }
+
+zd-autocomplete-breadcrumbs-multibrand {
+    display: none !important;
+}
