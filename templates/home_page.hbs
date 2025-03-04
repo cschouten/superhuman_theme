@@ -1,6 +1,9 @@
 <section id="docsSearch">
   <h2>Looking for help?</h2>
-  {{search instant=true placeholder='Search' aria-label='Search'}}
+  <form action="/hc/en-us/search" method="GET" id="searchBar" data-search data-instant="true">
+    <input type="text" name="query" title="search-query" class="search-query" placeholder="Search" aria-label="Search" value="">
+    <button type="submit" aria-label="Search"><i class="icon-search lp"></i><span>Search</span></button>
+  </form>
 </section>
 
 <section id="contentArea" class="container-fluid">
