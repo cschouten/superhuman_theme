@@ -1,9 +1,11 @@
 /**
- * Superhuman-style docs search for Zendesk Help Center - Vanilla JS Version
+ * Zendesk Help Center Search Enhancement
+ * Implements a search UX similar to Help Scout in Zendesk Guide
+ * Pure vanilla JavaScript implementation - no jQuery required
  */
 (function() {
-    console.log("DocsWebSearch vanilla script loaded");
-  
+    'use strict';
+    
     // Key codes for keyboard navigation
     const ENTER_KEY = 13;
     const UP_KEY = 38;
@@ -16,257 +18,311 @@
     window.initDocsWebSearch = function() {
       console.log("initDocsWebSearch called");
       
-      // Log all forms on the page to help with debugging
-      const allForms = document.querySelectorAll('form');
-      console.log("All forms on page:", allForms.length);
-      allForms.forEach((form, i) => {
-        console.log(`Form ${i}:`, form);
-        console.log(`Form ${i} HTML:`, form.outerHTML);
-      });
+      // Find the search form in Zendesk structure
+      let searchBar = null;
       
-      // Log all search inputs on the page
-      const allSearchInputs = document.querySelectorAll('input[type="search"], input[name="query"]');
-      console.log("All search inputs:", allSearchInputs.length);
-      allSearchInputs.forEach((input, i) => {
-        console.log(`Search input ${i}:`, input);
-        console.log(`Search input ${i} parent:`, input.parentElement);
-      });
+      // Try multiple selectors that might match the search form in different Zendesk themes
+      const searchSelectors = [
+        '#searchBar',
+        '.search-form',
+        'form[role="search"]',
+        'form.search',
+        '.header .search',
+        'header .search',
+        'form[action*="search"]',
+        '.search' // Most generic, try last
+      ];
       
-      // Find any existing "No results found" elements and hide them initially
-      const noResultsElements = document.querySelectorAll('*:contains("No results found")');
-      noResultsElements.forEach(el => {
-        console.log("Found 'No results found' element:", el);
-        if (el.textContent.trim() === "No results found") {
-          console.log("Hiding initial 'No results found' message");
-          el.style.display = "none";
+      // Try each selector until we find a match
+      for (let i = 0; i < searchSelectors.length; i++) {
+        try {
+          const el = document.querySelector(searchSelectors[i]);
+          if (el) {
+            searchBar = el;
+            console.log(`Found search bar with selector: ${searchSelectors[i]}`);
+            break;
+          }
+        } catch (e) {
+          console.warn(`Error with selector ${searchSelectors[i]}:`, e);
         }
-      });
-      
-      // Try to find the search container
-      // First try the form containing the search input
-      let searchContainer = null;
-      const searchInput = document.querySelector('input[type="search"], input[name="query"]');
-      
-      if (searchInput) {
-        console.log("Found search input:", searchInput);
-        // Try to get the main search container
-        searchContainer = searchInput.closest('form');
-        console.log("Search form:", searchContainer);
-        
-        // If we found a container, initialize the search
-        if (searchContainer) {
-          console.log("Initializing DocsWebSearch with container:", searchContainer);
-          new DocsWebSearch(searchContainer, searchInput);
-        } else {
-          console.error("Found search input but couldn't identify container");
-        }
-      } else {
-        console.error("No search input found on page");
       }
+      
+      // If still not found, try to find the first form with a search input
+      if (!searchBar) {
+        const searchInputs = document.querySelectorAll('input[type="search"], input[name="query"]');
+        if (searchInputs.length > 0) {
+          for (let i = 0; i < searchInputs.length; i++) {
+            const form = searchInputs[i].closest('form');
+            if (form) {
+              searchBar = form;
+              console.log('Found search bar via input element');
+              break;
+            }
+          }
+        }
+      }
+      
+      if (!searchBar) {
+        console.error("Could not find search bar - no enhancement applied");
+        return;
+      }
+      
+      // Initialize the enhanced search
+      new DocsWebSearch(searchBar);
     };
     
     // Main search class
-    function DocsWebSearch(container, inputElement) {
-      console.log("Creating DocsWebSearch instance");
+    function DocsWebSearch(element) {
+      console.log("Creating DocsWebSearch instance with element:", element);
       
-      this.container = container;
-      this.searchInput = inputElement;
+      this.element = element;
       
-      // Get button if it exists
-      this.searchButton = container.querySelector('button[type="submit"], input[type="submit"]');
-      console.log("Search button:", this.searchButton);
+      // Log all attributes of the form element for debugging
+      console.log("Form attributes:");
+      Array.from(element.attributes).forEach(attr => {
+        console.log(` - ${attr.name}: ${attr.value}`);
+      });
       
-      // Create results container that will appear under the search
-      this.createResultsContainer();
+      // Find UI elements
+      this.ui = {
+        save: element.querySelector('button[type="submit"], input[type="submit"]'),
+        input: element.querySelector('input[type="search"], input[type="text"], input[name="query"]'),
+        resultContainer: element.querySelector("#serp-dd")
+      };
+      
+      console.log("Found UI elements:", {
+        save: !!this.ui.save,
+        input: !!this.ui.input,
+        resultContainer: !!this.ui.resultContainer
+      });
+      
+      // Create result container if it doesn't exist
+      if (!this.ui.resultContainer) {
+        this.ui.resultContainer = document.createElement('div');
+        this.ui.resultContainer.id = 'serp-dd';
+        this.ui.resultContainer.className = 'search-results-dropdown';
+        this.element.appendChild(this.ui.resultContainer);
+        
+        // Style the container
+        Object.assign(this.ui.resultContainer.style, {
+          'position': 'absolute',
+          'top': '100%',
+          'left': '0',
+          'right': '0',
+          'z-index': '1000',
+          'background-color': '#fff',
+          'border': '1px solid #ddd',
+          'border-top': 'none',
+          'border-radius': '0 0 4px 4px',
+          'box-shadow': '0 5px 10px rgba(0,0,0,0.2)',
+          'max-height': '400px',
+          'overflow-y': 'auto',
+          'display': 'none'
+        });
+      }
+      
+      // Create results list if it doesn't exist
+      this.ui.resultsList = this.ui.resultContainer.querySelector("ul.result");
+      if (!this.ui.resultsList) {
+        this.ui.resultsList = document.createElement('ul');
+        this.ui.resultsList.className = 'result';
+        this.ui.resultContainer.appendChild(this.ui.resultsList);
+        
+        // Style the list
+        Object.assign(this.ui.resultsList.style, {
+          'margin': '0',
+          'padding': '0',
+          'list-style': 'none'
+        });
+      }
+      
+      // Ensure parent element has position relative for proper dropdown positioning
+      const position = getComputedStyle(this.element).position;
+      if (position === 'static') {
+        this.element.style.position = 'relative';
+      }
       
       // Set up event handlers
       this.setupEventHandlers();
       
-      // Log search form structure to debug
-      this.logSearchFormStructure();
-      
+      this.selectedIndex = -1;
       console.log("DocsWebSearch instance initialized");
     }
     
     DocsWebSearch.prototype = {
-      createResultsContainer: function() {
-        console.log("Creating results container");
-        
-        // First, find and hide any existing "No results found" messages
-        const existingNoResults = document.querySelectorAll('*');
-        existingNoResults.forEach(el => {
-          if (el.textContent && el.textContent.trim() === "No results found") {
-            console.log("Found existing 'No results found' element:", el);
-            this.existingNoResultsElement = el;
-            el.style.display = "none";
-          }
-        });
-        
-        // Create results container
-        this.resultsContainer = document.createElement('div');
-        this.resultsContainer.id = "search-results-dropdown";
-        this.resultsContainer.style.display = "none";
-        this.resultsContainer.style.position = "absolute";
-        this.resultsContainer.style.zIndex = "1000";
-        this.resultsContainer.style.width = "100%";
-        this.resultsContainer.style.backgroundColor = "#fff";
-        this.resultsContainer.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
-        this.resultsContainer.style.borderRadius = "0 0 4px 4px";
-        this.resultsContainer.style.marginTop = "0";
-        this.resultsContainer.style.top = "100%"; // Position below the search
-        this.resultsContainer.style.left = "0";
-        
-        // Create results list
-        this.resultsList = document.createElement('ul');
-        this.resultsList.style.listStyle = "none";
-        this.resultsList.style.padding = "0";
-        this.resultsList.style.margin = "0";
-        this.resultsList.style.maxHeight = "300px";
-        this.resultsList.style.overflowY = "auto";
-        
-        // Add results list to container
-        this.resultsContainer.appendChild(this.resultsList);
-        
-        // Ensure parent container has position relative
-        const containerPosition = getComputedStyle(this.container).position;
-        console.log("Container position style:", containerPosition);
-        if (containerPosition === "static") {
-          console.log("Setting container to position relative");
-          this.container.style.position = "relative";
-        }
-        
-        // Log the container dimensions for debugging
-        console.log("Container dimensions:", {
-          width: this.container.offsetWidth,
-          height: this.container.offsetHeight,
-          top: this.container.offsetTop,
-          left: this.container.offsetLeft
-        });
-        
-        // Try to find a better place to append the results container
-        // First, try to find a specific container for the search input
-        const searchInputParent = this.searchInput.parentElement;
-        
-        console.log("Search input parent:", searchInputParent);
-        
-        // Append to search container or to the body as a fallback
-        if (searchInputParent && searchInputParent !== this.container) {
-          console.log("Appending results to search input parent");
-          
-          // If the parent is not positioned, set it to relative
-          if (getComputedStyle(searchInputParent).position === "static") {
-            searchInputParent.style.position = "relative";
-          }
-          
-          searchInputParent.appendChild(this.resultsContainer);
-        } else {
-          console.log("Appending results to search container");
-          this.container.appendChild(this.resultsContainer);
-        }
-        
-        console.log("Results container created and appended:", this.resultsContainer);
-      },
-      
       setupEventHandlers: function() {
-        console.log("Setting up event handlers");
-        
-        // Handle input focus
-        this.searchInput.addEventListener('focus', this.onFocus.bind(this));
-        
-        // Handle input blur
-        this.searchInput.addEventListener('blur', this.onBlur.bind(this));
-        
-        // Handle keyup/keydown
-        this.searchInput.addEventListener('keydown', this.onKeyDown.bind(this));
-        this.searchInput.addEventListener('keyup', this.onKeyUp.bind(this));
-        
-        // Handle search button clicks
-        if (this.searchButton) {
-          this.searchButton.addEventListener('click', this.onSearchButtonClick.bind(this));
+        // Save button events
+        if (this.ui.save) {
+          this.ui.save.addEventListener('mousedown', this.onSaveMouseDown.bind(this));
+          this.ui.save.addEventListener('click', this.onSaveClick.bind(this));
         }
         
-        // Handle clicks outside search area
-        document.addEventListener('click', (e) => {
-          if (!this.container.contains(e.target)) {
-            this.closeSearchResults();
+        // Input field events
+        if (this.ui.input) {
+          this.ui.input.addEventListener('keydown', this.onKeyDown.bind(this));
+          this.ui.input.addEventListener('keyup', this.onKeyUp.bind(this));
+          this.ui.input.addEventListener('focus', this.onFocus.bind(this));
+          this.ui.input.addEventListener('blur', this.onBlur.bind(this));
+        }
+        
+        // Result list events
+        this.ui.resultContainer.addEventListener('click', this.onResultClick.bind(this));
+      },
+      
+      onSaveMouseDown: function(e) {
+        console.log("Save button mousedown");
+        this.navigating = true;
+      },
+      
+      onSaveClick: function(e) {
+        console.log("Save button clicked");
+        const query = this.ui.input.value;
+        
+        if (!query || query.length === 0) {
+          console.log("Empty query, preventing form submission");
+          e.preventDefault();
+          e.stopPropagation();
+          this.ui.input.classList.add("error");
+          this.navigating = false;
+        }
+      },
+      
+      onResultClick: function(e) {
+        // Find closest anchor element
+        let target = e.target;
+        while (target !== this.ui.resultContainer && target.tagName !== 'A') {
+          target = target.parentElement;
+          if (!target) return; // No anchor found
+        }
+        
+        if (target.tagName === 'A') {
+          console.log("Result item clicked");
+          const href = target.getAttribute('href');
+          
+          if (href) {
+            e.preventDefault();
+            this.recordSearchAndNavigate(href);
           }
-        });
-        
-        console.log("Event handlers set up");
-      },
-      
-      onFocus: function(e) {
-        console.log("Search input focused");
-        if (this.searchInput.value) {
-          console.log("Search input has value, triggering search");
-          this.startSearchTimer();
         }
       },
       
+      // Handle input blur event
       onBlur: function(e) {
-        console.log("Search input blurred");
+        console.log("Input blur event");
         
-        // Don't close results if clicking a result
         if (this.delayCloseOnBlur) {
-          console.log("Delaying close on blur");
+          console.log("Delay close on blur, setting timeout");
           this.closeTimeoutId = setTimeout(() => {
             this.closeSearchResults();
-          }, 200);
+          }, 400);
+        } else {
+          console.log("Immediate close on blur");
+          this.closeSearchResults();
         }
+        
         this.delayCloseOnBlur = false;
       },
       
+      // Handle input focus event
+      onFocus: function(e) {
+        console.log("Input focus event, value:", this.ui.input.value);
+        
+        if (this.ui.input.value) {
+          console.log("Input has value, triggering search");
+          this.doSearch();
+        }
+      },
+      
+      // Handle keydown events
       onKeyDown: function(e) {
         const keyCode = e.which || e.keyCode;
-        console.log("Key down, code:", keyCode);
+        console.log("Key down event, key code:", keyCode);
         
-        if (keyCode === UP_KEY || keyCode === DOWN_KEY) {
-          // Prevent default scrolling behavior for arrows
+        // Prevent default behavior for enter, up, and down keys
+        if (keyCode === ENTER_KEY || keyCode === UP_KEY || keyCode === DOWN_KEY) {
+          console.log("Preventing default for navigation key");
           e.preventDefault();
         }
       },
       
+      // Handle keyup events
       onKeyUp: function(e) {
         const keyCode = e.which || e.keyCode;
-        console.log("Key up, code:", keyCode);
+        console.log("Key up event, key code:", keyCode);
         
+        // Clear any error state
+        this.noResults = false;
+        const noResultsEl = this.ui.resultsList.querySelector("#noResults");
+        if (noResultsEl) {
+          noResultsEl.remove();
+        }
+        this.ui.input.classList.remove("error");
+        
+        // Hide results container if there are no results
+        if (this.ui.resultsList.querySelectorAll("li").length === 0) {
+          console.log("No results, hiding container");
+          this.ui.resultContainer.style.display = "none";
+        }
+        
+        // Handle different keys
         if (keyCode === ENTER_KEY) {
-          // Handle enter key - navigate to selected result
-          if (this.selectedIndex >= 0 && this.results && this.results.length > this.selectedIndex) {
-            const selectedResult = this.results[this.selectedIndex];
-            const url = selectedResult.html_url || selectedResult.url;
-            
-            if (url) {
-              console.log("Navigating to:", url);
-              window.location.href = url;
+          console.log("Enter key pressed");
+          
+          // If an item is selected, navigate to it
+          if (this.selectedIndex != null && this.selectedIndex >= 0) {
+            console.log("Item selected, index:", this.selectedIndex);
+            const items = this.ui.resultsList.querySelectorAll("li");
+            if (items.length > this.selectedIndex) {
+              const link = items[this.selectedIndex].querySelector("a");
+              if (link) {
+                const href = link.getAttribute("href");
+                if (href) {
+                  this.recordSearchAndNavigate(href);
+                }
+              }
             }
+          } 
+          // Otherwise submit the form if there's a query
+          else if (this.ui.input.value.length > 0) {
+            console.log("No item selected but has value, submitting form");
+            if (this.ui.save) {
+              this.ui.save.click();
+            } else {
+              this.element.submit();
+            }
+          } 
+          // Show error for empty query
+          else if (!this.ui.input.value) {
+            console.log("Empty input, adding error class");
+            this.ui.input.classList.add("error");
           }
-        } else if (keyCode === ESC_KEY) {
-          // Close results
+          
+          this.stopSearchTimer();
+        } 
+        // Escape key - clear input and close results
+        else if (keyCode === ESC_KEY) {
+          console.log("Escape key pressed");
+          this.ui.input.value = "";
           this.closeSearchResults();
-        } else if (keyCode === UP_KEY && this.results && this.results.length) {
-          // Navigate up in results
-          this.navigateResults('up');
-        } else if (keyCode === DOWN_KEY && this.results && this.results.length) {
-          // Navigate down in results
-          this.navigateResults('down');
-        } else if (keyCode !== LEFT_KEY && keyCode !== RIGHT_KEY) {
-          // Start search timer for other keys
+        } 
+        // Up arrow - navigate up in results
+        else if (keyCode === UP_KEY && this.articles && this.articles.length) {
+          console.log("Up arrow pressed");
+          this.arrow("up");
+        } 
+        // Down arrow - navigate down in results
+        else if (keyCode === DOWN_KEY && this.articles && this.articles.length) {
+          console.log("Down arrow pressed");
+          this.arrow("down");
+        } 
+        // Other keys - start search timer
+        else if (keyCode !== LEFT_KEY && keyCode !== RIGHT_KEY && keyCode !== ESC_KEY) {
+          console.log("Other key pressed, starting search timer");
           this.startSearchTimer();
         }
       },
       
-      onSearchButtonClick: function(e) {
-        console.log("Search button clicked");
-        
-        // If there are no search terms, prevent submission
-        if (!this.searchInput.value.trim()) {
-          e.preventDefault();
-          console.log("Empty search, preventing submit");
-          this.searchInput.focus();
-        }
-      },
-      
+      // Start timer for search to avoid too many requests
       startSearchTimer: function() {
         console.log("Starting search timer");
         clearTimeout(this.searchTimerId);
@@ -275,285 +331,353 @@
         }, 200);
       },
       
+      // Stop search timer
+      stopSearchTimer: function() {
+        console.log("Stopping search timer");
+        clearTimeout(this.searchTimerId);
+      },
+      
+      // Check if search should be performed
       checkSearch: function() {
         console.log("Checking search");
-        const query = this.searchInput.value.trim();
+        const query = this.ui.input.value;
         
-        if (query) {
-          console.log("Search query:", query);
-          this.performSearch(query);
+        if (query && query.length) {
+          console.log("Query has value, performing search");
+          this.doSearch();
         } else {
           console.log("Empty query, closing results");
           this.closeSearchResults();
+          this.lastQueryValue = query;
         }
       },
       
-      performSearch: function(query) {
-        console.log("Performing search for:", query);
+      // Perform search
+      doSearch: function() {
+        console.log("Performing search");
+        const query = this.ui.input.value;
+        console.log("Search query:", query);
         
-        // Hide existing "No results found" message if present
-        if (this.existingNoResultsElement) {
-          this.existingNoResultsElement.style.display = "none";
+        this.lastQueryValue = query;
+        
+        // Abort previous request if still in progress
+        if (this.queryXhr && this.queryXhr.abort) {
+          console.log("Aborting previous request");
+          this.queryXhr.abort();
         }
         
-        // Abort previous request if any
-        if (this.currentRequest && this.currentRequest.abort) {
-          this.currentRequest.abort();
+        this.searching = true;
+        
+        // Use the existing search form's endpoint if available, otherwise try known endpoints
+        let endpoint;
+        
+        // Try to determine from form action
+        const formAction = this.element.getAttribute('action');
+        if (formAction) {
+          console.log("Form action:", formAction);
+          // If form action ends with .json, use it directly
+          if (formAction.endsWith('.json')) {
+            endpoint = formAction;
+          } else {
+            // Add .json to the endpoint if needed
+            endpoint = formAction + (formAction.includes('?') ? '&' : '?') + 'format=json';
+          }
+        } else {
+          // Fallback endpoint
+          endpoint = "/api/v2/help_center/articles/search.json";
         }
         
-        // For debugging purposes, let's log all API endpoints we're trying
-        console.log("Attempting to search with these endpoints:");
-        const endpoints = [
-          "/hc/en-us/search/autocomplete.json",
-          "/api/v2/help_center/articles/search.json",
-          "/api/v2/help_center/en-us/articles/search.json"
-        ];
+        console.log("Using search endpoint:", endpoint);
         
-        endpoints.forEach(endpoint => {
-          console.log(` - ${endpoint}?query=${encodeURIComponent(query)}`);
+        // Add query parameters
+        const url = new URL(endpoint, window.location.origin);
+        url.searchParams.append('query', query);
+        url.searchParams.append('per_page', '10');
+        
+        // Make fetch request to Zendesk search API
+        fetch(url.toString(), {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json'
+          }
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(response => {
+          console.log("Search request successful, response:", response);
+          
+          // Process Zendesk's response format - handle different possible structures
+          if (response && response.results && response.results.length > 0) {
+            console.log("Found results in response.results");
+            this.noResults = false;
+            this.articles = response.results;
+            this.count = response.count || response.results.length;
+          } else if (response && response.articles && response.articles.length > 0) {
+            console.log("Found results in response.articles");
+            this.noResults = false;
+            this.articles = response.articles;
+            this.count = response.count || response.articles.length;
+          } else if (response && Array.isArray(response) && response.length > 0) {
+            console.log("Found results in array response");
+            this.noResults = false;
+            this.articles = response;
+            this.count = response.length;
+          } else {
+            console.log("No results found");
+            this.noResults = this.ui.input.value === this.lastQueryValue;
+            this.count = 0;
+            this.articles = [];
+          }
+          
+          this.searching = false;
+          this.selectedIndex = -1;
+          this.refresh();
+        })
+        .catch(error => {
+          console.error("Search request failed:", error);
+          
+          this.noResults = true;
+          this.count = 0;
+          this.articles = [];
+          this.searching = false;
+          this.selectedIndex = -1;
+          this.refresh();
         });
-        
-        // Use first endpoint as default
-        const endpoint = endpoints[0];
-        const url = `${endpoint}?query=${encodeURIComponent(query)}&per_page=8`;
-        
-        console.log("Fetching from:", url);
-        this.currentRequest = fetch(url)
-          .then(response => {
-            if (!response.ok) {
-              throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-          })
-          .then(data => {
-            console.log("Search results:", data);
-            
-            // Process results
-            if (data && data.results && data.results.length > 0) {
-              this.results = data.results;
-              this.selectedIndex = -1;
-              this.displayResults();
-            } else if (data && data.articles && data.articles.length > 0) {
-              this.results = data.articles;
-              this.selectedIndex = -1;
-              this.displayResults();
-            } else {
-              console.log("No results found");
-              this.displayNoResults();
-            }
-          })
-          .catch(error => {
-            console.error("Search error:", error);
-            
-            // Try next endpoint if first one fails
-            console.log("First endpoint failed, trying second endpoint");
-            return fetch(`${endpoints[1]}?query=${encodeURIComponent(query)}&per_page=8`)
-              .then(response => {
-                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-                return response.json();
-              })
-              .then(data => {
-                console.log("Search results from second endpoint:", data);
-                
-                if (data && data.results && data.results.length > 0) {
-                  this.results = data.results;
-                  this.selectedIndex = -1;
-                  this.displayResults();
-                } else if (data && data.articles && data.articles.length > 0) {
-                  this.results = data.articles;
-                  this.selectedIndex = -1;
-                  this.displayResults();
-                } else {
-                  this.displayNoResults();
-                }
-              })
-              .catch(error2 => {
-                console.error("Second endpoint also failed:", error2);
-                this.displayNoResults();
-              });
-          });
       },
       
-      displayResults: function() {
-        console.log("Displaying results");
+      // Record search for analytics
+      recordSearch: function() {
+        console.log("Recording search");
+        const query = this.ui.input.value;
+        
+        if (this.queryHasNotChanged(query)) {
+          console.log("Query hasn't changed, skipping record");
+          return Promise.resolve();
+        }
+        
+        this.lastRecordedQueryValue = query;
+        
+        // Zendesk might have a different way to record search events - this is a placeholder
+        console.log("Search recorded for:", query);
+        return Promise.resolve();
+      },
+      
+      // Record search and navigate to result
+      recordSearchAndNavigate: function(url) {
+        console.log("Recording search and navigating to:", url);
+        this.navigating = true;
+        
+        this.recordSearch().then(() => {
+          console.log("Navigation in progress to:", url);
+          window.location = url;
+        });
+      },
+      
+      // Check if query has changed
+      queryHasNotChanged: function(query) {
+        const result = !query || query === this.lastRecordedQueryValue;
+        console.log("Query hasn't changed:", result);
+        return result;
+      },
+      
+      // Refresh search results
+      refresh: function() {
+        console.log("Refreshing search results");
         
         // Clear previous results
-        while (this.resultsList.firstChild) {
-          this.resultsList.removeChild(this.resultsList.firstChild);
-        }
+        this.ui.resultsList.innerHTML = '';
+        this.ui.resultContainer.style.display = 'none';
         
-        // Add each result
-        this.results.forEach((result, index) => {
-          const item = document.createElement('li');
-          item.style.padding = "0";
-          item.style.margin = "0";
-          item.style.transition = "background-color 0.2s";
+        if (this.articles && this.articles.length) {
+          console.log("Articles found, count:", this.articles.length);
           
-          const link = document.createElement('a');
-          link.href = result.html_url || result.url;
-          link.textContent = result.title || result.name;
-          link.style.display = "block";
-          link.style.padding = "10px 15px";
-          link.style.textDecoration = "none";
-          link.style.color = "#333";
+          for (let i = 0; i < this.articles.length; i++) {
+            const article = this.articles[i];
+            console.log("Processing article:", article.title || article.name || "Unnamed");
+            
+            const listItem = document.createElement('li');
+            
+            if (i === this.selectedIndex) {
+              listItem.classList.add("active");
+            }
+            
+            // Style the list item
+            Object.assign(listItem.style, {
+              'padding': '0',
+              'margin': '0',
+              'border-bottom': '1px solid #eee'
+            });
+            
+            // Get the URL from the article depending on response format
+            const articleUrl = article.html_url || article.url || "#";
+            
+            // Handle https protocol
+            let finalUrl = articleUrl;
+            if (window.location.protocol.indexOf("https") !== -1 && finalUrl) {
+              finalUrl = finalUrl.replace("http://", "https://");
+            }
+            
+            // Get the title from the article depending on response format
+            const articleTitle = article.title || article.name || "Unnamed Article";
+            
+            const link = document.createElement('a');
+            link.href = finalUrl;
+            link.textContent = articleTitle;
+            
+            // Style the link
+            Object.assign(link.style, {
+              'display': 'block',
+              'padding': '10px 15px',
+              'color': '#333',
+              'text-decoration': 'none'
+            });
+            
+            link.addEventListener("mousedown", () => {
+              console.log("Link mousedown");
+              this.delayCloseOnBlur = true;
+            });
+            
+            link.addEventListener("mouseup", () => {
+              console.log("Link mouseup");
+              clearTimeout(this.closeTimeoutId);
+            });
+            
+            listItem.appendChild(link);
+            listItem.addEventListener("mouseover", this.hover.bind(this));
+            
+            this.ui.resultsList.appendChild(listItem);
+          }
           
-          // Prevent default navigation and handle manually
-          link.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.location.href = link.href;
-          });
-          
-          link.addEventListener('mousedown', () => {
-            this.delayCloseOnBlur = true;
-          });
-          
-          // Add hover handler
-          item.addEventListener('mouseover', () => {
-            this.selectedIndex = index;
-            this.highlightSelectedResult();
-          });
-          
-          item.appendChild(link);
-          this.resultsList.appendChild(item);
-        });
-        
-        // Show results container
-        this.resultsContainer.style.display = "block";
-        
-        console.log("Results displayed");
-      },
-      
-      displayNoResults: function() {
-        console.log("Displaying no results message");
-        
-        // Clear previous results
-        while (this.resultsList.firstChild) {
-          this.resultsList.removeChild(this.resultsList.firstChild);
-        }
-        
-        // If we have an existing "No results found" element from Zendesk, 
-        // we can show it instead of creating our own
-        if (this.existingNoResultsElement) {
-          console.log("Using existing 'No results found' element");
-          this.existingNoResultsElement.style.display = "block";
+          console.log("Showing results list and container");
+          this.ui.resultsList.style.display = "block";
+          this.ui.resultContainer.style.display = "block";
+        } else if (this.noResults) {
+          console.log("No results, showing message");
+          const noResultsItem = document.createElement('li');
+          noResultsItem.id = "noResults";
+          noResultsItem.style.padding = "10px 15px";
+          noResultsItem.style.color = "#999";
+          noResultsItem.textContent = "No results found";
+          this.ui.resultsList.appendChild(noResultsItem);
+          this.ui.resultContainer.style.display = "block";
         } else {
-          // Add no results message
-          const item = document.createElement('li');
-          item.style.padding = "10px 15px";
-          item.style.color = "#666";
-          item.textContent = "No results found";
-          
-          this.resultsList.appendChild(item);
-          this.resultsContainer.style.display = "block";
+          console.log("No results and not in 'no results' state");
         }
-        
-        this.results = [];
-        this.selectedIndex = -1;
       },
       
-      navigateResults: function(direction) {
-        console.log("Navigating results:", direction);
+      // Close search results
+      closeSearchResults: function() {
+        console.log("Closing search results");
+        this.ui.resultsList.innerHTML = '';
+        this.ui.resultContainer.style.display = 'none';
         
-        if (!this.results || this.results.length === 0) {
-          return;
-        }
-        
-        if (direction === 'up') {
-          this.selectedIndex = this.selectedIndex <= 0 ? this.results.length - 1 : this.selectedIndex - 1;
+        if (!this.navigating) {
+          console.log("Not navigating, recording search");
+          this.recordSearch();
         } else {
-          this.selectedIndex = this.selectedIndex >= this.results.length - 1 ? 0 : this.selectedIndex + 1;
+          console.log("Navigating, not recording search");
         }
-        
-        this.highlightSelectedResult();
       },
       
-      highlightSelectedResult: function() {
-        console.log("Highlighting selected result:", this.selectedIndex);
+      // Handle arrow key navigation
+      arrow: function(direction) {
+        console.log("Arrow navigation:", direction);
+        
+        if (direction === "up") {
+          this.selectedIndex = this.selectedIndex === -1 ? this.articles.length - 1 : this.selectedIndex - 1;
+        } else if (direction === "down") {
+          this.selectedIndex = this.selectedIndex === -1 ? 0 : this.selectedIndex + 1;
+        }
+        
+        if (this.selectedIndex >= this.articles.length) {
+          this.selectedIndex = -1;
+        }
+        
+        console.log("New selected index:", this.selectedIndex);
         
         // Remove highlight from all items
-        const items = this.resultsList.querySelectorAll('li');
+        const items = this.ui.resultsList.querySelectorAll("li");
         items.forEach(item => {
-          item.style.backgroundColor = "";
+          item.classList.remove("active");
+          item.style.backgroundColor = '';
         });
         
-        // Add highlight to selected item
-        if (this.selectedIndex >= 0 && items.length > this.selectedIndex) {
-          items[this.selectedIndex].style.backgroundColor = "#f0f0f0";
+        if (this.selectedIndex !== -1) {
+          const item = items[this.selectedIndex];
           
-          // Ensure the item is visible by scrolling if needed
-          const selectedItem = items[this.selectedIndex];
-          const listRect = this.resultsList.getBoundingClientRect();
-          const itemRect = selectedItem.getBoundingClientRect();
-          
-          if (itemRect.bottom > listRect.bottom) {
-            this.resultsList.scrollTop += (itemRect.bottom - listRect.bottom);
-          } else if (itemRect.top < listRect.top) {
-            this.resultsList.scrollTop -= (listRect.top - itemRect.top);
+          if (item) {
+            console.log("Setting active item");
+            item.classList.add("active");
+            item.style.backgroundColor = '#f8f8f8';
+            
+            // Handle scrolling if necessary
+            const itemTop = item.offsetTop;
+            const scrollTop = this.ui.resultsList.scrollTop;
+            const containerHeight = this.ui.resultsList.clientHeight;
+            const itemHeight = item.clientHeight;
+            
+            console.log("Scroll metrics:", {
+              itemTop,
+              scrollTop,
+              containerHeight,
+              itemHeight
+            });
+            
+            const bottomPos = scrollTop + containerHeight - itemHeight;
+            const innerHeight = this.ui.resultsList.scrollHeight;
+            const minScrollTop = innerHeight < bottomPos ? innerHeight - containerHeight : scrollTop;
+            
+            if (itemTop < minScrollTop || itemTop > bottomPos) {
+              console.log("Scrolling to item");
+              this.ui.resultsList.scrollTop = itemTop;
+            }
           }
         }
       },
       
-      closeSearchResults: function() {
-        console.log("Closing search results");
-        this.resultsContainer.style.display = "none";
+      // Handle hover over search results
+      hover: function(e) {
+        console.log("Hover event");
+        let target = e.target;
         
-        // Clear results list
-        while (this.resultsList.firstChild) {
-          this.resultsList.removeChild(this.resultsList.firstChild);
+        if (target.tagName !== "LI") {
+          console.log("Target is not li, finding closest li");
+          while (target && target.tagName !== "LI") {
+            target = target.parentNode;
+          }
         }
         
-        // Make sure any existing "No results" element is also hidden
-        if (this.existingNoResultsElement) {
-          this.existingNoResultsElement.style.display = "none";
-        }
+        if (!target || target.tagName !== "LI") return;
         
-        this.results = [];
-        this.selectedIndex = -1;
-      },
-      
-      // Debug function to show the structure of the search form
-      logSearchFormStructure: function() {
-        console.log("Search form structure:");
+        const listItems = Array.from(this.ui.resultsList.querySelectorAll("li"));
+        this.selectedIndex = listItems.indexOf(target);
+        console.log("Hover selected index:", this.selectedIndex);
         
-        const logElement = (element, depth = 0) => {
-          if (!element) return;
-          
-          const indent = ' '.repeat(depth * 2);
-          const tagName = element.tagName.toLowerCase();
-          const id = element.id ? `#${element.id}` : '';
-          const classes = element.className ? `.${element.className.replace(/\s+/g, '.')}` : '';
-          const position = getComputedStyle(element).position;
-          
-          console.log(`${indent}${tagName}${id}${classes} (position: ${position})`);
-          
-          // Log children recursively
-          Array.from(element.children).forEach(child => {
-            logElement(child, depth + 1);
-          });
-        };
+        // Remove highlight from all items
+        listItems.forEach(item => {
+          item.classList.remove("active");
+          item.style.backgroundColor = '';
+        });
         
-        logElement(this.container);
+        // Highlight the hovered item
+        target.classList.add("active");
+        target.style.backgroundColor = '#f8f8f8';
       }
     };
     
-    // Initialize when DOM is ready
-    if (document.readyState === "complete" || document.readyState === "interactive") {
+    // Initialize when document is ready
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
       console.log("Document already ready, initializing docs web search");
-      initDocsWebSearch();
+      window.initDocsWebSearch();
     } else {
-      document.addEventListener("DOMContentLoaded", function() {
+      document.addEventListener('DOMContentLoaded', function() {
         console.log("Document ready event, initializing docs web search");
-        initDocsWebSearch();
+        window.initDocsWebSearch();
       });
     }
     
   })();
-  
-  // export the function for use in other modules
-  export default function initDocsWebSearch() {
-    console.log("External initDocsWebSearch call");
-    // This will reinitialize the search if needed
-    if (window.initDocsWebSearch) {
-      window.initDocsWebSearch();
-    }
-  }
