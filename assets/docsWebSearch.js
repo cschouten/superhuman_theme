@@ -32,6 +32,16 @@
         console.log(`Search input ${i} parent:`, input.parentElement);
       });
       
+      // Find any existing "No results found" elements and hide them initially
+      const noResultsElements = document.querySelectorAll('*:contains("No results found")');
+      noResultsElements.forEach(el => {
+        console.log("Found 'No results found' element:", el);
+        if (el.textContent.trim() === "No results found") {
+          console.log("Hiding initial 'No results found' message");
+          el.style.display = "none";
+        }
+      });
+      
       // Try to find the search container
       // First try the form containing the search input
       let searchContainer = null;
@@ -81,6 +91,16 @@
     DocsWebSearch.prototype = {
       createResultsContainer: function() {
         console.log("Creating results container");
+        
+        // First, find and hide any existing "No results found" messages
+        const existingNoResults = document.querySelectorAll('*');
+        existingNoResults.forEach(el => {
+          if (el.textContent && el.textContent.trim() === "No results found") {
+            console.log("Found existing 'No results found' element:", el);
+            this.existingNoResultsElement = el;
+            el.style.display = "none";
+          }
+        });
         
         // Create results container
         this.resultsContainer = document.createElement('div');
@@ -271,12 +291,30 @@
       performSearch: function(query) {
         console.log("Performing search for:", query);
         
+        // Hide existing "No results found" message if present
+        if (this.existingNoResultsElement) {
+          this.existingNoResultsElement.style.display = "none";
+        }
+        
         // Abort previous request if any
         if (this.currentRequest && this.currentRequest.abort) {
           this.currentRequest.abort();
         }
         
-        const endpoint = "/hc/en-us/search/autocomplete.json";
+        // For debugging purposes, let's log all API endpoints we're trying
+        console.log("Attempting to search with these endpoints:");
+        const endpoints = [
+          "/hc/en-us/search/autocomplete.json",
+          "/api/v2/help_center/articles/search.json",
+          "/api/v2/help_center/en-us/articles/search.json"
+        ];
+        
+        endpoints.forEach(endpoint => {
+          console.log(` - ${endpoint}?query=${encodeURIComponent(query)}`);
+        });
+        
+        // Use first endpoint as default
+        const endpoint = endpoints[0];
         const url = `${endpoint}?query=${encodeURIComponent(query)}&per_page=8`;
         
         console.log("Fetching from:", url);
@@ -306,7 +344,33 @@
           })
           .catch(error => {
             console.error("Search error:", error);
-            this.displayNoResults();
+            
+            // Try next endpoint if first one fails
+            console.log("First endpoint failed, trying second endpoint");
+            return fetch(`${endpoints[1]}?query=${encodeURIComponent(query)}&per_page=8`)
+              .then(response => {
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                return response.json();
+              })
+              .then(data => {
+                console.log("Search results from second endpoint:", data);
+                
+                if (data && data.results && data.results.length > 0) {
+                  this.results = data.results;
+                  this.selectedIndex = -1;
+                  this.displayResults();
+                } else if (data && data.articles && data.articles.length > 0) {
+                  this.results = data.articles;
+                  this.selectedIndex = -1;
+                  this.displayResults();
+                } else {
+                  this.displayNoResults();
+                }
+              })
+              .catch(error2 => {
+                console.error("Second endpoint also failed:", error2);
+                this.displayNoResults();
+              });
           });
       },
       
@@ -367,14 +431,21 @@
           this.resultsList.removeChild(this.resultsList.firstChild);
         }
         
-        // Add no results message
-        const item = document.createElement('li');
-        item.style.padding = "10px 15px";
-        item.style.color = "#666";
-        item.textContent = "No results found";
-        
-        this.resultsList.appendChild(item);
-        this.resultsContainer.style.display = "block";
+        // If we have an existing "No results found" element from Zendesk, 
+        // we can show it instead of creating our own
+        if (this.existingNoResultsElement) {
+          console.log("Using existing 'No results found' element");
+          this.existingNoResultsElement.style.display = "block";
+        } else {
+          // Add no results message
+          const item = document.createElement('li');
+          item.style.padding = "10px 15px";
+          item.style.color = "#666";
+          item.textContent = "No results found";
+          
+          this.resultsList.appendChild(item);
+          this.resultsContainer.style.display = "block";
+        }
         
         this.results = [];
         this.selectedIndex = -1;
@@ -429,6 +500,11 @@
         // Clear results list
         while (this.resultsList.firstChild) {
           this.resultsList.removeChild(this.resultsList.firstChild);
+        }
+        
+        // Make sure any existing "No results" element is also hidden
+        if (this.existingNoResultsElement) {
+          this.existingNoResultsElement.style.display = "none";
         }
         
         this.results = [];
