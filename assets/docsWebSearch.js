@@ -1,5 +1,5 @@
 // Add this to your page to debug
-(function() {
+function initDocsWebSearch() {
     console.log("Debug script loaded");
     
     // Check if jQuery is available
@@ -21,11 +21,22 @@
       // Check input element
       const searchInput = jQuery('#searchBar input[name="query"]');
       console.log("Search input element:", searchInput.length ? "Found" : "Not found");
-      
-      // Check if initDocsWebSearch function exists
-      console.log("initDocsWebSearch function exists:", typeof window.initDocsWebSearch === 'function');
     });
+    
+    // Return something useful if needed
+    return {
+      initialized: true
+    };
+  }
+  
+  // Self-invoking function to run immediately
+  (function() {
+    console.log("docsWebSearch module loaded");
+    // You can still run code here that executes when the module loads
   })();
+  
+  // export the function for use in other modules
+  export default initDocsWebSearch;
 
   // /**
 //  * Superhuman-style docs search for Zendesk Help Center

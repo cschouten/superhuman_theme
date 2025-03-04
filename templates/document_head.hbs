@@ -21,10 +21,22 @@
 }
 </script>
 <script type="module">
+  // Existing flash-notifications import
   import { renderFlashNotifications } from "flash-notifications";
-
+  
+  // Import docsWebSearch
+  import initDocsWebSearch from "docsWebSearch";
+  
+  // Log to verify it's imported
+  console.log("docsWebSearch imported successfully");
+  
+  // Execute the imported function
+  const result = initDocsWebSearch();
+  console.log("docsWebSearch initialized:", result);
+  
+  // Your existing code for flash notifications
   const settings = {{json settings}};
-  const closeLabel = {{json (t 'close')}}
+  const closeLabel = {{json (t 'close')}};
 
   renderFlashNotifications(settings, closeLabel);
 </script>
