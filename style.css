@@ -3952,3 +3952,7 @@ a > * {
 zd-autocomplete-breadcrumbs-multibrand {
     display: none !important;
 }
+
+zd-autocomplete-header {
+    display: none !important;
+}
