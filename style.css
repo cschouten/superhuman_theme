@@ -3698,6 +3698,7 @@ a > * {
     display: flex;
     width: 100%;
     gap: 8px;
+    position: relative;
   }
   
   /* Input field styles */
@@ -3758,122 +3759,6 @@ a > * {
     }
   }
   
-  /* Submit button styles */
-  .search.search-full button[type="submit"] {
-    color: #ffffff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), linear-gradient(273.81deg, #FA75F8, #9E6EE5);
-    border: none;
-    cursor: pointer;
-    position: relative;
-    font-family: "Adelle Sans";
-    font-size: 24px;
-    line-height: 100%;
-    height: 64px;
-    padding: 22px 32px 18px 32px;
-    border-radius: 6px;
-    flex: 0.4;
-    position: relative;
-  }
-  
-  .search.search-full button[type="submit"]::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border-radius: 8px;
-    border: 2px solid transparent;
-    mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-    mask-composite: exclude;
-    -webkit-mask-composite: xor;
-    inset: -2px;
-    background: linear-gradient(#FA75F8, #9E6EE5) border-box;
-  }
-  
-  .search.search-full button[type="submit"]::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border-radius: 6px;
-    background: linear-gradient(273.81deg, #914694, #62438B);
-    z-index: 0;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-  
-  .search.search-full button[type="submit"]:hover::after {
-    opacity: 1;
-  }
-  
-  .search.search-full button[type="submit"] span {
-    position: relative;
-    z-index: 1;
-    top: 2px;
-  }
-  
-  @media (min-width: 768px) and (max-width: 1199px) {
-    .search.search-full button[type="submit"] {
-      font-size: 20px;
-      height: 48px;
-      padding: 2px 16px 0 16px;
-      border-radius: 3px;
-    }
-    
-    .search.search-full button[type="submit"]::before {
-      inset: -1px;
-      border-width: 1px;
-      border-radius: 4px;
-    }
-    
-    .search.search-full button[type="submit"]::after {
-      border-radius: 3px;
-    }
-    
-    .search.search-full button[type="submit"] span {
-      top: 1px;
-    }
-  }
-  
-  @media (max-width: 767px) {
-    .search.search-full button[type="submit"] {
-      font-size: 18px;
-      height: 40px;
-      padding: 2px 16px 0 16px;
-      border-radius: 3px;
-      flex: unset;
-      width: 100%;
-    }
-    
-    .search.search-full button[type="submit"]::before {
-      inset: -1px;
-      border-width: 1px;
-      border-radius: 4px;
-    }
-    
-    .search.search-full button[type="submit"]::after {
-      border-radius: 3px;
-    }
-    
-    .search.search-full button[type="submit"] .icon-search {
-      display: none;
-    }
-    
-    .search.search-full button[type="submit"] span {
-      width: 100%;
-      font-size: 18px;
-      text-indent: 0;
-    }
-  }
-  
   /* Search icon styling */
   .search-icon {
     display: none; /* Hide Zendesk's default search icon */
@@ -3884,24 +3769,119 @@ a > * {
     display: none;
   }
   
+  /* Add custom search button */
+  .search.search-full::after {
+    content: "";
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 150px;
+    height: 64px;
+  }
+  
+  .search.search-full form::after {
+    content: "Search";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 150px;
+    height: 64px;
+    color: #ffffff;
+    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), linear-gradient(273.81deg, #FA75F8, #9E6EE5);
+    border: none;
+    cursor: pointer;
+    font-family: "Adelle Sans";
+    font-size: 24px;
+    line-height: 100%;
+    border-radius: 6px;
+    z-index: 10;
+  }
+  
+  .search.search-full form::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 150px;
+    height: 64px;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    -webkit-mask-composite: xor;
+    background: linear-gradient(#FA75F8, #9E6EE5) border-box;
+    z-index: 9;
+  }
+  
+  .search.search-full form:hover::after {
+    background: linear-gradient(273.81deg, #914694, #62438B);
+  }
+  
+  @media (min-width: 768px) and (max-width: 1199px) {
+    .search.search-full form::after {
+      font-size: 20px;
+      height: 48px;
+      width: 120px;
+    }
+    
+    .search.search-full form::before {
+      height: 48px;
+      width: 120px;
+      border-width: 1px;
+      border-radius: 4px;
+    }
+  }
+  
+  @media (max-width: 767px) {
+    .search.search-full form::after {
+      position: relative;
+      font-size: 18px;
+      height: 40px;
+      width: 100%;
+      margin-top: 16px;
+    }
+    
+    .search.search-full form::before {
+      top: auto;
+      bottom: 0;
+      height: 40px;
+      width: 100%;
+      border-width: 1px;
+      border-radius: 4px;
+      margin-top: 16px;
+    }
+    
+    .search.search-full form {
+      flex-direction: column;
+    }
+  }
+  
   /* Search results dropdown styling */
   #serp-dd {
     box-shadow: none;
-    border-radius: 4px;
+    border-radius: 8px;
     background: linear-gradient(315deg, rgba(53, 36, 77, 0.6) 0%, rgba(6, 6, 8, 0.6) 100%);
     backdrop-filter: blur(29px);
     -webkit-backdrop-filter: blur(29px);
     border: 2px solid rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-    width: 100%;
+    width: 528px;
+    margin-top: 8px;
+    z-index: 1000;
   }
   
-  #serp-dd.sb {
-    width: 100%;
-    border-width: 1px;
-    border-radius: 4px;
-    box-sizing: border-box;
-    top: 42px;
+  @media (max-width: 767px) {
+    #serp-dd {
+      width: 100%;
+    }
+  }
+  
+  #serp-dd .result {
+    padding: 8px 0;
   }
   
   #serp-dd .result a {
@@ -3910,18 +3890,20 @@ a > * {
     line-height: 24px;
     color: rgba(255, 255, 255, 0.7);
     transition: color 0.3s ease;
-    padding-left: 24px;
+    padding: 8px 24px;
+    display: block;
   }
   
   #serp-dd .result a:hover {
     background: transparent;
+    color: #ffffff;
   }
   
-  #serp-dd .result .active {
+  #serp-dd .result.active {
     background: transparent;
   }
   
-  #serp-dd .result .active a {
+  #serp-dd .result.active a {
     color: #ffffff;
   }
   
@@ -3929,8 +3911,25 @@ a > * {
     font-family: "Adelle Sans";
     font-size: 16px;
     line-height: 24px;
-    padding-left: 24px;
+    padding: 16px 24px;
     color: rgba(255, 255, 255, 0.7);
+  }
+  
+  /* Add custom styles for the breadcrumb paths in search results */
+  #serp-dd .result .search-result-path {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
+    padding-left: 24px;
+    margin-top: -4px;
+  }
+  
+  /* Header for search results */
+  #serp-dd .search-results-header {
+    padding: 16px 24px;
+    font-family: "Adelle Sans Semibold";
+    font-size: 18px;
+    color: #ffffff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
   
   @media (min-width: 768px) and (max-width: 1199px) {
@@ -3938,6 +3937,10 @@ a > * {
     #serp-dd .result .noResults {
       font-size: 15px;
       line-height: 24px;
+    }
+    
+    #serp-dd .search-results-header {
+      font-size: 16px;
     }
   }
   
@@ -3947,4 +3950,13 @@ a > * {
       font-size: 15px;
       line-height: 24px;
     }
+    
+    #serp-dd .search-results-header {
+      font-size: 16px;
+    }
+  }
+  
+  /* Make the search button clickable to submit the form */
+  .search.search-full form::after {
+    cursor: pointer;
   }

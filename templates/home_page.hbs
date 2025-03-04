@@ -1,10 +1,38 @@
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Add click event to our custom search button
+  document.querySelector('.search.search-full form').addEventListener('click', function(event) {
+    // Check if the click was on or within the pseudo-element area
+    const form = this;
+    const formRect = form.getBoundingClientRect();
+    const buttonArea = {
+      top: formRect.top,
+      left: formRect.right - 150, // Adjust based on button width
+      width: 150,
+      height: 64
+    };
+    
+    // If the click is within the button area
+    if (
+      event.clientX >= buttonArea.left && 
+      event.clientX <= buttonArea.left + buttonArea.width &&
+      event.clientY >= buttonArea.top && 
+      event.clientY <= buttonArea.top + buttonArea.height
+    ) {
+      // Submit the form
+      form.submit();
+    }
+  });
+});
+</script>
+
 <section id="docsSearch">
   <h2>Looking for help?</h2>
   {{!-- <form action="/hc/en-us/search" method="GET" id="searchBar" autocomplete="off">
     <input type="text" name="query" title="search-query" class="search-query" placeholder="Search" aria-label="Search" value="">
     <button type="submit" aria-label="Search"><i class="icon-search lp"></i><span>Search</span></button>
   </form> --}}
-  {{search submit=false instant=settings.instant_search class='search search-full'}}
+  {{search instant=settings.instant_search class='search search-full' submit=false}}
 </section>
 
 <!-- search-query, icon-search -->
