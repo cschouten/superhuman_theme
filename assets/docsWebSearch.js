@@ -72,6 +72,9 @@
       // Set up event handlers
       this.setupEventHandlers();
       
+      // Log search form structure to debug
+      this.logSearchFormStructure();
+      
       console.log("DocsWebSearch instance initialized");
     }
     
@@ -90,6 +93,8 @@
         this.resultsContainer.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
         this.resultsContainer.style.borderRadius = "0 0 4px 4px";
         this.resultsContainer.style.marginTop = "0";
+        this.resultsContainer.style.top = "100%"; // Position below the search
+        this.resultsContainer.style.left = "0";
         
         // Create results list
         this.resultsList = document.createElement('ul');
@@ -103,12 +108,41 @@
         this.resultsContainer.appendChild(this.resultsList);
         
         // Ensure parent container has position relative
-        if (getComputedStyle(this.container).position === "static") {
+        const containerPosition = getComputedStyle(this.container).position;
+        console.log("Container position style:", containerPosition);
+        if (containerPosition === "static") {
+          console.log("Setting container to position relative");
           this.container.style.position = "relative";
         }
         
-        // Append to search container
-        this.container.appendChild(this.resultsContainer);
+        // Log the container dimensions for debugging
+        console.log("Container dimensions:", {
+          width: this.container.offsetWidth,
+          height: this.container.offsetHeight,
+          top: this.container.offsetTop,
+          left: this.container.offsetLeft
+        });
+        
+        // Try to find a better place to append the results container
+        // First, try to find a specific container for the search input
+        const searchInputParent = this.searchInput.parentElement;
+        
+        console.log("Search input parent:", searchInputParent);
+        
+        // Append to search container or to the body as a fallback
+        if (searchInputParent && searchInputParent !== this.container) {
+          console.log("Appending results to search input parent");
+          
+          // If the parent is not positioned, set it to relative
+          if (getComputedStyle(searchInputParent).position === "static") {
+            searchInputParent.style.position = "relative";
+          }
+          
+          searchInputParent.appendChild(this.resultsContainer);
+        } else {
+          console.log("Appending results to search container");
+          this.container.appendChild(this.resultsContainer);
+        }
         
         console.log("Results container created and appended:", this.resultsContainer);
       },
@@ -399,6 +433,30 @@
         
         this.results = [];
         this.selectedIndex = -1;
+      },
+      
+      // Debug function to show the structure of the search form
+      logSearchFormStructure: function() {
+        console.log("Search form structure:");
+        
+        const logElement = (element, depth = 0) => {
+          if (!element) return;
+          
+          const indent = ' '.repeat(depth * 2);
+          const tagName = element.tagName.toLowerCase();
+          const id = element.id ? `#${element.id}` : '';
+          const classes = element.className ? `.${element.className.replace(/\s+/g, '.')}` : '';
+          const position = getComputedStyle(element).position;
+          
+          console.log(`${indent}${tagName}${id}${classes} (position: ${position})`);
+          
+          // Log children recursively
+          Array.from(element.children).forEach(child => {
+            logElement(child, depth + 1);
+          });
+        };
+        
+        logElement(this.container);
       }
     };
     
