@@ -1,11 +1,13 @@
 <section id="docsSearch">
   <h2>Looking for help?</h2>
-  {{!-- <form action="/hc/en-us/search" method="GET" id="searchBar" data-search data-instant="true">
+  {{!-- <form action="/hc/en-us/search" method="GET" id="searchBar" autocomplete="off">
     <input type="text" name="query" title="search-query" class="search-query" placeholder="Search" aria-label="Search" value="">
     <button type="submit" aria-label="Search"><i class="icon-search lp"></i><span>Search</span></button>
   </form> --}}
   {{search submit=false instant=settings.instant_search class='search search-full'}}
 </section>
+
+<!-- search-query, icon-search -->
 
 <section id="contentArea" class="container-fluid">
   <section class="category-list">
