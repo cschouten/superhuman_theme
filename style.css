@@ -3949,10 +3949,15 @@ a > * {
   }
 }
 
-zd-autocomplete-breadcrumbs-multibrand {
-    display: none !important;
+/* Search Autocomplete Styling overrides */
+zd-autocomplete {
+    font-family: "Adelle Sans";
 }
 
 zd-autocomplete-header {
+    display: none !important;
+}
+
+zd-autocomplete-breadcrumbs-multibrand {
     display: none !important;
 }
