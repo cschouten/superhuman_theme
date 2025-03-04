@@ -15,13 +15,38 @@
     // Initialize the search functionality
     window.initDocsWebSearch = function() {
       console.log("initDocsWebSearch called");
-      const searchBar = document.getElementById("searchBar");
+      
+      // Try different possible search bar selectors used by Zendesk
+      let searchBar = document.getElementById("searchBar");
+      
+      // If not found by ID, try common class names or form elements
+      if (!searchBar) {
+        searchBar = document.querySelector(".search");
+        console.log("Searching by .search class:", searchBar ? "Found" : "Not found");
+      }
+      
+      if (!searchBar) {
+        searchBar = document.querySelector("form[role='search']");
+        console.log("Searching by search role:", searchBar ? "Found" : "Not found");
+      }
+      
+      if (!searchBar) {
+        // Look for any search input field and use its parent form or container
+        const searchInput = document.querySelector("input[type='search'], input[name='query']");
+        if (searchInput) {
+          console.log("Found search input:", searchInput);
+          // Get the closest parent form or containing div
+          searchBar = searchInput.closest("form") || searchInput.closest(".search-container") || searchInput.parentElement;
+          console.log("Using parent element as search bar:", searchBar);
+        }
+      }
+      
       console.log("Search bar found:", searchBar ? "Yes" : "No", searchBar);
       
       if (searchBar) {
         new DocsWebSearch(searchBar);
       } else {
-        console.error("No search bar found with selector #searchBar");
+        console.error("No search bar found with any common selectors. Create a custom search bar selector for your template.");
       }
     };
     
@@ -56,6 +81,22 @@
         this.ui.resultContainer.id = "serp-dd";
         this.ui.resultContainer.className = "sb";
         this.ui.resultContainer.style.display = "none";
+        
+        // Position the results directly under the search bar
+        this.ui.resultContainer.style.position = "absolute";
+        this.ui.resultContainer.style.zIndex = "1000";
+        this.ui.resultContainer.style.width = "100%";
+        this.ui.resultContainer.style.top = "100%"; // Position it right below the search bar
+        this.ui.resultContainer.style.left = "0";
+        this.ui.resultContainer.style.backgroundColor = "#fff";
+        this.ui.resultContainer.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+        this.ui.resultContainer.style.borderRadius = "0 0 4px 4px";
+        
+        // Make sure the parent element has position relative for proper absolute positioning
+        if (getComputedStyle(this.el).position === "static") {
+          this.el.style.position = "relative";
+        }
+        
         this.el.appendChild(this.ui.resultContainer);
       }
       
@@ -377,6 +418,18 @@
         }
         this.ui.resultContainer.style.display = "none";
         
+        // Add an event listener to close results when clicking outside
+        // We add this here to avoid adding multiple listeners
+        if (!this._hasDocumentClickListener) {
+          document.addEventListener('click', (e) => {
+            // Only close if the click is outside the search bar and results
+            if (!this.el.contains(e.target)) {
+              this.closeSearchResults();
+            }
+          });
+          this._hasDocumentClickListener = true;
+        }
+        
         if (this.articles && this.articles.length) {
           console.log("Articles found, count:", this.articles.length);
           
@@ -388,7 +441,12 @@
             
             if (i == this.selectedIndex) {
               listItem.classList.add("active");
+              listItem.style.backgroundColor = "#f0f0f0";
             }
+            
+            // Add hover effects with inline styles
+            listItem.style.cursor = "pointer";
+            listItem.style.transition = "background-color 0.2s";
             
             // Get the URL from the article depending on response format
             const articleUrl = article.html_url || article.url || "#";
@@ -406,6 +464,12 @@
             const link = document.createElement("a");
             link.href = finalUrl;
             link.textContent = articleTitle;
+            
+            // Style the link for better appearance
+            link.style.display = "block";
+            link.style.padding = "10px 15px";
+            link.style.textDecoration = "none";
+            link.style.color = "#333";
             
             link.addEventListener("mousedown", () => {
               console.log("Link mousedown");

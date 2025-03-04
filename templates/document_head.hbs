@@ -22,7 +22,7 @@
 </script>
 <script type="module">
   import { renderFlashNotifications } from "flash-notifications";
-  // import initDocsWebSearch from "docsWebSearch";
+  import initDocsWebSearch from "docsWebSearch";
 
   const settings = {{json settings}};
   const closeLabel = {{json (t 'close')}};
@@ -31,12 +31,12 @@
   renderFlashNotifications(settings, closeLabel);
   
   // This will log "undefined" if the function isn't defined properly
-  // console.log("docsWebSearch function:", typeof initDocsWebSearch);
+  console.log("docsWebSearch function:", typeof initDocsWebSearch);
   
   // The function should be called automatically in the module,
   // but you can call it explicitly here if needed
-  /* if (typeof initDocsWebSearch === 'function') {
+  if (typeof initDocsWebSearch === 'function') {
     console.log("Calling initDocsWebSearch explicitly");
     initDocsWebSearch();
-  } */
+  }
 </script>
