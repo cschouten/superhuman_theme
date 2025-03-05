@@ -4276,7 +4276,7 @@ form.search.search-full input[name="commit"] {
   background-clip: padding-box !important;
   
   /* Add transition for hover */
-  transition: background 0.3s ease, box-shadow 0.3s ease !important;
+  transition: background 0.6s ease, box-shadow 0.6s ease !important;
 }
 
 /* Hover effect */
