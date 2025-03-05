@@ -4102,3 +4102,145 @@ zd-autocomplete-multibrand zd-autocomplete-breadcrumbs-multibrand {
         font-size: 16px !important;
     }
 }
+
+/* Style the submit button to match your design */
+.search.search-full button[type="submit"],
+.search-full form button {
+  color: #ffffff !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), linear-gradient(273.81deg, #FA75F8, #9E6EE5) !important;
+  border: none !important;
+  cursor: pointer !important;
+  position: relative !important;
+  font-family: "Adelle Sans" !important;
+  font-size: 24px !important;
+  line-height: 100% !important;
+  height: 64px !important;
+  padding: 22px 32px 18px 32px !important;
+  border-radius: 6px !important;
+  flex: 0.4 !important;
+}
+
+.search.search-full button[type="submit"]::before,
+.search-full form button::before {
+  content: "" !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  border-radius: 8px !important;
+  border: 2px solid transparent !important;
+  mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0) !important;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0) !important;
+  mask-composite: exclude !important;
+  -webkit-mask-composite: xor !important;
+  inset: -2px !important;
+  background: linear-gradient(#FA75F8, #9E6EE5) border-box !important;
+}
+
+.search.search-full button[type="submit"]::after,
+.search-full form button::after {
+  content: "" !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  border-radius: 6px !important;
+  background: linear-gradient(273.81deg, #914694, #62438B) !important;
+  z-index: 0 !important;
+  opacity: 0 !important;
+  transition: opacity 0.3s ease !important;
+}
+
+.search.search-full button[type="submit"]:hover::after,
+.search-full form button:hover::after {
+  opacity: 1 !important;
+}
+
+.search.search-full button[type="submit"] span,
+.search-full form button span {
+  position: relative !important;
+  z-index: 1 !important;
+  top: 2px !important;
+}
+
+/* Style the clear button (x) to be white */
+.search-full .clear-button,
+.search-full button[data-clear-button],
+.search-full .clear-icon,
+.search-full .search-cancel-button,
+.search-full button[aria-label="Clear Search"] {
+  color: white !important;
+  fill: white !important;
+  stroke: white !important;
+  filter: brightness(0) invert(1) !important;
+}
+
+/* Media queries for responsive design */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .search.search-full button[type="submit"],
+  .search-full form button {
+    font-size: 20px !important;
+    height: 48px !important;
+    padding: 2px 16px 0 16px !important;
+    border-radius: 3px !important;
+  }
+  
+  .search.search-full button[type="submit"]::before,
+  .search-full form button::before {
+    inset: -1px !important;
+    border-width: 1px !important;
+    border-radius: 4px !important;
+  }
+  
+  .search.search-full button[type="submit"]::after,
+  .search-full form button::after {
+    border-radius: 3px !important;
+  }
+  
+  .search.search-full button[type="submit"] span,
+  .search-full form button span {
+    top: 1px !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .search.search-full button[type="submit"],
+  .search-full form button {
+    font-size: 18px !important;
+    height: 40px !important;
+    padding: 2px 16px 0 16px !important;
+    border-radius: 3px !important;
+    flex: unset !important;
+    width: 100% !important;
+  }
+  
+  .search.search-full button[type="submit"]::before,
+  .search-full form button::before {
+    inset: -1px !important;
+    border-width: 1px !important;
+    border-radius: 4px !important;
+  }
+  
+  .search.search-full button[type="submit"]::after,
+  .search-full form button::after {
+    border-radius: 3px !important;
+  }
+  
+  .search.search-full button[type="submit"] .icon-search,
+  .search-full form button .icon-search {
+    display: none !important;
+  }
+  
+  .search.search-full button[type="submit"] span,
+  .search-full form button span {
+    width: 100% !important;
+    font-size: 18px !important;
+    text-indent: 0 !important;
+  }
+}
