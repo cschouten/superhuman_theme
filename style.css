@@ -3959,7 +3959,7 @@ zd-autocomplete {
     border-radius: 8px !important;
     box-shadow: none !important;
     font-family: "Adelle Sans" !important;
-    margin-top: 8px !important;
+    margin-top: 0 !important; /* Changed from 8px to 0 to make it touch the search bar */
     z-index: 1000 !important;
     width: 528px !important;
 }
@@ -4031,7 +4031,7 @@ zd-autocomplete-multibrand {
     font-family: "Adelle Sans" !important;
     font-size: 16px !important;
     line-height: 24px !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-bottom: none !important; /* Removed the border to eliminate lines between results */
     color: rgba(255, 255, 255, 0.7) !important;
     padding: 16px 24px !important;
 }
