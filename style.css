@@ -4332,3 +4332,9 @@ form.search.search-full {
     width: 100% !important;
   }
 }
+
+.clear-button,
+button[aria-controls="query"],
+button[aria-label="Clear"] {
+  display: none !important;
+}
