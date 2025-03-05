@@ -4333,8 +4333,9 @@ form.search.search-full {
   }
 }
 
-.clear-button,
-button[aria-controls="query"],
-button[aria-label="Clear"] {
+/* Option 1: Hide all clear buttons in input fields */
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-clear-button {
   display: none !important;
+  -webkit-appearance: none !important;
 }
