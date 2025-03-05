@@ -4245,8 +4245,6 @@ zd-autocomplete-multibrand zd-autocomplete-breadcrumbs-multibrand {
   }
 }  */
 
-linear-gradient(#FA75F8, #9E6EE5) border-box;
-
 /* Style the submit button with gradient border */
 form.search.search-full input[type="submit"],
 form.search.search-full input[name="commit"] {
