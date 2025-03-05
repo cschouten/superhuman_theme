@@ -4245,127 +4245,79 @@ zd-autocomplete-multibrand zd-autocomplete-breadcrumbs-multibrand {
   }
 }  */
 
-/* Style the form */
+/* Style the submit button with gradient border */
+form.search.search-full input[type="submit"],
+form.search.search-full input[name="commit"] {
+  color: #ffffff !important;
+  font-family: "Adelle Sans" !important;
+  font-size: 24px !important;
+  line-height: 100% !important;
+  height: 64px !important;
+  padding: 0 32px !important;
+  min-width: 150px !important;
+  cursor: pointer !important;
+  
+  /* Create the gradient border effect */
+  border: double 2px transparent !important;
+  border-radius: 6px !important;
+  background-image: linear-gradient(273.81deg, #914694, #62438B), linear-gradient(to right, #FA75F8, #9E6EE5) !important;
+  background-origin: border-box !important;
+  background-clip: padding-box, border-box !important;
+  
+  /* Add transition for smooth hover effect */
+  transition: background-image 0.3s ease !important;
+}
+
+/* Hover effect - darkens the button but keeps the border */
+form.search.search-full input[type="submit"]:hover,
+form.search.search-full input[name="commit"]:hover {
+  background-image: linear-gradient(273.81deg, #A252A5, #735196), linear-gradient(to right, #FA75F8, #9E6EE5) !important;
+}
+
+/* Make sure search input has matching height */
+form.search.search-full input[type="search"],
+form.search.search-full input[name="query"] {
+  height: 64px !important;
+  box-sizing: border-box !important;
+}
+
+/* Fix form layout */
 form.search.search-full {
-    display: flex !important;
-    align-items: stretch !important;
-    gap: 16px !important;
-    position: relative !important;
-  }
-  
-  /* Style the search input */
-  form.search.search-full input[type="search"],
-  form.search.search-full input[name="query"] {
-    height: 64px !important;
-    box-sizing: border-box !important;
-    margin: 0 !important;
-    border-radius: 6px !important;
-  }
-  
-  /* Base styling for the submit input */
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+}
+
+/* Media queries for responsive design */
+@media (min-width: 768px) and (max-width: 1199px) {
   form.search.search-full input[type="submit"],
   form.search.search-full input[name="commit"] {
-    color: #ffffff !important;
-    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), linear-gradient(273.81deg, #FA75F8, #9E6EE5) !important;
-    border: none !important;
-    cursor: pointer !important;
-    font-family: "Adelle Sans" !important;
-    font-size: 24px !important;
-    line-height: 100% !important;
-    height: 64px !important;
-    padding: 0 32px !important;
-    min-width: 150px !important;
-    border-radius: 6px !important;
-    position: relative !important;
-    z-index: 2 !important; /* Keep above the pseudo elements */
-    transition: background 0.3s ease !important;
+    height: 48px !important;
+    font-size: 20px !important;
   }
   
-  /* Hover effect using adjacent sibling */
-  form.search.search-full input[type="submit"]:hover,
-  form.search.search-full input[name="commit"]:hover {
-    background: linear-gradient(273.81deg, #914694, #62438B) !important;
+  form.search.search-full input[type="search"],
+  form.search.search-full input[name="query"] {
+    height: 48px !important;
   }
-  
-  /* Create a position:relative parent for the absolute gradient border */
+}
+
+@media (max-width: 767px) {
   form.search.search-full {
-    position: relative !important;
+    flex-direction: column !important;
+    width: 100% !important;
   }
   
-  /* Add gradient border using a pseudo element on the form */
-  form.search.search-full::after {
-    content: "" !important;
-    position: absolute !important;
-    top: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    width: calc(150px + 64px) !important; /* Match button width + padding */
-    border-radius: 8px !important;
-    background: linear-gradient(#FA75F8, #9E6EE5) !important;
-    z-index: 1 !important;
-    pointer-events: none !important;
+  form.search.search-full input[type="submit"],
+  form.search.search-full input[name="commit"] {
+    height: 40px !important;
+    font-size: 18px !important;
+    width: 100% !important;
   }
   
-  /* Create a hole in the middle for the button */
-  form.search.search-full::before {
-    content: "" !important;
-    position: absolute !important;
-    top: 2px !important;
-    right: 2px !important;
-    bottom: 2px !important;
-    width: calc(150px + 60px) !important; /* Match button width + padding - border */
-    border-radius: 6px !important;
-    background: linear-gradient(273.81deg, #FA75F8, #9E6EE5) !important;
-    z-index: 1 !important;
-    pointer-events: none !important;
+  form.search.search-full input[type="search"],
+  form.search.search-full input[name="query"] {
+    height: 40px !important;
+    width: 100% !important;
   }
-  
-  /* Media queries for responsive design */
-  @media (min-width: 768px) and (max-width: 1199px) {
-    form.search.search-full input[type="submit"],
-    form.search.search-full input[name="commit"] {
-      height: 48px !important;
-      font-size: 20px !important;
-    }
-    
-    form.search.search-full::after {
-      border-radius: 4px !important;
-    }
-    
-    form.search.search-full::before {
-      top: 1px !important;
-      right: 1px !important;
-      bottom: 1px !important;
-      border-radius: 3px !important;
-    }
-  }
-  
-  @media (max-width: 767px) {
-    form.search.search-full {
-      flex-direction: column !important;
-      width: 100% !important;
-    }
-    
-    form.search.search-full input[type="submit"],
-    form.search.search-full input[name="commit"] {
-      height: 40px !important;
-      font-size: 18px !important;
-      width: 100% !important;
-    }
-    
-    form.search.search-full::after,
-    form.search.search-full::before {
-      width: 100% !important;
-    }
-    
-    form.search.search-full::after {
-      border-radius: 4px !important;
-    }
-    
-    form.search.search-full::before {
-      top: 1px !important;
-      right: 1px !important;
-      bottom: 1px !important;
-      border-radius: 3px !important;
-    }
-  }
+}
