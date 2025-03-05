@@ -3759,7 +3759,7 @@ a > * {
 }
 
 /* Submit button styles */
-.search.search-full button[type="submit"] {
+/* .search.search-full button[type="submit"] {
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -3872,7 +3872,7 @@ a > * {
     font-size: 18px;
     text-indent: 0;
   }
-}
+} */
 
 /* Search icon styling */
 .search-icon {
