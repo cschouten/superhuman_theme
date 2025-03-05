@@ -1,7 +1,7 @@
 {
   "name": "Superhuman Help Center",
   "author": "Zendesk",
-  "version": "1.2.40",
+  "version": "1.2.41",
   "api_version": 4,
   "default_locale": "en-us",
   "settings": [
@@ -55,7 +55,7 @@
           "type": "color",
           "description": "background_color_description",
           "label": "background_color_label",
-          "value": "#FFFFFF"
+          "value": "#000000"
         }
       ]
     },
