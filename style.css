@@ -13,10 +13,10 @@
     src: url("$assets-adellesans-semibold-otf");
 }
 
-@font-face {
+/* @font-face {
     font-family: "Adelle Sans Semibold";
     src: url("$assets-adellesans-semibold-otf");
-}
+} */
 
 @font-face {
     font-family: "Operator Mono";
@@ -71,352 +71,7 @@ body {
 }
 
 h1 {
-  font-family: "Adelle Sans Semibold";
-  font-size: 80px;
-  line-height: 96px;
-}
-@media (min-width: 768px) and (max-width: 1199px) {
-  h1 {
-    font-size: 48px;
-    line-height: 56px;
-  }
-}
-@media (max-width: 767px) {
-  h1 {
-    font-size: 32px;
-    line-height: 40px;
-  }
-}
-
-h2 {
-  font-family: "Adelle Sans Semibold";
-  font-size: 48px;
-  line-height: 64px;
-}
-@media (min-width: 768px) and (max-width: 1199px) {
-  h2 {
-    font-size: 32px;
-    line-height: 44px;
-  }
-}
-@media (max-width: 767px) {
-  h2 {
-    font-size: 26px;
-    line-height: 32px;
-  }
-}
-
-h3 {
-  font-family: "Adelle Sans Semibold";
-  font-size: 36px;
-  line-height: 48px;
-}
-@media (min-width: 768px) and (max-width: 1199px) {
-  h3 {
-    font-size: 28px;
-    line-height: 36px;
-  }
-}
-@media (max-width: 767px) {
-  h3 {
-    font-size: 24px;
-    line-height: 32px;
-  }
-}
-
-h4 {
-  font-family: "Adelle Sans Semibold";
-  font-size: 32px;
-  line-height: 40px;
-}
-@media (min-width: 768px) and (max-width: 1199px) {
-  h4 {
-    font-size: 24px;
-    line-height: 32px;
-  }
-}
-@media (max-width: 767px) {
-  h4 {
-    font-size: 20px;
-    line-height: 28px;
-  }
-}
-
-h5 {
-  font-family: "Adelle Sans Semibold";
-  font-size: 24px;
-  line-height: 32px;
-}
-@media (min-width: 768px) and (max-width: 1199px) {
-  h5 {
-    font-size: 20px;
-    line-height: 28px;
-  }
-}
-@media (max-width: 767px) {
-  h5 {
-    font-size: 18px;
-    line-height: 24px;
-  }
-}
-
-h6 {
-  font-family: "Operator Mono";
-  font-size: 24px;
-  line-height: 32px;
-}
-@media (min-width: 768px) and (max-width: 1199px) {
-  h6 {
-    font-size: 20px;
-    line-height: 28px;
-  }
-}
-@media (max-width: 767px) {
-  h6 {
-    font-size: 18px;
-    line-height: 24px;
-  }
-}
-
-/**
- * It might seem strange to use mixins instead of applying styles directly to
- * the relevant selectors — h1, h2, etc. We use the mixins because these styles
- * aren't just for HTML we control. We also use them for our help center hosted
- * on Help Scout Docs. The mixins let us override Help Scout's styles without
- * using `!important`.
- */
-h1 {
-  font-family: "Adelle Sans Semibold";
-  font-size: 80px;
-  line-height: 96px;
-}
-@media (min-width: 768px) and (max-width: 1199px) {
-  h1 {
-    font-size: 48px;
-    line-height: 56px;
-  }
-}
-@media (max-width: 767px) {
-  h1 {
-    font-size: 32px;
-    line-height: 40px;
-  }
-}
-
-h2 {
-  font-family: "Adelle Sans Semibold";
-  font-size: 48px;
-  line-height: 64px;
-}
-@media (min-width: 768px) and (max-width: 1199px) {
-  h2 {
-    font-size: 32px;
-    line-height: 44px;
-  }
-}
-@media (max-width: 767px) {
-  h2 {
-    font-size: 26px;
-    line-height: 32px;
-  }
-}
-
-h3 {
-  font-family: "Adelle Sans Semibold";
-  font-size: 36px;
-  line-height: 48px;
-}
-@media (min-width: 768px) and (max-width: 1199px) {
-  h3 {
-    font-size: 28px;
-    line-height: 36px;
-  }
-}
-@media (max-width: 767px) {
-  h3 {
-    font-size: 24px;
-    line-height: 32px;
-  }
-}
-
-h4 {
-  font-family: "Adelle Sans Semibold";
-  font-size: 32px;
-  line-height: 40px;
-}
-@media (min-width: 768px) and (max-width: 1199px) {
-  h4 {
-    font-size: 24px;
-    line-height: 32px;
-  }
-}
-@media (max-width: 767px) {
-  h4 {
-    font-size: 20px;
-    line-height: 28px;
-  }
-}
-
-h5 {
-  font-family: "Adelle Sans Semibold";
-  font-size: 24px;
-  line-height: 32px;
-}
-@media (min-width: 768px) and (max-width: 1199px) {
-  h5 {
-    font-size: 20px;
-    line-height: 28px;
-  }
-}
-@media (max-width: 767px) {
-  h5 {
-    font-size: 18px;
-    line-height: 24px;
-  }
-}
-
-h6 {
-  font-family: "Operator Mono";
-  font-size: 24px;
-  line-height: 32px;
-}
-@media (min-width: 768px) and (max-width: 1199px) {
-  h6 {
-    font-size: 20px;
-    line-height: 28px;
-  }
-}
-@media (max-width: 767px) {
-  h6 {
-    font-size: 18px;
-    line-height: 24px;
-  }
-}
-
-/**
- * It might seem strange to use mixins instead of applying styles directly to
- * the relevant selectors — h1, h2, etc. We use the mixins because these styles
- * aren't just for HTML we control. We also use them for our help center hosted
- * on Help Scout Docs. The mixins let us override Help Scout's styles without
- * using `!important`.
- */
-h1 {
-  font-family: "Adelle Sans Semibold";
-  font-size: 80px;
-  line-height: 96px;
-}
-@media (min-width: 768px) and (max-width: 1199px) {
-  h1 {
-    font-size: 48px;
-    line-height: 56px;
-  }
-}
-@media (max-width: 767px) {
-  h1 {
-    font-size: 32px;
-    line-height: 40px;
-  }
-}
-
-h2 {
-  font-family: "Adelle Sans Semibold";
-  font-size: 48px;
-  line-height: 64px;
-}
-@media (min-width: 768px) and (max-width: 1199px) {
-  h2 {
-    font-size: 32px;
-    line-height: 44px;
-  }
-}
-@media (max-width: 767px) {
-  h2 {
-    font-size: 26px;
-    line-height: 32px;
-  }
-}
-
-h3 {
-  font-family: "Adelle Sans Semibold";
-  font-size: 36px;
-  line-height: 48px;
-}
-@media (min-width: 768px) and (max-width: 1199px) {
-  h3 {
-    font-size: 28px;
-    line-height: 36px;
-  }
-}
-@media (max-width: 767px) {
-  h3 {
-    font-size: 24px;
-    line-height: 32px;
-  }
-}
-
-h4 {
-  font-family: "Adelle Sans Semibold";
-  font-size: 32px;
-  line-height: 40px;
-}
-@media (min-width: 768px) and (max-width: 1199px) {
-  h4 {
-    font-size: 24px;
-    line-height: 32px;
-  }
-}
-@media (max-width: 767px) {
-  h4 {
-    font-size: 20px;
-    line-height: 28px;
-  }
-}
-
-h5 {
-  font-family: "Adelle Sans Semibold";
-  font-size: 24px;
-  line-height: 32px;
-}
-@media (min-width: 768px) and (max-width: 1199px) {
-  h5 {
-    font-size: 20px;
-    line-height: 28px;
-  }
-}
-@media (max-width: 767px) {
-  h5 {
-    font-size: 18px;
-    line-height: 24px;
-  }
-}
-
-h6 {
-  font-family: "Operator Mono";
-  font-size: 24px;
-  line-height: 32px;
-}
-@media (min-width: 768px) and (max-width: 1199px) {
-  h6 {
-    font-size: 20px;
-    line-height: 28px;
-  }
-}
-@media (max-width: 767px) {
-  h6 {
-    font-size: 18px;
-    line-height: 24px;
-  }
-}
-
-/**
- * It might seem strange to use mixins instead of applying styles directly to
- * the relevant selectors — h1, h2, etc. We use the mixins because these styles
- * aren't just for HTML we control. We also use them for our help center hosted
- * on Help Scout Docs. The mixins let us override Help Scout's styles without
- * using `!important`.
- */
-h1 {
-  font-family: "Adelle Sans Semibold";
+  font-family: "Adelle Sans";
   font-size: 80px;
   line-height: 96px;
 }
@@ -452,7 +107,7 @@ h2 {
 }
 
 h3 {
-  font-family: "Adelle Sans Semibold";
+  font-family: "Adelle Sans";
   font-size: 36px;
   line-height: 48px;
 }
@@ -470,7 +125,7 @@ h3 {
 }
 
 h4 {
-  font-family: "Adelle Sans Semibold";
+  font-family: "Adelle Sans";
   font-size: 32px;
   line-height: 40px;
 }
@@ -488,7 +143,352 @@ h4 {
 }
 
 h5 {
-  font-family: "Adelle Sans Semibold";
+  font-family: "Adelle Sans";
+  font-size: 24px;
+  line-height: 32px;
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+  h5 {
+    font-size: 20px;
+    line-height: 28px;
+  }
+}
+@media (max-width: 767px) {
+  h5 {
+    font-size: 18px;
+    line-height: 24px;
+  }
+}
+
+h6 {
+  font-family: "Operator Mono";
+  font-size: 24px;
+  line-height: 32px;
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+  h6 {
+    font-size: 20px;
+    line-height: 28px;
+  }
+}
+@media (max-width: 767px) {
+  h6 {
+    font-size: 18px;
+    line-height: 24px;
+  }
+}
+
+/**
+ * It might seem strange to use mixins instead of applying styles directly to
+ * the relevant selectors — h1, h2, etc. We use the mixins because these styles
+ * aren't just for HTML we control. We also use them for our help center hosted
+ * on Help Scout Docs. The mixins let us override Help Scout's styles without
+ * using `!important`.
+ */
+h1 {
+  font-family: "Adelle Sans";
+  font-size: 80px;
+  line-height: 96px;
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+  h1 {
+    font-size: 48px;
+    line-height: 56px;
+  }
+}
+@media (max-width: 767px) {
+  h1 {
+    font-size: 32px;
+    line-height: 40px;
+  }
+}
+
+h2 {
+  font-family: "Adelle Sans";
+  font-size: 48px;
+  line-height: 64px;
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+  h2 {
+    font-size: 32px;
+    line-height: 44px;
+  }
+}
+@media (max-width: 767px) {
+  h2 {
+    font-size: 26px;
+    line-height: 32px;
+  }
+}
+
+h3 {
+  font-family: "Adelle Sans";
+  font-size: 36px;
+  line-height: 48px;
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+  h3 {
+    font-size: 28px;
+    line-height: 36px;
+  }
+}
+@media (max-width: 767px) {
+  h3 {
+    font-size: 24px;
+    line-height: 32px;
+  }
+}
+
+h4 {
+  font-family: "Adelle Sans";
+  font-size: 32px;
+  line-height: 40px;
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+  h4 {
+    font-size: 24px;
+    line-height: 32px;
+  }
+}
+@media (max-width: 767px) {
+  h4 {
+    font-size: 20px;
+    line-height: 28px;
+  }
+}
+
+h5 {
+  font-family: "Adelle Sans";
+  font-size: 24px;
+  line-height: 32px;
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+  h5 {
+    font-size: 20px;
+    line-height: 28px;
+  }
+}
+@media (max-width: 767px) {
+  h5 {
+    font-size: 18px;
+    line-height: 24px;
+  }
+}
+
+h6 {
+  font-family: "Operator Mono";
+  font-size: 24px;
+  line-height: 32px;
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+  h6 {
+    font-size: 20px;
+    line-height: 28px;
+  }
+}
+@media (max-width: 767px) {
+  h6 {
+    font-size: 18px;
+    line-height: 24px;
+  }
+}
+
+/**
+ * It might seem strange to use mixins instead of applying styles directly to
+ * the relevant selectors — h1, h2, etc. We use the mixins because these styles
+ * aren't just for HTML we control. We also use them for our help center hosted
+ * on Help Scout Docs. The mixins let us override Help Scout's styles without
+ * using `!important`.
+ */
+h1 {
+  font-family: "Adelle Sans";
+  font-size: 80px;
+  line-height: 96px;
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+  h1 {
+    font-size: 48px;
+    line-height: 56px;
+  }
+}
+@media (max-width: 767px) {
+  h1 {
+    font-size: 32px;
+    line-height: 40px;
+  }
+}
+
+h2 {
+  font-family: "Adelle Sans";
+  font-size: 48px;
+  line-height: 64px;
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+  h2 {
+    font-size: 32px;
+    line-height: 44px;
+  }
+}
+@media (max-width: 767px) {
+  h2 {
+    font-size: 26px;
+    line-height: 32px;
+  }
+}
+
+h3 {
+  font-family: "Adelle Sans";
+  font-size: 36px;
+  line-height: 48px;
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+  h3 {
+    font-size: 28px;
+    line-height: 36px;
+  }
+}
+@media (max-width: 767px) {
+  h3 {
+    font-size: 24px;
+    line-height: 32px;
+  }
+}
+
+h4 {
+  font-family: "Adelle Sans";
+  font-size: 32px;
+  line-height: 40px;
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+  h4 {
+    font-size: 24px;
+    line-height: 32px;
+  }
+}
+@media (max-width: 767px) {
+  h4 {
+    font-size: 20px;
+    line-height: 28px;
+  }
+}
+
+h5 {
+  font-family: "Adelle Sans";
+  font-size: 24px;
+  line-height: 32px;
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+  h5 {
+    font-size: 20px;
+    line-height: 28px;
+  }
+}
+@media (max-width: 767px) {
+  h5 {
+    font-size: 18px;
+    line-height: 24px;
+  }
+}
+
+h6 {
+  font-family: "Operator Mono";
+  font-size: 24px;
+  line-height: 32px;
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+  h6 {
+    font-size: 20px;
+    line-height: 28px;
+  }
+}
+@media (max-width: 767px) {
+  h6 {
+    font-size: 18px;
+    line-height: 24px;
+  }
+}
+
+/**
+ * It might seem strange to use mixins instead of applying styles directly to
+ * the relevant selectors — h1, h2, etc. We use the mixins because these styles
+ * aren't just for HTML we control. We also use them for our help center hosted
+ * on Help Scout Docs. The mixins let us override Help Scout's styles without
+ * using `!important`.
+ */
+h1 {
+  font-family: "Adelle Sans";
+  font-size: 80px;
+  line-height: 96px;
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+  h1 {
+    font-size: 48px;
+    line-height: 56px;
+  }
+}
+@media (max-width: 767px) {
+  h1 {
+    font-size: 32px;
+    line-height: 40px;
+  }
+}
+
+h2 {
+  font-family: "Adelle Sans";
+  font-size: 48px;
+  line-height: 64px;
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+  h2 {
+    font-size: 32px;
+    line-height: 44px;
+  }
+}
+@media (max-width: 767px) {
+  h2 {
+    font-size: 26px;
+    line-height: 32px;
+  }
+}
+
+h3 {
+  font-family: "Adelle Sans";
+  font-size: 36px;
+  line-height: 48px;
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+  h3 {
+    font-size: 28px;
+    line-height: 36px;
+  }
+}
+@media (max-width: 767px) {
+  h3 {
+    font-size: 24px;
+    line-height: 32px;
+  }
+}
+
+h4 {
+  font-family: "Adelle Sans";
+  font-size: 32px;
+  line-height: 40px;
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+  h4 {
+    font-size: 24px;
+    line-height: 32px;
+  }
+}
+@media (max-width: 767px) {
+  h4 {
+    font-size: 20px;
+    line-height: 28px;
+  }
+}
+
+h5 {
+  font-family: "Adelle Sans";
   font-size: 24px;
   line-height: 32px;
 }
@@ -705,7 +705,7 @@ footer .footerContent .footerTop .footerLinks .linkColumn .linkColumnTitle {
   font-family: "Adelle Sans";
   font-size: 16px;
   line-height: 24px;
-  font-family: "Adelle Sans Semibold";
+  font-family: "Adelle Sans";
   color: #ffffff;
 }
 @media (min-width: 768px) and (max-width: 1199px) {
@@ -1479,7 +1479,7 @@ footer p {
   display: none !important;
 }
 #contentArea .collectionTitle {
-  font-family: "Adelle Sans Semibold";
+  font-family: "Adelle Sans";
   font-size: 24px;
   line-height: 32px;
   pointer-events: none;
@@ -2047,7 +2047,7 @@ a > * {
   padding: 48px 80px;
 }
 #main-content .contentWrapper h1 {
-  font-family: "Adelle Sans Semibold";
+  font-family: "Adelle Sans";
   font-size: 32px;
   line-height: 40px;
 }
@@ -2064,7 +2064,7 @@ a > * {
   }
 }
 #main-content .contentWrapper h2 {
-  font-family: "Adelle Sans Semibold";
+  font-family: "Adelle Sans";
   font-size: 24px;
   line-height: 32px;
 }
@@ -2084,7 +2084,7 @@ a > * {
   font-family: "Operator Mono";
   font-size: 24px;
   line-height: 32px;
-  font-family: "Adelle Sans Semibold";
+  font-family: "Adelle Sans";
 }
 @media (min-width: 768px) and (max-width: 1199px) {
   #main-content .contentWrapper h3 {
@@ -3534,7 +3534,7 @@ zd-autocomplete-multibrand zd-autocomplete-title-multibrand {
     color: #ffffff !important;
     font-size: 16px !important;
     padding-bottom: 4px !important;
-    font-family: "Adelle Sans Semibold" !important;
+    font-family: "Adelle Sans" !important;
 }
 
 /* Hide breadcrumbs in multibrand results */
@@ -3568,7 +3568,7 @@ zd-autocomplete-multibrand zd-autocomplete-breadcrumbs-multibrand {
 /* Top header for search results dropdown */
 .search-results-header {
     padding: 16px 24px !important;
-    font-family: "Adelle Sans Semibold" !important;
+    font-family: "Adelle Sans" !important;
     font-size: 18px !important;
     color: #ffffff !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
