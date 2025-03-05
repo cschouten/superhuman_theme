@@ -4285,6 +4285,7 @@ form.search.search-full {
 }
 
 /* Button with gradient border */
+.search.search-full button[type="input"],
 .search.search-full button[type="submit"] {
     position: relative !important;
     background: linear-gradient(273.81deg, #914694, #62438B) !important;
@@ -4294,6 +4295,7 @@ form.search.search-full {
   }
   
   /* Gradient border effect */
+  .search.search-full button[type="input"]::before,
   .search.search-full button[type="submit"]::before {
     content: "" !important;
     position: absolute !important;
@@ -4307,6 +4309,7 @@ form.search.search-full {
   }
   
   /* Button hover effect */
+  .search.search-full button[type="input"]:hover,
   .search.search-full button[type="submit"]:hover {
     background: linear-gradient(273.81deg, #A252A5, #735196) !important;
   }
