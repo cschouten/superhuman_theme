@@ -23,6 +23,11 @@
     src: url("$assets-operatormono-book-otf");
 }
 
+body {
+    color: #ffffff;
+    -webkit-font-smoothing: antialiased;
+  }
+  
   
   body, h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd, ul, ol {
     margin: 9px 0;
@@ -173,29 +178,6 @@ h6 {
   }
 }
 
-@font-face {
-  font-family: "Adelle Sans";
-  font-weight: 400;
-  src: url("https://superhuman.com/fonts/AdelleSans-Regular.otf") format("truetype");
-}
-@font-face {
-  font-family: "Adelle Sans";
-  font-weight: 600;
-  src: url("https://superhuman.com/fonts/AdelleSans-SemiBold.otf") format("truetype");
-}
-@font-face {
-  font-family: "Adelle Sans Semibold";
-  src: url("https://superhuman.com/fonts/AdelleSans-SemiBold.otf") format("truetype");
-}
-@font-face {
-  font-family: "Operator Mono";
-  src: url("https://superhuman.com/fonts/OperatorMono-Book.otf") format("truetype");
-}
-body {
-  color: #ffffff;
-  -webkit-font-smoothing: antialiased;
-}
-
 /**
  * It might seem strange to use mixins instead of applying styles directly to
  * the relevant selectors — h1, h2, etc. We use the mixins because these styles
@@ -311,29 +293,6 @@ h6 {
   }
 }
 
-@font-face {
-  font-family: "Adelle Sans";
-  font-weight: 400;
-  src: url("https://superhuman.com/fonts/AdelleSans-Regular.otf") format("truetype");
-}
-@font-face {
-  font-family: "Adelle Sans";
-  font-weight: 600;
-  src: url("https://superhuman.com/fonts/AdelleSans-SemiBold.otf") format("truetype");
-}
-@font-face {
-  font-family: "Adelle Sans Semibold";
-  src: url("https://superhuman.com/fonts/AdelleSans-SemiBold.otf") format("truetype");
-}
-@font-face {
-  font-family: "Operator Mono";
-  src: url("https://superhuman.com/fonts/OperatorMono-Book.otf") format("truetype");
-}
-body {
-  color: #ffffff;
-  -webkit-font-smoothing: antialiased;
-}
-
 /**
  * It might seem strange to use mixins instead of applying styles directly to
  * the relevant selectors — h1, h2, etc. We use the mixins because these styles
@@ -447,29 +406,6 @@ h6 {
     font-size: 18px;
     line-height: 24px;
   }
-}
-
-@font-face {
-  font-family: "Adelle Sans";
-  font-weight: 400;
-  src: url("https://superhuman.com/fonts/AdelleSans-Regular.otf") format("truetype");
-}
-@font-face {
-  font-family: "Adelle Sans";
-  font-weight: 600;
-  src: url("https://superhuman.com/fonts/AdelleSans-SemiBold.otf") format("truetype");
-}
-@font-face {
-  font-family: "Adelle Sans Semibold";
-  src: url("https://superhuman.com/fonts/AdelleSans-SemiBold.otf") format("truetype");
-}
-@font-face {
-  font-family: "Operator Mono";
-  src: url("https://superhuman.com/fonts/OperatorMono-Book.otf") format("truetype");
-}
-body {
-  color: #ffffff;
-  -webkit-font-smoothing: antialiased;
 }
 
 /**
