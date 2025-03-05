@@ -1,7 +1,7 @@
 {
   "name": "Superhuman Help Center",
   "author": "Zendesk",
-  "version": "1.2.32",
+  "version": "1.2.33",
   "api_version": 4,
   "default_locale": "en-us",
   "settings": [
