@@ -4104,7 +4104,7 @@ zd-autocomplete-multibrand zd-autocomplete-breadcrumbs-multibrand {
 }
 
 /* Style the submit button to match your design */
-.search.search-full button[type="submit"],
+/* .search.search-full button[type="submit"],
 .search-full form button {
   color: #ffffff !important;
   display: flex !important;
@@ -4170,7 +4170,7 @@ zd-autocomplete-multibrand zd-autocomplete-breadcrumbs-multibrand {
 }
 
 /* Style the clear button (x) to be white */
-.search-full .clear-button,
+/* .search-full .clear-button,
 .search-full button[data-clear-button],
 .search-full .clear-icon,
 .search-full .search-cancel-button,
@@ -4179,10 +4179,10 @@ zd-autocomplete-multibrand zd-autocomplete-breadcrumbs-multibrand {
   fill: white !important;
   stroke: white !important;
   filter: brightness(0) invert(1) !important;
-}
+} */
 
 /* Media queries for responsive design */
-@media (min-width: 768px) and (max-width: 1199px) {
+/* @media (min-width: 768px) and (max-width: 1199px) {
   .search.search-full button[type="submit"],
   .search-full form button {
     font-size: 20px !important;
@@ -4243,4 +4243,32 @@ zd-autocomplete-multibrand zd-autocomplete-breadcrumbs-multibrand {
     font-size: 18px !important;
     text-indent: 0 !important;
   }
+}  */
+
+/* Apply the exact button styles from #docsSearch #searchBar button to Zendesk's submit input */
+form.search.search-full input[type="submit"],
+form.search.search-full input[name="commit"] {
+  color: #ffffff !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), linear-gradient(273.81deg, #FA75F8, #9E6EE5) !important;
+  border: none !important;
+  cursor: pointer !important;
+  position: relative !important;
+  font-family: "Adelle Sans" !important;
+  font-size: 24px !important;
+  line-height: 100% !important;
+  height: 64px !important;
+  padding: 22px 32px 18px 32px !important;
+  border-radius: 6px !important;
+  flex: 0.4 !important;
+  position: relative !important;
+  top: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  text-shadow: none !important;
+  min-width: 150px !important;
+  z-index: 1 !important;
 }
