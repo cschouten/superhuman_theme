@@ -3948,16 +3948,157 @@ a > * {
     line-height: 24px;
   }
 }
+/* Zendesk Autocomplete Styling - Custom Overrides */
 
-/* Search Autocomplete Styling overrides */
+/* Main autocomplete container */
 zd-autocomplete {
-    font-family: "Adelle Sans";
+    background: linear-gradient(315deg, rgba(53, 36, 77, 0.6) 0%, rgba(6, 6, 8, 0.6) 100%) !important;
+    backdrop-filter: blur(29px) !important;
+    -webkit-backdrop-filter: blur(29px) !important;
+    border: 2px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 8px !important;
+    box-shadow: none !important;
+    font-family: "Adelle Sans" !important;
+    margin-top: 8px !important;
+    z-index: 1000 !important;
+    width: 528px !important;
 }
 
+@media (max-width: 767px) {
+    zd-autocomplete {
+        width: 100% !important;
+    }
+}
+
+/* Hide the header */
 zd-autocomplete-header {
     display: none !important;
 }
 
-zd-autocomplete-breadcrumbs-multibrand {
+/* Option styling - equivalent to .result a */
+zd-autocomplete-option {
+    font-family: "Adelle Sans" !important;
+    font-size: 16px !important;
+    line-height: 24px !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+    transition: color 0.3s ease !important;
+    padding: 8px 24px !important;
+    display: block !important;
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+    zd-autocomplete-option {
+        font-size: 15px !important;
+        line-height: 24px !important;
+    }
+}
+
+@media (max-width: 767px) {
+    zd-autocomplete-option {
+        font-size: 15px !important;
+        line-height: 24px !important;
+    }
+}
+
+/* Hover state */
+zd-autocomplete-option:hover {
+    background: transparent !important;
+    color: #ffffff !important;
+}
+
+/* Selected state */
+zd-autocomplete-option[aria-selected=true] {
+    background: transparent !important;
+    color: #ffffff !important;
+}
+
+/* Highlighted text in search results */
+zd-autocomplete-option em {
+    font-style: normal !important;
+    font-weight: bold !important;
+}
+
+/* Breadcrumbs in search results */
+zd-autocomplete-option zd-autocomplete-breadcrumbs {
+    color: rgba(255, 255, 255, 0.5) !important;
+    font-size: 14px !important;
+    display: block !important;
+    margin-top: -4px !important;
+}
+
+/* Multibrand (category) results */
+zd-autocomplete-multibrand {
+    font-family: "Adelle Sans" !important;
+    font-size: 16px !important;
+    line-height: 24px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+    padding: 16px 24px !important;
+}
+
+zd-autocomplete-multibrand:hover {
+    background: transparent !important;
+    color: #ffffff !important;
+}
+
+zd-autocomplete-multibrand[aria-selected=true] {
+    background: transparent !important;
+    color: #ffffff !important;
+}
+
+/* Title in multibrand results */
+zd-autocomplete-multibrand zd-autocomplete-title-multibrand {
+    color: #ffffff !important;
+    font-size: 16px !important;
+    padding-bottom: 4px !important;
+    font-family: "Adelle Sans Semibold" !important;
+}
+
+/* Hide breadcrumbs in multibrand results */
+zd-autocomplete-multibrand zd-autocomplete-breadcrumbs-multibrand {
     display: none !important;
+}
+
+/* No results message */
+.no-results {
+    font-family: "Adelle Sans" !important;
+    font-size: 16px !important;
+    line-height: 24px !important;
+    padding: 16px 24px !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+    .no-results {
+        font-size: 15px !important;
+        line-height: 24px !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .no-results {
+        font-size: 15px !important;
+        line-height: 24px !important;
+    }
+}
+
+/* Top header for search results dropdown */
+.search-results-header {
+    padding: 16px 24px !important;
+    font-family: "Adelle Sans Semibold" !important;
+    font-size: 18px !important;
+    color: #ffffff !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+    .search-results-header {
+        font-size: 16px !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .search-results-header {
+        font-size: 16px !important;
+    }
 }
