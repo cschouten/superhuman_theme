@@ -4245,7 +4245,7 @@ zd-autocomplete-multibrand zd-autocomplete-breadcrumbs-multibrand {
   }
 }  */
 
-/* Style the submit button with gradient border */
+/* CSS-only approach with precise gradient and border effects */
 form.search.search-full input[type="submit"],
 form.search.search-full input[name="commit"] {
   color: #ffffff !important;
@@ -4256,26 +4256,33 @@ form.search.search-full input[name="commit"] {
   padding: 0 32px !important;
   min-width: 150px !important;
   cursor: pointer !important;
-
-  background: linear-gradient(#FA75F8, #9E6EE5) border-box !important;
   
-  /* Create the gradient border effect */
-  border: 2px solid transparent !important;
-  border-radius: 8px !important;
-  inset: -2px !important;
-  /* Lighter gradient for the default state */
-  /* background-image: linear-gradient(273.81deg, #FA75F8, #9E6EE5), linear-gradient(to right, #FA75F8, #9E6EE5) !important;
-  background-origin: border-box !important;
-  background-clip: padding-box, border-box !important; */
+  /* Create the deeper purple background */
+  background: linear-gradient(273.81deg, #914694, #62438B) !important;
   
-  /* Add transition for smooth hover effect */
-  /* transition: background-image 0.3s ease !important; */
+  /* Remove standard border */
+  border: none !important;
+  
+  /* Add border radius for the button */
+  border-radius: 6px !important;
+  
+  /* Add the gradient border using box-shadow */
+  box-shadow: 
+    0 0 0 2px #FA75F8, 
+    0 0 0 2px #9E6EE5, 
+    inset 0 0 0 0 transparent !important;
+  
+  /* Use background-clip to help with the gradient border */
+  background-clip: padding-box !important;
+  
+  /* Add transition for hover */
+  transition: background 0.3s ease, box-shadow 0.3s ease !important;
 }
 
-/* Darker color on hover */
+/* Hover effect */
 form.search.search-full input[type="submit"]:hover,
 form.search.search-full input[name="commit"]:hover {
-  background-image: linear-gradient(273.81deg, #914694, #62438B), linear-gradient(to right, #FA75F8, #9E6EE5) !important;
+  background: linear-gradient(273.81deg, #A252A5, #735196) !important;
 }
 
 /* Make sure search input has matching height */
