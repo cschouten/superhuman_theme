@@ -3600,85 +3600,6 @@ form.search.search-full input[type="text"]::-ms-clear {
   display: none;
 }
 
-/* Base button styling */
-/* form.search.search-full {
-    display: flex !important;
-    align-items: flex-start !important; 
-  }
-
-form.search.search-full input[type="submit"],
-form.search.search-full input[name="commit"] {
-
-  color: #ffffff !important;
-  font-family: "Adelle Sans", sans-serif !important;
-  font-size: 24px !important;
-  line-height: 100% !important;
-  text-shadow: none !important;
-  
-
-  height: 64px !important;
-  padding: 0 32px !important;
-  min-width: 150px !important;
-  border-radius: 6px !important;
-  
-
-  border: none !important;
-  outline: none !important;
-  box-shadow: none !important;
-  
-
-  background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), 
-              linear-gradient(273.81deg, #FA75F8, #9E6EE5) !important;
-  
-
-  cursor: pointer !important;
-  
-
-  -webkit-appearance: none !important;
-  appearance: none !important;
-}
-
-
-.search-button-wrapper {
-  display: inline-block !important;
-  position: relative !important;
-}
-
-
-.search-button-wrapper.disabled input[type="submit"],
-.search-button-wrapper.disabled input[name="commit"] {
-  background: transparent !important;
-  opacity: 0.6 !important;
-  cursor: not-allowed !important;
-}
-
-
-@media (min-width: 768px) and (max-width: 1199px) {
-  form.search.search-full input[type="submit"],
-  form.search.search-full input[name="commit"] {
-    font-size: 20px !important;
-    height: 48px !important;
-    padding: 0 16px !important;
-    border-radius: 3px !important;
-  }
-}
-
-@media (max-width: 767px) {
-  form.search.search-full input[type="submit"],
-  form.search.search-full input[name="commit"] {
-    font-size: 18px !important;
-    height: 40px !important;
-    padding: 0 16px !important;
-    border-radius: 3px !important;
-    width: 100% !important;
-  }
-  
-  .search-button-wrapper {
-    display: block !important;
-    width: 100% !important;
-  }
-} */
-
 /* Base form styling */
 form.search.search-full {
     display: flex !important;
@@ -3713,11 +3634,11 @@ form.search.search-full {
   /* Wrapper styling for pseudo-elements */
   .search-button-wrapper {
     position: relative !important;
-    z-index: 1 !important; /* Base layer */
+    /* z-index: 1 !important;  */
     display: inline-block !important;
     border-radius: 6px !important;
-    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), 
-                linear-gradient(273.81deg, #FA75F8, #9E6EE5) !important;
+    /* background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), 
+                linear-gradient(273.81deg, #FA75F8, #9E6EE5) !important; */
   }
   
   /* Border gradient using ::before */
@@ -3730,7 +3651,7 @@ form.search.search-full {
     bottom: -2px !important;
     border-radius: 8px !important;
     background: linear-gradient(180deg, #FA75F8, #9E6EE5) !important;
-    z-index: 0 !important; /* Behind the wrapper */
+    z-index: -1 !important; /* Behind the wrapper */
   }
   
   /* Hover effect using ::after */
