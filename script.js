@@ -1139,6 +1139,60 @@ function enhanceSearchButton() {
       wrapper.appendChild(searchButton);
     }
   }
+
+  function enhanceSidebarSearch() {
+    // Target the Zendesk search component in the sidebar
+    const searchForm = document.querySelector('#sidebar form.search.search-full');
+    
+    if (searchForm) {
+      // Add the searchBar and sm classes to match your existing styling
+      searchForm.id = 'searchBar';
+      searchForm.classList.add('sm');
+      
+      // Find the search input
+      const searchInput = searchForm.querySelector('input[type="search"]');
+      if (searchInput) {
+        searchInput.classList.add('search-query');
+        searchInput.placeholder = 'Search';
+      }
+      
+      // Enhance the submit button
+      const searchButton = searchForm.querySelector('input[type="submit"]');
+      if (searchButton && !searchButton.parentElement.classList.contains('search-button-wrapper')) {
+        // Replace input with button element to match your structure
+        const newButton = document.createElement('button');
+        newButton.type = 'submit';
+        
+        // Add screen reader text
+        const srOnly = document.createElement('span');
+        srOnly.className = 'sr-only';
+        srOnly.textContent = 'Toggle Search';
+        newButton.appendChild(srOnly);
+        
+        // Add search icon
+        const icon = document.createElement('i');
+        icon.className = 'icon-search';
+        newButton.appendChild(icon);
+        
+        // Replace the original submit input with our new button
+        searchButton.parentNode.replaceChild(newButton, searchButton);
+      }
+      
+      // Create results dropdown container if it doesn't exist
+      if (!searchForm.querySelector('#serp-dd')) {
+        const resultsContainer = document.createElement('div');
+        resultsContainer.id = 'serp-dd';
+        resultsContainer.className = 'sb';
+        resultsContainer.style.display = 'none';
+        
+        const resultsList = document.createElement('ul');
+        resultsList.className = 'result';
+        
+        resultsContainer.appendChild(resultsList);
+        searchForm.appendChild(resultsContainer);
+      }
+    }
+  }
   
   // Update the initDarkTheme function to include button enhancement
   function initDarkTheme() {
@@ -1163,6 +1217,7 @@ function enhanceSearchButton() {
       
       // Apply button styling right away (it's lightweight CSS-only)
       enhanceSearchButton();
+      enhanceSidebarSearch();
     };
   
     const nonCriticalTasks = () => {

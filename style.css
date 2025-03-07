@@ -2000,24 +2000,6 @@ footer p {
     float: right
 }
 
-
-/* Remove underlines from category links in all states */
-/* #contentArea .category-list .category,
-#contentArea .category-list .category:link,
-#contentArea .category-list .category:visited,
-#contentArea .category-list .category:hover,
-#contentArea .category-list .category:active,
-#contentArea .category-list .category:focus {
-  text-decoration: none !important;
-} */
-
-/* Also target any text inside these links */
-/* #contentArea .category-list .category *,
-#contentArea .category-list .category h3,
-#contentArea .category-list .category p {
-  text-decoration: none !important;
-} */
-
 /* Remove underlines from all links in all states */
 a,
 a:link,
@@ -3432,7 +3414,6 @@ a > * {
   }
 }
 /* Zendesk Autocomplete Styling - Custom Overrides */
-
 /* Main autocomplete container */
 zd-autocomplete {
     background: linear-gradient(315deg, rgba(53, 36, 77, 0.6) 0%, rgba(6, 6, 8, 0.6) 100%) !important;
@@ -3732,4 +3713,41 @@ form.search.search-full {
     .search-button-wrapper::after {
       border-radius: 3px !important;
     }
+  }
+
+  /* Override Zendesk search styles to match your custom sidebar search */
+#sidebar form.search.search-full {
+    position: relative;
+    margin: 0 0 40px 0;
+  }
+  
+  #sidebar form.search.search-full input[type="search"] {
+    padding: 4px 24px 0px 24px;
+    outline-style: solid;
+    outline-color: rgba(255, 255, 255, 0.2);
+    transition: outline-color 0.3s ease;
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+    border: none;
+    font-family: "Adelle Sans";
+    font-size: 16px;
+    line-height: 100%;
+    height: 40px;
+    outline-width: 1px;
+    border-radius: 4px;
+    padding-left: 24px;
+  }
+  
+  #sidebar form.search.search-full input[type="search"]:focus {
+    outline-color: #ffffff;
+    box-shadow: none;
+  }
+  
+  #sidebar form.search.search-full input[type="search"]::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  /* Hide any Zendesk elements you don't need */
+  #sidebar form.search.search-full .search-results-column {
+    display: none;
   }
