@@ -50,8 +50,22 @@
                 {{
                 /if
                 }}
-                <div class="pagination-container">
-                    {{pagination}}
+                <div class="custom-pagination">
+                {{#if pagination.previous}}
+                    <a href="{{pagination.previous}}" class="previous">&laquo; Previous</a>
+                {{/if}}
+                
+                {{#each pagination.pages}}
+                    {{#if is_current}}
+                    <span class="current">{{page}}</span>
+                    {{else}}
+                    <a href="{{url}}">{{page}}</a>
+                    {{/if}}
+                {{/each}}
+                
+                {{#if pagination.next}}
+                    <a href="{{pagination.next}}" class="next">Next &raquo;</a>
+                {{/if}}
                 </div>
             </div>
         </section>
