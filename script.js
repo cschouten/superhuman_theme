@@ -1256,7 +1256,7 @@ function enhanceSearchButton() {
       }
       
       // Apply button styling right away (it's lightweight CSS-only)
-      enhanceSearchButtons();
+      enhanceSearchButton();
     };
   
     const nonCriticalTasks = () => {
