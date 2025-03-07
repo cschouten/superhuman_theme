@@ -756,75 +756,96 @@
         });
       }
 
-    //   function setupTutorialNavigation() {
-    //     // Define the tutorial sequence - add all your tutorial series here
-    //     const tutorials = {
-    //       'superhuman-get-started': [
-    //         { id: '38448760193939', title: 'Superhuman Fundamentals' },
-    //         { id: '38449611367187', title: 'Splits Inbox Basics' },
-    //         { id: '38449739437587', title: 'Achieving Inbox Zero' },
-    //         { id: '38449763157011', title: 'Composing & Replying' }
-    //       ]
-    //       // You can add more tutorial series here as needed
-    //       // 'another-tutorial-series': [ {...}, {...} ]
-    //     };
-      
-    //     // Get the current article ID from the URL
-    //     const currentUrl = window.location.href;
-    //     const currentIdMatch = currentUrl.match(/\/articles\/(\d+)/);
-        
-    //     if (!currentIdMatch || !currentIdMatch[1]) return;
-        
-    //     const currentId = currentIdMatch[1];
-        
-    //     // Find which tutorial series this article belongs to
-    //     let currentTutorial = null;
-    //     let currentIndex = -1;
-        
-    //     for (const [tutorialKey, sequence] of Object.entries(tutorials)) {
-    //       const foundIndex = sequence.findIndex(article => article.id === currentId);
-    //       if (foundIndex !== -1) {
-    //         currentTutorial = sequence;
-    //         currentIndex = foundIndex;
-    //         break;
-    //       }
-    //     }
-        
-    //     if (!currentTutorial || currentIndex === -1) return;
-        
-    //     // Find or create the navigation container
-    //     let navContainer = document.querySelector('.tutorial-navigation');
-        
-    //     if (!navContainer) {
-    //       navContainer = document.createElement('div');
-    //       navContainer.className = 'tutorial-navigation nextPageButton';
-          
-    //       // Add the navigation to the article
-    //       const articleContent = document.querySelector('.article-body');
-    //       if (articleContent) {
-    //         articleContent.appendChild(navContainer);
-    //       }
-    //     }
-        
-    //     // Determine what content to show based on position in sequence
-    //     if (currentIndex < currentTutorial.length - 1) {
-    //       // Not the last article, show "Up Next" navigation
-    //       const nextArticle = currentTutorial[currentIndex + 1];
-    //       navContainer.innerHTML = `
-    //         <p>Up Next</p>
-    //         <a href="/hc/en-us/articles/${nextArticle.id}">${nextArticle.title}</a>
-    //       `;
-    //     } else {
-    //       // This is the last article, show completion message
-    //       navContainer.innerHTML = `
-    //         <h3>Congratulations!</h3>
-    //         <p>You've completed the Superhuman Get Started Guide and are ready to fly through your inbox faster than ever! If you have any feedback, please hit <strong>Cmd+K</strong> or <strong>Ctrl+K → Help</strong> to let us know 🙏</p>
-    //         <p>Ready for more? <a href="/hc/en-us/articles/4406028835731">Check out our Level Up Guide</a> to become as effective as possible!</p>
-    //       `;
-    //     }
-    //   }
-
       function updateSidebarActiveClass() {
+        // Get current article metadata if available in the Help Center template
+        if (window.HelpCenter && window.HelpCenter.article) {
+          const article = window.HelpCenter.article;
+          
+          // Log article details for debugging
+          console.log('Article details:', article);
+          
+          // Get the section ID from the article
+          const sectionId = article.section_id;
+          console.log('Section ID:', sectionId);
+          
+          // Make an API call to get the section details, which includes the category ID
+          fetch(`/api/v2/help_center/en-us/sections/${sectionId}`)
+            .then(response => response.json())
+            .then(data => {
+              const section = data.section;
+              console.log('Section details:', section);
+              
+              // Get the category ID from the section
+              const categoryId = section.category_id;
+              console.log('Category ID:', categoryId);
+              
+              // Make another API call to get the category name/details
+              return fetch(`/api/v2/help_center/en-us/categories/${categoryId}`);
+            })
+            .then(response => response.json())
+            .then(data => {
+              const category = data.category;
+              console.log('Category details:', category);
+              
+              // Now highlight the corresponding sidebar item
+              highlightCategoryInSidebar(category.id, category.name);
+            })
+            .catch(error => {
+              console.error('Error fetching category data:', error);
+              
+              // Fallback to the previous URL-based matching if API calls fail
+              fallbackUrlMatching();
+            });
+        } else {
+          // Fallback to URL matching if the article object isn't available
+          fallbackUrlMatching();
+        }
+      }
+      
+      function highlightCategoryInSidebar(categoryId, categoryName) {
+        // Get all sidebar navigation links
+        const navLinks = document.querySelectorAll('#sidebar .nav-list li a');
+        
+        // Remove any existing active classes
+        document.querySelectorAll('#sidebar .nav-list li').forEach(function(li) {
+          li.classList.remove('active');
+        });
+        
+        // Find the matching category link
+        let foundMatch = false;
+        
+        navLinks.forEach(function(link) {
+          const linkUrl = link.getAttribute('href');
+          const linkText = link.textContent.trim();
+          
+          // Check for category ID in the URL
+          if (linkUrl.includes(`/categories/${categoryId}`)) {
+            link.parentElement.classList.add('active');
+            console.log(`Found and highlighted category by ID: ${categoryId}`);
+            foundMatch = true;
+          } 
+          // Check for category name in the link text
+          else if (linkText === categoryName) {
+            link.parentElement.classList.add('active');
+            console.log(`Found and highlighted category by name: ${categoryName}`);
+            foundMatch = true;
+          }
+          // Check if the URL contains the category ID as a string
+          else if (linkUrl.includes(categoryId.toString())) {
+            link.parentElement.classList.add('active');
+            console.log(`Found and highlighted category by ID string in URL: ${categoryId}`);
+            foundMatch = true;
+          }
+        });
+        
+        if (!foundMatch) {
+          console.log(`Could not find a matching sidebar item for category: ${categoryName} (ID: ${categoryId})`);
+        }
+      }
+      
+      function fallbackUrlMatching() {
+        console.log('Using fallback URL matching method');
+        
         // Get current page URL
         const currentPageUrl = window.location.href;
         
