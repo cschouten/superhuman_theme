@@ -1203,9 +1203,37 @@ function enhanceSearchButton() {
     }
     
   }
+
+  function fixSidebarAutocomplete() {
+    const sidebarForm = document.querySelector('#sidebar form.search-full, #sidebar #searchBar.sm');
+    const autocomplete = document.querySelector('#sidebar zd-autocomplete');
+    
+    if (sidebarForm && autocomplete) {
+      // Get the width of the search form
+      const formWidth = sidebarForm.offsetWidth;
+      
+      // Set width directly
+      autocomplete.style.width = formWidth + 'px';
+      autocomplete.style.maxWidth = formWidth + 'px';
+      
+      // Ensure correct positioning
+      autocomplete.style.top = '42px';
+      autocomplete.style.left = '0';
+      autocomplete.style.right = 'auto';
+    }
+  }
+  
+  // Create the observer outside any function so it's globally available
+  const autocompleteObserver = new MutationObserver(function(mutations) {
+    const autocomplete = document.querySelector('#sidebar zd-autocomplete');
+    if (autocomplete) {
+      fixSidebarAutocomplete();
+    }
+  });
   
   // Update the initDarkTheme function to include button enhancement
-  function initDarkTheme() {
+  // Update the initDarkTheme function to include button enhancement
+function initDarkTheme() {
     // Make this function a no-op if it's called again
     initDarkTheme = function() {};
     
@@ -1228,6 +1256,20 @@ function enhanceSearchButton() {
       // Apply button styling right away (it's lightweight CSS-only)
       enhanceSearchButton();
       enhanceSidebarSearch();
+      
+      // Start observing for autocomplete dropdown
+      autocompleteObserver.observe(document.body, { childList: true, subtree: true });
+      
+      // Add event listeners for autocomplete size fixing
+      window.addEventListener('resize', fixSidebarAutocomplete);
+      
+      // Add input event listener for search
+      const searchInput = document.querySelector('#sidebar .search-query, #sidebar input[type="search"]');
+      if (searchInput) {
+        searchInput.addEventListener('input', function() {
+          setTimeout(fixSidebarAutocomplete, 100);
+        });
+      }
     };
   
     const nonCriticalTasks = () => {
