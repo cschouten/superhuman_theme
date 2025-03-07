@@ -767,87 +767,146 @@
         }
         
         // Get data from the article element
-        const categoryId = articleEl.getAttribute('data-category-id');
-        const categoryName = articleEl.getAttribute('data-category-name');
+        const articleId = articleEl.getAttribute('data-article-id');
         const sectionId = articleEl.getAttribute('data-section-id');
         const sectionName = articleEl.getAttribute('data-section-name');
         
-        // Log the data for debugging
+        // Log the data we have from Handlebars
         console.log('Article data from Handlebars:', {
-          categoryId: categoryId,
-          categoryName: categoryName,
+          articleId: articleId,
           sectionId: sectionId,
           sectionName: sectionName
         });
         
-        if (!categoryId && !categoryName) {
-          console.log('Category data not available, using fallback method');
+        // Use sectionId to fetch the category information
+        if (sectionId) {
+          console.log('Attempting to find category from section ID:', sectionId);
+          
+          // First attempt: Look for section/category mapping directly in the page content
+          findCategoryFromSectionContent(sectionId, sectionName);
+        } else {
+          console.log('Section ID not available, using fallback method');
           fallbackUrlMatching();
+        }
+      }
+      
+      function findCategoryFromSectionContent(sectionId, sectionName) {
+        // These are the top-level sections we have direct links to in our sidebar
+        const topLevelSections = [
+          { name: "Get Started", article: "38448760193939" },
+          { name: "Level Up", article: "38450004008595" },
+          { name: "Supercharge Your Team", article: "38450322526995" }
+        ];
+        
+        // Try to map section to a known category based on common patterns
+        const sectionCategoryMap = {
+          // Map section name patterns to their category
+          "Account": "Account Setup",
+          "Billing": "Billing",
+          "Support": "Support",
+          "Feature": "Features",
+          "Integration": "Integrations",
+          "Use Case": "Use Cases"
+        };
+        
+        // First, check if this is a top-level section directly in our sidebar
+        const isTopLevelSection = topLevelSections.some(section => {
+          // Check if the section name matches
+          if (sectionName && section.name === sectionName) {
+            highlightMenuItemByText(section.name);
+            console.log(`Found direct match for top-level section: ${section.name}`);
+            return true;
+          }
+          return false;
+        });
+        
+        if (isTopLevelSection) {
           return;
         }
         
-        // Get all sidebar navigation links
-        const navLinks = document.querySelectorAll('#sidebar .nav-list li a');
+        // Next, try to find a category match based on section name patterns
+        if (sectionName) {
+          for (const [pattern, category] of Object.entries(sectionCategoryMap)) {
+            if (sectionName.includes(pattern)) {
+              highlightMenuItemByText(category);
+              console.log(`Found category match "${category}" based on section name containing "${pattern}"`);
+              return;
+            }
+          }
+        }
         
-        // Remove any existing active classes
+        // If we get here, we'll try to use the section ID to infer the category
+        // This can be done by looking for clues in the URL structure
+        const currentUrl = window.location.href;
+        
+        // Check for category ID in the URL
+        const categoryMatch = currentUrl.match(/\/categories\/(\d+)/);
+        if (categoryMatch && categoryMatch[1]) {
+          highlightMenuItemByCategory(categoryMatch[1]);
+          console.log(`Found category ID in URL: ${categoryMatch[1]}`);
+          return;
+        }
+        
+        // If no matches found so far, resort to extracting category from breadcrumbs or other page elements
+        const breadcrumbs = document.querySelectorAll('.breadcrumbs a');
+        if (breadcrumbs.length > 0) {
+          // Typically the second breadcrumb item is the category
+          if (breadcrumbs.length >= 2) {
+            const categoryText = breadcrumbs[1].textContent.trim();
+            highlightMenuItemByText(categoryText);
+            console.log(`Found category from breadcrumbs: ${categoryText}`);
+            return;
+          }
+        }
+        
+        // If we still don't have a match, use URL structure as last resort
+        console.log('No category match found, using fallback URL matching');
+        fallbackUrlMatching();
+      }
+      
+      function highlightMenuItemByText(categoryText) {
+        const navLinks = document.querySelectorAll('#sidebar .nav-list li a');
+        let found = false;
+        
+        // First remove any existing active classes
         document.querySelectorAll('#sidebar .nav-list li').forEach(function(li) {
           li.classList.remove('active');
         });
         
-        // Try to find a match for the category
-        let found = false;
-        
         navLinks.forEach(function(link) {
-          const linkUrl = link.getAttribute('href');
-          const linkText = link.textContent.trim().replace(/\s*\i.*$/, ''); // Remove icon text
+          // Extract text without icon
+          const linkText = link.textContent.trim().replace(/\s*\i.*$/, '');
           
-          // Check 1: Direct category ID match in URL
-          if (categoryId && linkUrl.includes(`/categories/${categoryId}`)) {
+          if (linkText.toLowerCase() === categoryText.toLowerCase()) {
             link.parentElement.classList.add('active');
-            console.log(`Found category match by ID in URL: ${categoryId}`);
             found = true;
-          } 
-          // Check 2: Check by category name
-          else if (categoryName && linkText.toLowerCase() === categoryName.toLowerCase()) {
-            link.parentElement.classList.add('active');
-            console.log(`Found category match by name: ${categoryName}`);
-            found = true;
-          }
-          // Check 3: For main section pages that might be linked directly
-          else if (linkUrl.includes('/articles/') && sectionName) {
-            // For certain top-level sections that might be in the sidebar
-            if (linkText.toLowerCase() === sectionName.toLowerCase()) {
-              link.parentElement.classList.add('active');
-              console.log(`Found section match by name: ${sectionName}`);
-              found = true;
-            }
+            console.log(`Highlighted menu item: ${linkText}`);
           }
         });
         
-        if (!found) {
-          console.log('No match found using data attributes, trying partial URL matching');
-          // Try partial matching as a last resort
-          navLinks.forEach(function(link) {
-            const linkUrl = link.getAttribute('href');
-            
-            // Check if the URL contains parts of the category or section name
-            if (categoryName && linkUrl.toLowerCase().includes(categoryName.toLowerCase().replace(/\s+/g, '-'))) {
-              link.parentElement.classList.add('active');
-              console.log(`Found match by category name in URL: ${categoryName}`);
-              found = true;
-            }
-            else if (sectionName && linkUrl.toLowerCase().includes(sectionName.toLowerCase().replace(/\s+/g, '-'))) {
-              link.parentElement.classList.add('active');
-              console.log(`Found match by section name in URL: ${sectionName}`);
-              found = true;
-            }
-          });
+        return found;
+      }
+      
+      function highlightMenuItemByCategory(categoryId) {
+        const navLinks = document.querySelectorAll('#sidebar .nav-list li a');
+        let found = false;
+        
+        // First remove any existing active classes
+        document.querySelectorAll('#sidebar .nav-list li').forEach(function(li) {
+          li.classList.remove('active');
+        });
+        
+        navLinks.forEach(function(link) {
+          const linkUrl = link.getAttribute('href');
           
-          if (!found) {
-            console.log('No matches found, falling back to URL matching');
-            fallbackUrlMatching();
+          if (linkUrl.includes(`/categories/${categoryId}`)) {
+            link.parentElement.classList.add('active');
+            found = true;
+            console.log(`Highlighted menu item with category ID: ${categoryId}`);
           }
-        }
+        });
+        
+        return found;
       }
       
       function fallbackUrlMatching() {
@@ -864,7 +923,34 @@
           li.classList.remove('active');
         });
         
-        // Check for category in URL structure
+        // Define our mapping of URL patterns to sidebar items
+        const urlPatterns = [
+          { pattern: 'get-started', text: 'Get Started' },
+          { pattern: 'level-up', text: 'Level Up' },
+          { pattern: 'supercharge', text: 'Supercharge Your Team' },
+          { pattern: 'account', text: 'Account Setup' },
+          { pattern: 'billing', text: 'Billing' },
+          { pattern: 'support', text: 'Support' },
+          { pattern: 'features', text: 'Features' },
+          { pattern: 'integrations', text: 'Integrations' },
+          { pattern: 'use-cases', text: 'Use Cases' }
+        ];
+        
+        // Try to match URL patterns first
+        let patternMatch = false;
+        
+        urlPatterns.forEach(function(item) {
+          if (currentPageUrl.toLowerCase().includes(item.pattern.toLowerCase())) {
+            patternMatch = highlightMenuItemByText(item.text);
+            if (patternMatch) {
+              console.log(`Matched URL pattern "${item.pattern}" to menu item "${item.text}"`);
+            }
+          }
+        });
+        
+        if (patternMatch) return;
+        
+        // Check for category in URL structure as a fallback
         const urlParts = currentPageUrl.split('/');
         let categoryMatch = false;
         
@@ -872,54 +958,49 @@
         for (let i = 0; i < urlParts.length; i++) {
           if (urlParts[i] === 'categories' && i+1 < urlParts.length) {
             const categoryId = urlParts[i+1];
+            categoryMatch = highlightMenuItemByCategory(categoryId);
             
-            navLinks.forEach(function(link) {
-              const linkUrl = link.getAttribute('href');
-              if (linkUrl.includes(`/categories/${categoryId}`)) {
-                link.parentElement.classList.add('active');
-                categoryMatch = true;
-                console.log(`Found category match from URL path: ${categoryId}`);
-              }
-            });
-            
-            if (categoryMatch) break;
+            if (categoryMatch) {
+              console.log(`Found category match from URL path: ${categoryId}`);
+              return;
+            }
           }
         }
         
-        // If no category match, try article or section matching
-        if (!categoryMatch) {
-          // Check for exact URL match first
-          let exactMatch = false;
+        // Final fallback: check for exact URL matches
+        let exactMatch = false;
+        
+        navLinks.forEach(function(link) {
+          const linkUrl = link.getAttribute('href');
           
+          if (currentPageUrl === linkUrl || currentPageUrl.endsWith(linkUrl)) {
+            // Add active class to the parent li element for exact match
+            link.parentElement.classList.add('active');
+            exactMatch = true;
+            console.log(`Found exact URL match: ${linkUrl}`);
+          }
+        });
+        
+        // If no exact match found, check for partial matches
+        if (!exactMatch) {
+          console.log('Trying partial URL matching');
           navLinks.forEach(function(link) {
             const linkUrl = link.getAttribute('href');
             
-            if (currentPageUrl === linkUrl || currentPageUrl.endsWith(linkUrl)) {
-              // Add active class to the parent li element for exact match
+            // For article links in specific categories
+            if (linkUrl.includes('/articles/') && currentPageUrl.includes('/articles/')) {
+              const articleId = linkUrl.split('/articles/')[1];
+              if (currentPageUrl.includes(articleId)) {
+                link.parentElement.classList.add('active');
+                console.log(`Found article ID match: ${articleId}`);
+              }
+            }
+            // For more general URL matching (but avoid overly broad matches)
+            else if (linkUrl.length > 10 && currentPageUrl.includes(linkUrl)) {
               link.parentElement.classList.add('active');
-              exactMatch = true;
+              console.log(`Found partial URL match: ${linkUrl}`);
             }
           });
-          
-          // If no exact match found, check for partial matches
-          if (!exactMatch) {
-            navLinks.forEach(function(link) {
-              const linkUrl = link.getAttribute('href');
-              
-              // For category links
-              if (linkUrl.includes('/categories/') && currentPageUrl.includes(linkUrl.split('/categories/')[1])) {
-                link.parentElement.classList.add('active');
-              }
-              // For article links that are part of a category
-              else if (linkUrl.includes('/articles/') && currentPageUrl.includes(linkUrl.split('/articles/')[1])) {
-                link.parentElement.classList.add('active');
-              }
-              // For more general URL matching
-              else if (currentPageUrl.includes(linkUrl) && linkUrl !== '/' && linkUrl.length > 3) {
-                link.parentElement.classList.add('active');
-              }
-            });
-          }
         }
       }
       
