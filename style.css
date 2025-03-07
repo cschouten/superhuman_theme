@@ -3586,12 +3586,26 @@ zd-autocomplete-multibrand zd-autocomplete-breadcrumbs-multibrand {
     }
 }
 
+/* Remove x (cancel button) from search results textbox */
+/* Hide the clear/cancel button in search inputs */
+form.search.search-full input[type="search"]::-webkit-search-cancel-button,
+form.search.search-full input[type="text"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  display: none;
+}
+
+/* For other browsers that might have similar functionality */
+form.search.search-full input[type="search"]::-ms-clear,
+form.search.search-full input[type="text"]::-ms-clear {
+  display: none;
+}
+
 /* Base button styling */
 form.search.search-full {
     display: flex !important;
     align-items: flex-start !important; /* Align children to top */
   }
-  
+
 form.search.search-full input[type="submit"],
 form.search.search-full input[name="commit"] {
   /* Text styling */
