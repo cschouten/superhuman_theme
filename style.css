@@ -3445,11 +3445,17 @@ zd-autocomplete {
     margin-top: 0 !important; /* Changed from 8px to 0 to make it touch the search bar */
     z-index: 1000 !important;
     width: 528px !important;
+    max-width: calc(100vw - 30px) !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
 }
 
 @media (max-width: 767px) {
     zd-autocomplete {
-        width: 100% !important;
+        left: 50% !important; /* Center horizontally */
+        transform: translateX(-50%) !important; /* Center adjustment */
+        width: calc(100vw - 30px) !important; /* Full viewport width minus margins */
+        max-width: 100% !important;
     }
 }
 
