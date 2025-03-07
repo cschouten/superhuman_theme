@@ -51,21 +51,7 @@
                 /if
                 }}
                 <div class="custom-pagination">
-                {{#if pagination.previous}}
-                    <a href="{{pagination.previous}}" class="previous">&laquo; Previous</a>
-                {{/if}}
-                
-                {{#each pagination.pages}}
-                    {{#if is_current}}
-                    <span class="current">{{page}}</span>
-                    {{else}}
-                    <a href="{{url}}">{{page}}</a>
-                    {{/if}}
-                {{/each}}
-                
-                {{#if pagination.next}}
-                    <a href="{{pagination.next}}" class="next">Next &raquo;</a>
-                {{/if}}
+                    <div id="pagination-links"></div>
                 </div>
             </div>
         </section>
@@ -75,3 +61,63 @@
     </aside>
     </div>
 </section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Get current URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentPage = parseInt(urlParams.get('page')) || 1;
+    const query = urlParams.get('query');
+    
+    // Get total results count (you mentioned it's available)
+    const totalResults = {{results_count}};
+    
+    // Define results per page (default in Zendesk is 10)
+    const resultsPerPage = 10;
+    
+    // Calculate total pages
+    const totalPages = Math.ceil(totalResults / resultsPerPage);
+    
+    if (totalPages <= 1) {
+      return; // No pagination needed
+    }
+    
+    let paginationHTML = '';
+    
+    // Previous link
+    if (currentPage > 1) {
+      paginationHTML += `<a href="?page=${currentPage - 1}&query=${query}&utf8=%E2%9C%93#results">Previous</a> `;
+    }
+    
+    // Page numbers
+    const maxLinks = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(maxLinks / 2));
+    let endPage = Math.min(totalPages, startPage + maxLinks - 1);
+    
+    // Adjust if we're near the end
+    if (endPage - startPage + 1 < maxLinks) {
+      startPage = Math.max(1, endPage - maxLinks + 1);
+    }
+    
+    for (let i = startPage; i <= endPage; i++) {
+      if (i === currentPage) {
+        paginationHTML += `<span class="current">${i}</span> `;
+      } else {
+        paginationHTML += `<a href="?page=${i}&query=${query}&utf8=%E2%9C%93#results">${i}</a> `;
+      }
+    }
+    
+    // Next link
+    if (currentPage < totalPages) {
+      paginationHTML += `<a href="?page=${currentPage + 1}&query=${query}&utf8=%E2%9C%93#results">Next</a> `;
+    }
+    
+    // Last link if not showing the last page already
+    if (endPage < totalPages) {
+      paginationHTML += `<a href="?page=${totalPages}&query=${query}&utf8=%E2%9C%93#results">Last</a>`;
+    }
+    
+    // Update the DOM
+    document.getElementById('pagination-links').innerHTML = paginationHTML;
+  });
+</script>

@@ -4026,3 +4026,24 @@ form.search.search-full {
 .pagination .next, .pagination .last {
     margin-left: 5px;
 }
+
+.custom-pagination {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  
+  .custom-pagination a, .custom-pagination span {
+    color: #7f5af0; /* Purple color like in your screenshots */
+    padding: 0 5px;
+    text-decoration: none;
+    margin: 0 2px;
+  }
+  
+  .custom-pagination span.current {
+    font-weight: bold;
+  }
+  
+  .custom-pagination a:hover {
+    text-decoration: underline;
+  }
