@@ -1145,7 +1145,8 @@ function enhanceSearchButton() {
     const searchForm = document.querySelector('#sidebar form.sidebar-search');
     
     if (searchForm) {
-      // Convert to match your original structure
+      // Basic classes should already be applied by inline script
+      // but we add them again in case that failed
       searchForm.id = 'searchBar';
       searchForm.classList.add('sm');
       
@@ -1196,6 +1197,9 @@ function enhanceSearchButton() {
       // Remove any extra Zendesk elements
       const extraElements = searchForm.querySelectorAll('.search-results-column, .search-box-separator');
       extraElements.forEach(el => el.remove());
+      
+      // Now that everything is set up, make the search visible
+      searchForm.style.opacity = '1';
     }
   }
   
