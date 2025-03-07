@@ -1124,8 +1124,6 @@ function urlBasedMatching(sidebarItems, sidebarLinks) {
 }
 
 function enhanceSearchButtons() {
-    // Add CSS for styling instead of manipulating DOM structure or applying inline styles
-    // This approach ensures the button's functionality is preserved
     if (!document.getElementById('search-button-styles')) {
       const styleSheet = document.createElement('style');
       styleSheet.id = 'search-button-styles';
@@ -1133,7 +1131,6 @@ function enhanceSearchButtons() {
         /* Base button styles */
         form.search.search-full input[type="submit"],
         form.search.search-full input[name="commit"] {
-          box-sizing: border-box !important;
           color: #ffffff !important;
           font-family: "Adelle Sans", sans-serif !important;
           font-size: 24px !important;
@@ -1141,9 +1138,10 @@ function enhanceSearchButtons() {
           height: 64px !important;
           padding: 0 32px !important;
           min-width: 150px !important;
-          border-radius: 8px !important;
+          border-radius: 6px !important;
           cursor: pointer !important;
           position: relative !important;
+          box-sizing: border-box !important;
           
           /* Preserve functionality while fixing appearance */
           border: 2px solid transparent !important;
@@ -1158,33 +1156,29 @@ function enhanceSearchButtons() {
             linear-gradient(to right, #FA75F8, #9E6EE5) !important;
           
           /* Smooth transitions */
-          transition: transform 0.2s ease, box-shadow 0.2s ease, background-image 0.3s ease !important;
+          transition: background-image 0.3s ease !important;
           
           /* Fix any browser styling issues */
           -webkit-appearance: none !important;
           appearance: none !important;
         }
         
-        /* Hover state */
+        /* Hover state - only darken the background */
         form.search.search-full input[type="submit"]:hover,
         form.search.search-full input[name="commit"]:hover {
           background-image: 
-            linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), 
-            linear-gradient(273.81deg, #914694, #62438B),
+            linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), 
+            linear-gradient(273.81deg, #FA75F8, #9E6EE5),
             linear-gradient(to right, #FA75F8, #9E6EE5) !important;
-          transform: translateY(-1px) !important;
-          box-shadow: 0 4px 8px rgba(250, 117, 248, 0.3) !important;
         }
         
         /* Active/pressed state */
         form.search.search-full input[type="submit"]:active,
         form.search.search-full input[name="commit"]:active {
           background-image: 
-            linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), 
-            linear-gradient(273.81deg, #914694, #62438B),
+            linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), 
+            linear-gradient(273.81deg, #FA75F8, #9E6EE5),
             linear-gradient(to right, #FA75F8, #9E6EE5) !important;
-          transform: translateY(1px) !important;
-          box-shadow: none !important;
         }
         
         /* Focus state */
@@ -1221,9 +1215,6 @@ function enhanceSearchButtons() {
       // Add stylesheet to head
       document.head.appendChild(styleSheet);
     }
-    
-    // No need to manipulate the DOM or add event listeners
-    // The CSS handles all the styling and states
   }
   
   
