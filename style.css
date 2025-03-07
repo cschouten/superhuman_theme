@@ -3442,14 +3442,9 @@ zd-autocomplete {
     border-radius: 8px !important;
     box-shadow: none !important;
     font-family: "Adelle Sans" !important;
-    margin-top: 0 !important;
+    margin-top: 0 !important; /* Changed from 8px to 0 to make it touch the search bar */
     z-index: 1000 !important;
-    
-    /* These are the critical properties */
-    position: absolute !important;
-    left: 0 !important;
-    right: 0 !important;
-    width: 100% !important;
+    width: 528px !important;
 }
 
 @media (max-width: 767px) {
@@ -3609,8 +3604,6 @@ form.search.search-full input[type="text"]::-ms-clear {
 form.search.search-full {
     display: flex !important;
     align-items: stretch !important;
-    position: relative !important; /* Make this the positioning context for zd-autocomplete */
-    width: 100% !important; /* Ensure the form takes full width available */
   }
   
   /* Search button base styling */
