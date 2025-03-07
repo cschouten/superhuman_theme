@@ -1133,6 +1133,7 @@ function enhanceSearchButtons() {
         /* Base button styles */
         form.search.search-full input[type="submit"],
         form.search.search-full input[name="commit"] {
+          box-sizing: border-box !important;
           color: #ffffff !important;
           font-family: "Adelle Sans", sans-serif !important;
           font-size: 24px !important;
