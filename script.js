@@ -1232,7 +1232,6 @@ function enhanceSearchButton() {
   });
   
   // Update the initDarkTheme function to include button enhancement
-  // Update the initDarkTheme function to include button enhancement
 function initDarkTheme() {
     // Make this function a no-op if it's called again
     initDarkTheme = function() {};
