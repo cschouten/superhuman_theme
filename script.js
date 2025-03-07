@@ -1142,6 +1142,7 @@ function enhanceSearchButton() {
 
   function enhanceSidebarSearch() {
     // Target the Zendesk search component in the sidebar
+    const searchForm = document.querySelector('#sidebar form.sidebar-search');
     
     if (searchForm) {
       // Basic classes should already be applied by inline script
@@ -1200,12 +1201,7 @@ function enhanceSearchButton() {
       // Now that everything is set up, make the search visible
       searchForm.style.opacity = '1';
     }
-    // After all modifications are complete, save the HTML
-    const searchForm = document.querySelector('#sidebar #searchBar.sm');
-    if (searchForm) {
-        localStorage.setItem('superhuman-search-html', searchForm.outerHTML);
-    }
-
+    
   }
   
   // Update the initDarkTheme function to include button enhancement
