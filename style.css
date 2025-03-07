@@ -3715,13 +3715,15 @@ form.search.search-full {
     }
   }
 
-  /* Override Zendesk search styles to match your custom sidebar search */
-#sidebar form.search.search-full {
+  /* Sidebar search styling to match the dark theme with spyglass */
+#sidebar #searchBar.sm {
+    width: 100%;
+    padding: 0;
+    margin-bottom: 30px;
     position: relative;
-    margin: 0 0 40px 0;
   }
   
-  #sidebar form.search.search-full input[type="search"] {
+  #sidebar #searchBar.sm .search-query {
     padding: 4px 24px 0px 24px;
     outline-style: solid;
     outline-color: rgba(255, 255, 255, 0.2);
@@ -3736,18 +3738,92 @@ form.search.search-full {
     outline-width: 1px;
     border-radius: 4px;
     padding-left: 24px;
+    width: 100%;
+    box-sizing: border-box;
   }
   
-  #sidebar form.search.search-full input[type="search"]:focus {
+  #sidebar #searchBar.sm .search-query:focus {
     outline-color: #ffffff;
     box-shadow: none;
   }
   
-  #sidebar form.search.search-full input[type="search"]::placeholder {
+  #sidebar #searchBar.sm .search-query::placeholder {
     color: rgba(255, 255, 255, 0.7);
   }
   
-  /* Hide any Zendesk elements you don't need */
-  #sidebar form.search.search-full .search-results-column {
-    display: none;
+  #sidebar #searchBar.sm button {
+    height: 40px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    padding: 0 10px;
+  }
+  
+  #sidebar #searchBar.sm button:hover {
+    background: transparent;
+  }
+  
+  #sidebar #searchBar.sm button .icon-search {
+    display: block;
+    text-shadow: none;
+  }
+  
+  /* Hide Zendesk's search elements we don't need */
+  #sidebar .search-results,
+  #sidebar .search-results-column,
+  #sidebar .search-box-separator {
+    display: none !important;
+  }
+  
+  /* Style the dropdown */
+  #sidebar #serp-dd {
+    box-shadow: none;
+    border-radius: 4px;
+    background: linear-gradient(315deg, rgba(53, 36, 77, 0.6) 0%, rgba(6, 6, 8, 0.6) 100%);
+    backdrop-filter: blur(29px);
+    -webkit-backdrop-filter: blur(29px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    width: 100%;
+    border-width: 1px;
+    border-radius: 4px;
+    box-sizing: border-box;
+    top: 42px;
+    position: absolute;
+    z-index: 1000;
+  }
+  
+  #sidebar #serp-dd .result a {
+    font-family: "Adelle Sans";
+    font-size: 16px;
+    line-height: 24px;
+    color: rgba(255, 255, 255, 0.7);
+    transition: color 0.3s ease;
+    padding-left: 24px;
+    display: block;
+    padding: 8px 24px;
+  }
+  
+  #sidebar #serp-dd .result a:hover {
+    background: transparent;
+    color: #ffffff;
+  }
+  
+  #sidebar #serp-dd .result .active {
+    background: transparent;
+  }
+  
+  #sidebar #serp-dd .result .active a {
+    color: #ffffff;
+  }
+  
+  #sidebar #serp-dd .result .noResults {
+    font-family: "Adelle Sans";
+    font-size: 16px;
+    line-height: 24px;
+    padding: 8px 24px;
+    color: rgba(255, 255, 255, 0.7);
   }

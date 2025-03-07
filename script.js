@@ -1142,24 +1142,24 @@ function enhanceSearchButton() {
 
   function enhanceSidebarSearch() {
     // Target the Zendesk search component in the sidebar
-    const searchForm = document.querySelector('#sidebar form.search.search-full');
+    const searchForm = document.querySelector('#sidebar form.sidebar-search');
     
     if (searchForm) {
-      // Add the searchBar and sm classes to match your existing styling
+      // Convert to match your original structure
       searchForm.id = 'searchBar';
       searchForm.classList.add('sm');
       
-      // Find the search input
+      // Handle the search input
       const searchInput = searchForm.querySelector('input[type="search"]');
       if (searchInput) {
         searchInput.classList.add('search-query');
         searchInput.placeholder = 'Search';
+        searchInput.setAttribute('aria-label', 'Search');
       }
       
-      // Enhance the submit button
-      const searchButton = searchForm.querySelector('input[type="submit"]');
-      if (searchButton && !searchButton.parentElement.classList.contains('search-button-wrapper')) {
-        // Replace input with button element to match your structure
+      // Replace the submit button completely
+      const oldButton = searchForm.querySelector('input[type="submit"]');
+      if (oldButton) {
         const newButton = document.createElement('button');
         newButton.type = 'submit';
         
@@ -1174,11 +1174,11 @@ function enhanceSearchButton() {
         icon.className = 'icon-search';
         newButton.appendChild(icon);
         
-        // Replace the original submit input with our new button
-        searchButton.parentNode.replaceChild(newButton, searchButton);
+        // Replace the original button
+        oldButton.parentNode.replaceChild(newButton, oldButton);
       }
       
-      // Create results dropdown container if it doesn't exist
+      // Add the dropdown container
       if (!searchForm.querySelector('#serp-dd')) {
         const resultsContainer = document.createElement('div');
         resultsContainer.id = 'serp-dd';
@@ -1191,6 +1191,10 @@ function enhanceSearchButton() {
         resultsContainer.appendChild(resultsList);
         searchForm.appendChild(resultsContainer);
       }
+      
+      // Remove any extra Zendesk elements
+      const extraElements = searchForm.querySelectorAll('.search-results-column, .search-box-separator');
+      extraElements.forEach(el => el.remove());
     }
   }
   
