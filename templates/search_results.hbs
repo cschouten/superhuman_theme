@@ -24,7 +24,12 @@
                     {{
                     #each
                     results}}
-                    <li><a href="{{url}}"><i class="icon-article-doc"></i><span>{{title}}</span></a></li>
+                    <li>
+                        <a href="{{url}}">
+                            <i class="icon-article-doc"></i><span>{{title}}</span>
+                        </a>
+                        <p class="article-snippet">{{snippet}}</p>
+                    </li>
                     {{
                     /each
                     }}
