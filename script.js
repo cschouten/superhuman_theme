@@ -1182,58 +1182,81 @@ function enhanceSearchButton() {
   });
 
   function handleSearchBarDisplay() {
+    console.log('Search bar display handler running');
+    
     const searchPlaceholder = document.getElementById('search-placeholder');
-    const actualSearchBar = document.querySelector('#sidebar form.sidebar-search, #sidebar #searchBar');
+    const searchContainer = document.querySelector('#sidebar .search-area');
+    const actualSearchBar = document.querySelector('#sidebar form.sidebar-search');
     
-    if (!searchPlaceholder || !actualSearchBar) return;
+    console.log('Elements found:', {
+      searchPlaceholder,
+      searchContainer,
+      actualSearchBar
+    });
     
-    // First, position the actual search off-screen but render it to get dimensions
-    actualSearchBar.style.position = 'absolute';
-    actualSearchBar.style.left = '-9999px';
-    actualSearchBar.style.visibility = 'hidden';
-    actualSearchBar.style.display = 'block';
+    if (!searchPlaceholder) {
+      console.error('Search placeholder not found');
+      return;
+    }
     
-    // Once the page has loaded and styles are applied
+    // Make sure placeholder is visible with definite dimensions
+    searchPlaceholder.style.display = 'block';
+    searchPlaceholder.style.height = '36px';
+    searchPlaceholder.style.width = '100%';
+    searchPlaceholder.style.backgroundColor = 'rgba(255,255,255,0.1)';
+    searchPlaceholder.style.borderRadius = '4px';
+    
+    // Hide the actual search bar initially
+    if (actualSearchBar) {
+      actualSearchBar.style.opacity = '0';
+      actualSearchBar.style.position = 'absolute';
+      actualSearchBar.style.left = '-9999px';
+    } else {
+      console.warn('Actual search bar not found yet');
+    }
+    
+    // Once page has loaded
     window.addEventListener('load', function() {
-      // Get measurements of the actual search
-      const actualHeight = actualSearchBar.offsetHeight;
-      const actualWidth = actualSearchBar.offsetWidth;
+      console.log('Page loaded, handling search bar swap');
       
-      // Set placeholder to match exact dimensions
-      searchPlaceholder.style.height = actualHeight + 'px';
-      searchPlaceholder.style.width = actualWidth + 'px';
+      // Try to find search bar again if not found before
+      const searchBar = actualSearchBar || document.querySelector('#sidebar form.sidebar-search');
       
-      // Execute the search enhancements
-      enhanceSidebarSearch();
-      
-      // Set up a mutation observer to detect when search is styled
-      const observer = new MutationObserver(function(mutations) {
-        for (let mutation of mutations) {
-          if (mutation.attributeName === 'style' || mutation.attributeName === 'class') {
-            // Once styling is complete, swap them
-            setTimeout(function() {
-              // Position the real search bar in place of the placeholder
-              actualSearchBar.style.position = 'static';
-              actualSearchBar.style.visibility = 'visible';
-              actualSearchBar.style.opacity = '1';
-              
-              // Hide the placeholder
-              searchPlaceholder.style.display = 'none';
-              
-              // Disconnect once done
-              observer.disconnect();
-            }, 50);
-          }
-        }
-      });
-      
-      // Start observing the search bar for style changes
-      observer.observe(actualSearchBar, { attributes: true });
+      if (searchBar) {
+        console.log('Search bar found on load, dimensions:', {
+          width: searchBar.offsetWidth,
+          height: searchBar.offsetHeight
+        });
+        
+        // Simple swap after a delay
+        setTimeout(function() {
+          // Hide placeholder
+          searchPlaceholder.style.display = 'none';
+          
+          // Show actual search
+          searchBar.style.position = 'static';
+          searchBar.style.left = 'auto';
+          searchBar.style.opacity = '1';
+          
+          console.log('Swap completed');
+        }, 500); // Longer delay to ensure everything is ready
+      } else {
+        console.error('Search bar not found even after page load');
+      }
     });
   }
   
   // Call this function early in the page load
   document.addEventListener('DOMContentLoaded', handleSearchBarDisplay);
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const placeholder = document.getElementById('search-placeholder');
+    console.log('Placeholder element:', placeholder);
+    console.log('Placeholder visibility:', placeholder ? getComputedStyle(placeholder).display : 'Element not found');
+    
+    // Then call your handler
+    handleSearchBarDisplay();
+  });
   
   /**
  * Initializes the dark theme and handles various UI enhancements
