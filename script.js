@@ -674,43 +674,52 @@
   
     // Dark Theme functionality
     function initDarkTheme() {
-      addBackground();
-      updateArticleFooter();
-      fixNextPageButtons(); 
-      // setupTutorialNavigation(); 
-      updateSidebarActiveClass();
-    }
-  
-    function addBackground() {
-      const background = document.createElement('div');
-      const blueGradient = document.createElement('div');
-      const pinkGradient = document.createElement('div');
-  
-      background.className = 'background';
-      blueGradient.className = 'blue';
-      pinkGradient.className = 'pink';
-  
-      background.appendChild(blueGradient);
-      background.appendChild(pinkGradient);
-      document.body.prepend(background);
-    }
-
-    function updateArticleFooter() {
+        addBackground();
+        updateArticleFooter();
+        fixNextPageButtons(); 
+      
+        const articleEl = document.getElementById('fullArticle');
+        const categoryHeading = document.querySelector('h1, .page-header h1');
+      
+        if (articleEl) {
+          // We're on an article page - use article data to highlight sidebar
+          updateSidebarFromArticle();
+        } else {
+          // We're on a category page or another type of page - use URL and page title
+          updateSidebarFromCategoryPage();
+        }
+      }
+      
+      function addBackground() {
+        const background = document.createElement('div');
+        const blueGradient = document.createElement('div');
+        const pinkGradient = document.createElement('div');
+      
+        background.className = 'background';
+        blueGradient.className = 'blue';
+        pinkGradient.className = 'pink';
+      
+        background.appendChild(blueGradient);
+        background.appendChild(pinkGradient);
+        document.body.prepend(background);
+      }
+      
+      function updateArticleFooter() {
         const articleFoot = document.querySelector('.articleFoot')
         if (!articleFoot) return
-    
+          
         const feedbackDiv = document.createElement('div')
         feedbackDiv.innerText = 'Have feedback? '
         feedbackDiv.className = 'feedbackDiv'
-    
+          
         const feedbackLink = document.createElement('a')
         feedbackLink.className = 'feedbackLink'
         feedbackLink.innerText = 'Let us know!'
         feedbackLink.href = 'mailto:hello@superhuman.com?subject=Help%20Center%20Feedback'
-    
+          
         feedbackDiv.append(feedbackLink)
         articleFoot.prepend(feedbackDiv)
-
+      
         // Add new code here - format the date in the time element
         const timeElement = articleFoot.querySelector('time.lu')
         if (timeElement) {
@@ -721,22 +730,22 @@
             timeElement.textContent = 'Last updated on ' + date.toLocaleDateString('en-US', options)
           }
         }
-        
+              
         const articleRatings = document.querySelector('.articleRatings')
         if (articleRatings) {
           articleFoot.append(articleRatings)
         }
-    }
-
-    function fixNextPageButtons() {
+      }
+      
+      function fixNextPageButtons() {
         // Find all nextPageButton divs
         const nextPageButtons = document.querySelectorAll('.nextPageButton');
-        
+              
         nextPageButtons.forEach(button => {
           // Get the current HTML and text content
           const currentHTML = button.innerHTML;
           const textContent = button.textContent.trim();
-          
+                
           // Check for several possible patterns
           if (
             // Case 1: Contains &nbsp; and "Up Next" (your original check)
@@ -749,13 +758,93 @@
             // Extract the link or links
             const linkMatches = currentHTML.match(/<a[^>]*>([^<]*)<\/a>/g);
             const links = linkMatches ? linkMatches.join('') : '';
-            
+                  
             // Create the correct structure with just one "Up Next" followed by the links
             button.innerHTML = `<p>Up Next</p>${links}`;
           }
         });
       }
-
+      
+      function updateSidebarFromArticle() {
+        // Cache DOM selections to avoid repetitive queries
+        const articleEl = document.getElementById('fullArticle');
+        const sidebarItems = document.querySelectorAll('#sidebar .nav-list li');
+        const sidebarLinks = document.querySelectorAll('#sidebar .nav-list li a');
+        
+        // Exit early if article element doesn't exist
+        if (!articleEl) {
+          console.log('Article element not found');
+          return;
+        }
+        
+        // Get section data
+        const sectionId = articleEl.getAttribute('data-section-id');
+        const sectionName = articleEl.getAttribute('data-section-name');
+        
+        // Build a map of link text to DOM elements for faster lookups
+        const menuMap = buildMenuMap(sidebarLinks);
+        
+        // First, try direct matching
+        if (sectionName) {
+          // Direct category mapping based on section name
+          const categoryMap = {
+            "Billing": "Billing",
+            "Account": "Account Setup",
+            "Support": "Support",
+            "Features": "Features",
+            "Feature": "Features",
+            "Integrations": "Integrations",
+            "Integration": "Integrations",
+            "Use Cases": "Use Cases",
+            "Use Case": "Use Cases",
+            "Get Started": "Get Started",
+            "Level Up": "Level Up",
+            "Supercharge Your Team": "Supercharge Your Team"
+          };
+          
+          // Try exact match first
+          if (categoryMap[sectionName]) {
+            if (highlightMenuItem(sidebarItems, menuMap, categoryMap[sectionName])) {
+              return;
+            }
+          }
+          
+          // Try partial match
+          for (const [pattern, category] of Object.entries(categoryMap)) {
+            if (sectionName.includes(pattern)) {
+              if (highlightMenuItem(sidebarItems, menuMap, category)) {
+                return;
+              }
+            }
+          }
+          
+          // Case-insensitive keyword check as final content-based approach
+          const lowerSectionName = sectionName.toLowerCase();
+          if (lowerSectionName.includes("billing")) {
+            highlightMenuItem(sidebarItems, menuMap, "Billing");
+            return;
+          } else if (lowerSectionName.includes("account")) {
+            highlightMenuItem(sidebarItems, menuMap, "Account Setup");
+            return;
+          } else if (lowerSectionName.includes("support")) {
+            highlightMenuItem(sidebarItems, menuMap, "Support");
+            return;
+          } else if (lowerSectionName.includes("feature")) {
+            highlightMenuItem(sidebarItems, menuMap, "Features");
+            return;
+          } else if (lowerSectionName.includes("integration")) {
+            highlightMenuItem(sidebarItems, menuMap, "Integrations");
+            return;
+          } else if (lowerSectionName.includes("use case")) {
+            highlightMenuItem(sidebarItems, menuMap, "Use Cases");
+            return;
+          }
+        }
+        
+        // If we get here, try URL-based matching
+        urlBasedMatching(sidebarItems, sidebarLinks);
+      }
+      
       function updateSidebarFromCategoryPage() {
         // This function handles category pages specifically
         const sidebarItems = document.querySelectorAll('#sidebar .nav-list li');
@@ -943,5 +1032,4 @@
         });
       }
       
-  
   })();
