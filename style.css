@@ -3827,3 +3827,35 @@ form.search.search-full {
     padding: 8px 24px;
     color: rgba(255, 255, 255, 0.7);
   }
+
+  /* Hide the purple/pink search button completely */
+#sidebar .search-full button.search-submit,
+#sidebar .search-full input[type="submit"],
+#sidebar .search-full .search-button-wrapper,
+#sidebar .search-full .search-button,
+#sidebar .search-full .btn {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  position: absolute !important;
+  left: -9999px !important;
+}
+
+/* Make sure the search box takes full width */
+#sidebar form.search-full {
+  width: 100% !important;
+  display: block !important;
+  border-radius: 4px !important;
+  overflow: hidden !important;
+}
+
+/* Ensure no other buttons are visible */
+#sidebar .search-controls,
+#sidebar .search-submit-wrapper {
+  display: none !important;
+}

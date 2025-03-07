@@ -1149,6 +1149,10 @@ function enhanceSearchButton() {
       searchForm.id = 'searchBar';
       searchForm.classList.add('sm');
       
+      // Remove ALL original buttons and controls
+      const buttonsToRemove = searchForm.querySelectorAll('button, input[type="submit"], .search-button, .search-button-wrapper, .search-controls, .search-submit-wrapper');
+      buttonsToRemove.forEach(button => button.remove());
+      
       // Handle the search input
       const searchInput = searchForm.querySelector('input[type="search"]');
       if (searchInput) {
@@ -1157,26 +1161,23 @@ function enhanceSearchButton() {
         searchInput.setAttribute('aria-label', 'Search');
       }
       
-      // Replace the submit button completely
-      const oldButton = searchForm.querySelector('input[type="submit"]');
-      if (oldButton) {
-        const newButton = document.createElement('button');
-        newButton.type = 'submit';
-        
-        // Add screen reader text
-        const srOnly = document.createElement('span');
-        srOnly.className = 'sr-only';
-        srOnly.textContent = 'Toggle Search';
-        newButton.appendChild(srOnly);
-        
-        // Add search icon
-        const icon = document.createElement('i');
-        icon.className = 'icon-search';
-        newButton.appendChild(icon);
-        
-        // Replace the original button
-        oldButton.parentNode.replaceChild(newButton, oldButton);
-      }
+      // Create new spyglass button
+      const newButton = document.createElement('button');
+      newButton.type = 'submit';
+      
+      // Add screen reader text
+      const srOnly = document.createElement('span');
+      srOnly.className = 'sr-only';
+      srOnly.textContent = 'Toggle Search';
+      newButton.appendChild(srOnly);
+      
+      // Add search icon
+      const icon = document.createElement('i');
+      icon.className = 'icon-search';
+      newButton.appendChild(icon);
+      
+      // Append the new button
+      searchForm.appendChild(newButton);
       
       // Add the dropdown container
       if (!searchForm.querySelector('#serp-dd')) {
