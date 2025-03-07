@@ -4007,3 +4007,82 @@ form.search.search-full {
 #sidebar form.search-full {
     position: relative !important;
 }
+
+/* Ensure search is visible */
+#sidebar form.search.search-full,
+#sidebar form.sidebar-search,
+#sidebar #searchBar {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  margin-bottom: 20px;
+}
+
+/* Make sure inputs inside the search are visible */
+#sidebar form.search input,
+#sidebar form.sidebar-search input,
+#sidebar #searchBar input {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Stabilize sidebar items to prevent jumps when active state changes */
+#sidebar .nav-list li {
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+#sidebar .nav-list li a {
+  display: block;
+  position: relative;
+  padding: 8px 15px 8px 15px; /* Keep consistent padding */
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.85); /* Default color */
+  transition: color 0.15s ease; /* Only transition color */
+}
+
+/* Active items */
+#sidebar .nav-list li.active a {
+  color: #fff; /* Active color */
+  font-weight: 400; /* Keep consistent weight */
+}
+
+/* Use ::before element for indicators that doesn't affect layout */
+#sidebar .nav-list li a::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 3px;
+  background-color: #7c4bff; /* Use your actual highlight color */
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+#sidebar .nav-list li.active a::before {
+  opacity: 1;
+}
+
+/* Icon positioning */
+#sidebar .nav-list li a i.icon-arrow {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: transform 0.15s ease;
+}
+
+#sidebar .nav-list li.active a i.icon-arrow {
+  transform: translateY(-50%) rotate(90deg);
+}
+
+/* Remove any styles that might cause shifts */
+#sidebar .nav-list li a,
+#sidebar .nav-list li.active a {
+  border-left: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}

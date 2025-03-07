@@ -1123,87 +1123,86 @@ function urlBasedMatching(sidebarItems, sidebarLinks) {
   }
 }
 
-// function enhanceSearchButton() {
-//     // Find the submit button
-//     const searchButton = document.querySelector('form.search.search-full input[type="submit"], form.search.search-full input[name="commit"]');
+function enhanceSearchButton() {
+    // Find the submit button
+    const searchButton = document.querySelector('form.search.search-full input[type="submit"], form.search.search-full input[name="commit"]');
     
-//     if (searchButton && !searchButton.parentElement.classList.contains('search-button-wrapper')) {
-//       // Create wrapper element
-//       const wrapper = document.createElement('div');
-//       wrapper.className = 'search-button-wrapper';
+    if (searchButton && !searchButton.parentElement.classList.contains('search-button-wrapper')) {
+      // Create wrapper element
+      const wrapper = document.createElement('div');
+      wrapper.className = 'search-button-wrapper';
       
-//       // Insert wrapper before button in the DOM
-//       searchButton.parentNode.insertBefore(wrapper, searchButton);
+      // Insert wrapper before button in the DOM
+      searchButton.parentNode.insertBefore(wrapper, searchButton);
       
-//       // Move button into wrapper
-//       wrapper.appendChild(searchButton);
-//     }
-//   }
-
-//   function enhanceSidebarSearch() {
-//     // Target the Zendesk search component in the sidebar
-//     const searchForm = document.querySelector('#sidebar form.sidebar-search');
+      // Move button into wrapper
+      wrapper.appendChild(searchButton);
+    }
+  }
+  
+  function enhanceSidebarSearch() {
+    // Target the Zendesk search component in the sidebar
+    const searchForm = document.querySelector('#sidebar form.sidebar-search');
     
-//     if (searchForm) {
-//       // Basic classes should already be applied by inline script
-//       // but we add them again in case that failed
-//       searchForm.id = 'searchBar';
-//       searchForm.classList.add('sm');
+    if (searchForm) {
+      // Basic classes should already be applied by inline script
+      // but we add them again in case that failed
+      searchForm.id = 'searchBar';
+      searchForm.classList.add('sm');
       
-//       // Remove ALL original buttons and controls
-//       const buttonsToRemove = searchForm.querySelectorAll('button, input[type="submit"], .search-button, .search-button-wrapper, .search-controls, .search-submit-wrapper');
-//       buttonsToRemove.forEach(button => button.remove());
+      // Remove ALL original buttons and controls
+      const buttonsToRemove = searchForm.querySelectorAll('button, input[type="submit"], .search-button, .search-button-wrapper, .search-controls, .search-submit-wrapper');
+      buttonsToRemove.forEach(button => button.remove());
       
-//       // Handle the search input
-//       const searchInput = searchForm.querySelector('input[type="search"]');
-//       if (searchInput) {
-//         searchInput.classList.add('search-query');
-//         searchInput.placeholder = 'Search';
-//         searchInput.setAttribute('aria-label', 'Search');
-//       }
+      // Handle the search input
+      const searchInput = searchForm.querySelector('input[type="search"]');
+      if (searchInput) {
+        searchInput.classList.add('search-query');
+        searchInput.placeholder = 'Search';
+        searchInput.setAttribute('aria-label', 'Search');
+      }
       
-//       // Create new spyglass button
-//       const newButton = document.createElement('button');
-//       newButton.type = 'submit';
+      // Create new spyglass button
+      const newButton = document.createElement('button');
+      newButton.type = 'submit';
       
-//       // Add screen reader text
-//       const srOnly = document.createElement('span');
-//       srOnly.className = 'sr-only';
-//       srOnly.textContent = 'Toggle Search';
-//       newButton.appendChild(srOnly);
+      // Add screen reader text
+      const srOnly = document.createElement('span');
+      srOnly.className = 'sr-only';
+      srOnly.textContent = 'Toggle Search';
+      newButton.appendChild(srOnly);
       
-//       // Add search icon
-//       const icon = document.createElement('i');
-//       icon.className = 'icon-search';
-//       newButton.appendChild(icon);
+      // Add search icon
+      const icon = document.createElement('i');
+      icon.className = 'icon-search';
+      newButton.appendChild(icon);
       
-//       // Append the new button
-//       searchForm.appendChild(newButton);
+      // Append the new button
+      searchForm.appendChild(newButton);
       
-//       // Add the dropdown container
-//       if (!searchForm.querySelector('#serp-dd')) {
-//         const resultsContainer = document.createElement('div');
-//         resultsContainer.id = 'serp-dd';
-//         resultsContainer.className = 'sb';
-//         resultsContainer.style.display = 'none';
+      // Add the dropdown container
+      if (!searchForm.querySelector('#serp-dd')) {
+        const resultsContainer = document.createElement('div');
+        resultsContainer.id = 'serp-dd';
+        resultsContainer.className = 'sb';
+        resultsContainer.style.display = 'none';
         
-//         const resultsList = document.createElement('ul');
-//         resultsList.className = 'result';
+        const resultsList = document.createElement('ul');
+        resultsList.className = 'result';
         
-//         resultsContainer.appendChild(resultsList);
-//         searchForm.appendChild(resultsContainer);
-//       }
+        resultsContainer.appendChild(resultsList);
+        searchForm.appendChild(resultsContainer);
+      }
       
-//       // Remove any extra Zendesk elements
-//       const extraElements = searchForm.querySelectorAll('.search-results-column, .search-box-separator');
-//       extraElements.forEach(el => el.remove());
+      // Remove any extra Zendesk elements
+      const extraElements = searchForm.querySelectorAll('.search-results-column, .search-box-separator');
+      extraElements.forEach(el => el.remove());
       
-//       // Now that everything is set up, make the search visible
-//       searchForm.style.opacity = '1';
-//     }
-    
-//   }
-
+      // Now that everything is set up, make the search visible
+      searchForm.style.opacity = '1';
+    }
+  } // This closing brace was commented out, causing the issue
+  
   function fixSidebarAutocomplete() {
     const sidebarForm = document.querySelector('#sidebar form.search-full, #sidebar #searchBar.sm');
     const autocomplete = document.querySelector('#sidebar zd-autocomplete');
@@ -1232,8 +1231,7 @@ function urlBasedMatching(sidebarItems, sidebarLinks) {
   });
   
   // Update the initDarkTheme function to include button enhancement
-// In your script.js file - at the beginning of the initDarkTheme function
-function initDarkTheme() {
+  function initDarkTheme() {
     // Make this function a no-op if it's called again  
     initDarkTheme = function() {};
     
@@ -1242,6 +1240,16 @@ function initDarkTheme() {
     
     // Run sidebar highlighting first (critical UI task)
     highlightSidebarItem();
+  
+    // Make sure search initialization happens
+    enhanceSearchButton();
+    enhanceSidebarSearch();
+    
+    // Start observing for autocomplete dropdown
+    autocompleteObserver.observe(document.body, { childList: true, subtree: true });
+    
+    // Add event listeners for autocomplete size fixing
+    window.addEventListener('resize', fixSidebarAutocomplete);
     
     // Add click listener to store the clicked link path
     document.querySelectorAll('#sidebar .nav-list li a').forEach(link => {
@@ -1344,10 +1352,9 @@ function initDarkTheme() {
       bestMatch.link.parentElement.classList.add('active');
     }
   }
-// Initialize on DOMContentLoaded
-document.addEventListener('DOMContentLoaded', function() {
-  // Initialize dark theme when DOM is ready
-  initDarkTheme();
-});
   
-  })();
+  // Initialize on DOMContentLoaded
+  document.addEventListener('DOMContentLoaded', function() {
+    // Initialize dark theme when DOM is ready
+    initDarkTheme();
+  });
