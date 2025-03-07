@@ -4038,7 +4038,20 @@ form.search.search-full {
   .custom-pagination span.current {
     color: #7f5af0; /* Purple color for page numbers */
     text-decoration: none;
-    padding: 0 2px;
+    padding: 0;
+    margin: 0 12px; /* Add 12px margin on both sides */
+  }
+  
+  /* Remove left margin from first item */
+  .custom-pagination a:first-child,
+  .custom-pagination span.current:first-child {
+    margin-left: 0;
+  }
+  
+  /* Remove right margin from last item */
+  .custom-pagination a:last-child,
+  .custom-pagination span.current:last-child {
+    margin-right: 0;
   }
   
   .custom-pagination span.current {
@@ -4048,4 +4061,5 @@ form.search.search-full {
   .custom-pagination .separator {
     color: white; /* White color for the pipes */
     font-weight: normal;
+    margin: 0; /* Reset margin for separators */
   }
