@@ -3883,7 +3883,7 @@ form.search.search-full {
 /* Hide the search initially until JavaScript modifies it */
 #sidebar form.search.search-full {
     opacity: 0;
-    transition: opacity 0.2s ease;
+    /* transition: opacity 0.2s ease; */
   }
   
   /* Once our JS has initialized it (by adding the 'sm' class), show it */
