@@ -3891,67 +3891,119 @@ form.search.search-full {
     opacity: 1;
   }
 
-  /* Style the instant search results dropdown */
-.search-results-popover,
-.search-results,
-.search-results-column,
-#sidebar #serp-dd {
-  width: 100% !important;
-  max-width: 100% !important;
-  left: 0 !important;
-  right: 0 !important;
-  box-sizing: border-box !important;
-  position: absolute !important;
-  margin: 0 !important;
+/* Sidebar Zendesk Autocomplete Styling - Custom Overrides */
+#sidebar zd-autocomplete,
+#sidebar .search-full zd-autocomplete {
+    background: linear-gradient(315deg, rgba(53, 36, 77, 0.6) 0%, rgba(6, 6, 8, 0.6) 100%) !important;
+    backdrop-filter: blur(29px) !important;
+    -webkit-backdrop-filter: blur(29px) !important;
+    border: 2px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 8px !important;
+    box-shadow: none !important;
+    font-family: "Adelle Sans" !important;
+    margin-top: 0 !important;
+    z-index: 1000 !important;
+    width: 100% !important; /* Take full width of parent */
+    max-width: 100% !important; /* Ensure it doesn't exceed parent width */
+    left: 0 !important; /* Align with left edge */
+    right: 0 !important; /* Stretch to right edge */
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+    transform: none !important; /* Remove any transforms */
+    position: absolute !important;
+    top: 42px !important; /* Position below search input */
 }
 
-/* Container for search results */
+/* Hide the header */
+#sidebar zd-autocomplete-header {
+    display: none !important;
+}
+
+/* Option styling */
+#sidebar zd-autocomplete-option {
+    font-family: "Adelle Sans" !important;
+    font-size: 16px !important;
+    line-height: 24px !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+    transition: color 0.3s ease !important;
+    padding: 8px 24px !important;
+    display: block !important;
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+    #sidebar zd-autocomplete-option {
+        font-size: 15px !important;
+        line-height: 24px !important;
+    }
+}
+
+@media (max-width: 767px) {
+    #sidebar zd-autocomplete-option {
+        font-size: 15px !important;
+        line-height: 24px !important;
+    }
+}
+
+/* Hover state */
+#sidebar zd-autocomplete-option:hover {
+    background: transparent !important;
+    color: #ffffff !important;
+}
+
+/* Selected state */
+#sidebar zd-autocomplete-option[aria-selected=true] {
+    background: transparent !important;
+    color: #ffffff !important;
+}
+
+/* Highlighted text in search results */
+#sidebar zd-autocomplete-option em {
+    font-style: normal !important;
+    font-weight: bold !important;
+}
+
+/* Breadcrumbs in search results */
+#sidebar zd-autocomplete-option zd-autocomplete-breadcrumbs {
+    color: rgba(255, 255, 255, 0.5) !important;
+    font-size: 14px !important;
+    display: block !important;
+    margin-top: -4px !important;
+}
+
+/* Multibrand (category) results */
+#sidebar zd-autocomplete-multibrand {
+    font-family: "Adelle Sans" !important;
+    font-size: 16px !important;
+    line-height: 24px !important;
+    border-bottom: none !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+    padding: 16px 24px !important;
+}
+
+#sidebar zd-autocomplete-multibrand:hover {
+    background: transparent !important;
+    color: #ffffff !important;
+}
+
+#sidebar zd-autocomplete-multibrand[aria-selected=true] {
+    background: transparent !important;
+    color: #ffffff !important;
+}
+
+/* Title in multibrand results */
+#sidebar zd-autocomplete-multibrand zd-autocomplete-title-multibrand {
+    color: #ffffff !important;
+    font-size: 16px !important;
+    padding-bottom: 4px !important;
+    font-family: "Adelle Sans" !important;
+}
+
+/* Hide breadcrumbs in multibrand results */
+#sidebar zd-autocomplete-multibrand zd-autocomplete-breadcrumbs-multibrand {
+    display: none !important;
+}
+
+/* Position the autocomplete container correctly relative to the search form */
 #sidebar form.search-full {
-  position: relative !important;
-}
-
-/* Style the results to match your design */
-.search-results-popover {
-  background: linear-gradient(315deg, rgba(53, 36, 77, 0.6) 0%, rgba(6, 6, 8, 0.6) 100%) !important;
-  backdrop-filter: blur(29px) !important;
-  -webkit-backdrop-filter: blur(29px) !important;
-  border: 2px solid rgba(255, 255, 255, 0.2) !important;
-  border-radius: 8px !important;
-  margin-top: 2px !important;
-  box-shadow: none !important;
-}
-
-/* Style the search result links */
-.search-results a,
-.search-results-column a {
-  font-family: "Adelle Sans" !important;
-  font-size: 16px !important;
-  line-height: 24px !important;
-  color: rgba(255, 255, 255, 0.7) !important;
-  transition: color 0.3s ease !important;
-  padding-left: 24px !important;
-}
-
-.search-results a:hover,
-.search-results-column a:hover {
-  background: transparent !important;
-  color: #ffffff !important;
-}
-
-/* Remove any extra padding or margins */
-.search-results li,
-.search-results-column li {
-  padding: 4px 0 !important;
-  margin: 0 !important;
-}
-
-/* Hide unnecessary elements in the search results */
-.search-results-meta,
-.search-results-subheading {
-  display: none !important;
-}
-
-/* Ensure dropdown appears directly below the search box */
-.search-results-popover {
-  top: 42px !important;
+    position: relative !important;
 }
