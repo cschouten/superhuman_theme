@@ -4007,18 +4007,3 @@ form.search.search-full {
 #sidebar form.search-full {
     position: relative !important;
 }
-
-/* Initially hide the real search bar */
-#sidebar form.sidebar-search,
-#sidebar #searchBar {
-  opacity: 0;
-  visibility: hidden;
-  position: absolute;
-}
-
-/* Placeholder styling */
-.search-placeholder {
-  display: block;
-  width: 100%;
-  /* Match any other styling you need */
-}
