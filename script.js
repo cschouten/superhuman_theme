@@ -1182,154 +1182,171 @@ function enhanceSearchButton() {
   });
 
   function handleSearchBarDisplay() {
-    console.log('Search bar display handler running');
-    
-    const searchArea = document.querySelector('.search-area');
     const searchPlaceholder = document.getElementById('search-placeholder');
-    const searchWrapper = document.getElementById('search-wrapper');
+    const actualSearchBar = document.querySelector('#sidebar form.sidebar-search, #sidebar #searchBar');
     
-    if (!searchArea || !searchPlaceholder || !searchWrapper) {
-      console.error('Required elements not found:', { searchArea, searchPlaceholder, searchWrapper });
-      return;
-    }
+    if (!searchPlaceholder || !actualSearchBar) return;
     
-    // Make sure we have proper initial height
-    const initialHeight = searchArea.offsetHeight;
-    console.log('Initial search area height:', initialHeight);
+    // First, position the actual search off-screen but render it to get dimensions
+    actualSearchBar.style.position = 'absolute';
+    actualSearchBar.style.left = '-9999px';
+    actualSearchBar.style.visibility = 'hidden';
+    actualSearchBar.style.display = 'block';
     
-    // Wait for page load to ensure search bar is fully initialized
+    // Once the page has loaded and styles are applied
     window.addEventListener('load', function() {
-      const actualSearchBar = document.querySelector('#sidebar form.sidebar-search');
-      
-      if (!actualSearchBar) {
-        console.error('Actual search bar not found after page load');
-        return;
-      }
-      
-      // Get real measurements
+      // Get measurements of the actual search
       const actualHeight = actualSearchBar.offsetHeight;
-      console.log('Actual search bar height:', actualHeight);
+      const actualWidth = actualSearchBar.offsetWidth;
       
-      // Update container height if needed
-      if (actualHeight > initialHeight) {
-        searchArea.style.height = actualHeight + 'px';
-        searchPlaceholder.style.height = actualHeight + 'px';
-      }
+      // Set placeholder to match exact dimensions
+      searchPlaceholder.style.height = actualHeight + 'px';
+      searchPlaceholder.style.width = actualWidth + 'px';
       
-      // Ensure proper styling before showing
+      // Execute the search enhancements
       enhanceSidebarSearch();
       
-      // Fade transition instead of abrupt swap
-      setTimeout(function() {
-        // Start transition
-        searchWrapper.style.transition = 'opacity 0.3s ease-in-out';
-        searchPlaceholder.style.transition = 'opacity 0.3s ease-in-out';
-        
-        // Show actual search
-        searchWrapper.style.opacity = '1';
-        
-        // Hide placeholder with fade
-        searchPlaceholder.style.opacity = '0';
-        
-        // After transition, clean up
-        setTimeout(function() {
-          // Keep placeholder in DOM but invisible
-          searchPlaceholder.style.visibility = 'hidden';
-          console.log('Transition completed');
-        }, 300);
-      }, 200);
+      // Set up a mutation observer to detect when search is styled
+      const observer = new MutationObserver(function(mutations) {
+        for (let mutation of mutations) {
+          if (mutation.attributeName === 'style' || mutation.attributeName === 'class') {
+            // Once styling is complete, swap them
+            setTimeout(function() {
+              // Position the real search bar in place of the placeholder
+              actualSearchBar.style.position = 'static';
+              actualSearchBar.style.visibility = 'visible';
+              actualSearchBar.style.opacity = '1';
+              
+              // Hide the placeholder
+              searchPlaceholder.style.display = 'none';
+              
+              // Disconnect once done
+              observer.disconnect();
+            }, 50);
+          }
+        }
+      });
+      
+      // Start observing the search bar for style changes
+      observer.observe(actualSearchBar, { attributes: true });
     });
   }
   
-  // Run immediately after DOM is ready
+  // Call this function early in the page load
   document.addEventListener('DOMContentLoaded', handleSearchBarDisplay);
-
-  document.addEventListener('DOMContentLoaded', function() {
-    const placeholder = document.getElementById('search-placeholder');
-    console.log('Placeholder element:', placeholder);
-    console.log('Placeholder visibility:', placeholder ? getComputedStyle(placeholder).display : 'Element not found');
-    
-    // Then call your handler
-    handleSearchBarDisplay();
-  });
   
   /**
  * Initializes the dark theme and handles various UI enhancements
  * This function runs once and makes itself a no-op on subsequent calls
  */
   function initDarkTheme() {
-    // Prevent multiple runs
-    initDarkTheme = function() {
-      console.log("Dark theme already initialized");
-    };
-  
-    // Show the background element
-    const backgroundElement = document.querySelector('.background');
-    if (backgroundElement) {
-      backgroundElement.getBoundingClientRect();
-      backgroundElement.classList.add('visible');
-    }
-    
-    // Handle sidebar highlighting first (content visible to the user)
-    requestAnimationFrame(function() {
-      // Highlight sidebar based on current page
-      const articleElement = document.getElementById('fullArticle');
-      
-      if (articleElement) {
-        // Article page highlighting logic
-        if (!document.querySelector('#sidebar .nav-list li.active')) {
-          const sectionName = articleElement.getAttribute('data-section-name');
-          if (sectionName) {
-            highlightSidebarItemBySection(sectionName);
-          }
-        }
-      } else {
-        // Category page highlighting logic
-        if (!document.querySelector('#sidebar .nav-list li.active')) {
-          updateSidebarFromCategoryPage();
-        }
-      }
-      
-      // Don't enhance search here - that happens in the swap function
-    });
-    
-    // Other non-critical updates
-    if ('requestIdleCallback' in window) {
-      requestIdleCallback(function() {
-        updateArticleFooter();
-        fixNextPageButtons();
-      }, { timeout: 500 });
-    } else {
-      setTimeout(function() {
-        updateArticleFooter();
-        fixNextPageButtons();
-      }, 50);
-    }
+  // Prevent multiple runs
+  initDarkTheme = function() {
+    console.log("Dark theme already initialized");
+  };
+
+  // Show the background element
+  const backgroundElement = document.querySelector('.background');
+  if (backgroundElement) {
+    backgroundElement.getBoundingClientRect();
+    backgroundElement.classList.add('visible');
   }
   
-  // Helper function to highlight sidebar based on section
-  function highlightSidebarItemBySection(sectionName) {
-    const categoryMap = {
-      "Billing": "Billing",
-      "Account": "Account Setup",
-      "Support": "Support",
-      "Features": "Features",
-      "Integrations": "Integrations",
-      "Use Cases": "Use Cases",
-      "Get Started": "Get Started",
-      "Level Up": "Level Up",
-      "Supercharge Your Team": "Supercharge Your Team"
-    };
+  // Handle sidebar highlighting first (content visible to the user)
+  requestAnimationFrame(function() {
+    // Highlight sidebar based on current page
+    const articleElement = document.getElementById('fullArticle');
     
-    if (categoryMap[sectionName]) {
-      const targetText = categoryMap[sectionName];
-      const categoryLinks = document.querySelectorAll('#sidebar .nav-list li a');
-      
-      for (let i = 0; i < categoryLinks.length; i++) {
-        if (categoryLinks[i].textContent.trim() === targetText) {
-          categoryLinks[i].parentElement.classList.add('active');
-          break;
+    if (articleElement) {
+      // Article page highlighting logic
+      if (!document.querySelector('#sidebar .nav-list li.active')) {
+        const sectionName = articleElement.getAttribute('data-section-name');
+        if (sectionName) {
+          highlightSidebarItemBySection(sectionName);
         }
+      }
+    } else {
+      // Category page highlighting logic
+      if (!document.querySelector('#sidebar .nav-list li.active')) {
+        updateSidebarFromCategoryPage();
+      }
+    }
+    
+    // Don't enhance search here - that happens in the swap function
+  });
+  
+  // Other non-critical updates
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(function() {
+      updateArticleFooter();
+      fixNextPageButtons();
+    }, { timeout: 500 });
+  } else {
+    setTimeout(function() {
+      updateArticleFooter();
+      fixNextPageButtons();
+    }, 50);
+  }
+}
+
+// Helper function to highlight sidebar based on section
+function highlightSidebarItemBySection(sectionName) {
+  const categoryMap = {
+    "Billing": "Billing",
+    "Account": "Account Setup",
+    "Support": "Support",
+    "Features": "Features",
+    "Integrations": "Integrations",
+    "Use Cases": "Use Cases",
+    "Get Started": "Get Started",
+    "Level Up": "Level Up",
+    "Supercharge Your Team": "Supercharge Your Team"
+  };
+  
+  if (categoryMap[sectionName]) {
+    const targetText = categoryMap[sectionName];
+    const categoryLinks = document.querySelectorAll('#sidebar .nav-list li a');
+    
+    for (let i = 0; i < categoryLinks.length; i++) {
+      if (categoryLinks[i].textContent.trim() === targetText) {
+        categoryLinks[i].parentElement.classList.add('active');
+        break;
+      }
+    }
+  }
+}
+  
+  /**
+   * Performs URL-based sidebar highlighting without clearing existing active states
+   * This modified version reduces DOM operations to prevent layout jumps
+   */
+  function urlBasedMatchingWithoutClearingActive(sidebarLinks) {
+    const currentUrl = window.location.href.toLowerCase();
+    let bestMatch = { link: null, quality: 0 };
+    
+    // Check each sidebar link for potential URL match
+    for (let i = 0; i < sidebarLinks.length; i++) {
+      const link = sidebarLinks[i];
+      const href = (link.getAttribute('href') || '').toLowerCase();
+      let matchQuality = 0;
+      
+      // Determine match quality based on URL similarity
+      if (currentUrl === href || currentUrl.endsWith(href)) {
+        matchQuality = 100; // Exact match
+      } else if (href.length > 10 && currentUrl.includes(href)) {
+        matchQuality = 80 + (href.length / currentUrl.length) * 10; // Partial match
+      }
+      
+      // Keep track of the best match
+      if (matchQuality > bestMatch.quality) {
+        bestMatch = { link, quality: matchQuality };
+      }
+    }
+    
+    // Apply the best match if found without clearing existing active states
+    if (bestMatch.link && bestMatch.quality > 0) {
+      if (!bestMatch.link.parentElement.classList.contains('active')) {
+        bestMatch.link.parentElement.classList.add('active');
       }
     }
   }
