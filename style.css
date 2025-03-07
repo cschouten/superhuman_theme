@@ -3591,12 +3591,12 @@ zd-autocomplete-multibrand zd-autocomplete-breadcrumbs-multibrand {
     }
 }
 
-/* Normal state - Zendesk Guide Search Button */
+/* Basic button styling */
 form.search.search-full input[type="submit"],
 form.search.search-full input[name="commit"] {
   /* Text styling */
   color: #ffffff !important;
-  font-family: "Adelle Sans" !important;
+  font-family: "Adelle Sans", sans-serif !important;
   font-size: 24px !important;
   line-height: 100% !important;
   text-shadow: none !important;
@@ -3606,34 +3606,110 @@ form.search.search-full input[name="commit"] {
   padding: 0 32px !important;
   min-width: 150px !important;
   border-radius: 6px !important;
-  border: none !important;
+  
+  /* Create a transparent border */
+  border: 1px solid transparent !important;
+  
+  /* Main approach: Use background-clip for modern browsers */
+  background: 
+    /* Button background confined to the padding box */
+    linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), 
+    linear-gradient(273.81deg, #FA75F8, #9E6EE5) padding-box,
+    
+    /* Border gradient visible only in the border box */
+    linear-gradient(to right, #FA75F8, #9E6EE5) border-box !important;
   
   /* Positioning and behavior */
   cursor: pointer !important;
-  display: flex !important;
+  display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
   position: relative !important;
   
-  /* Background with gradient - matching Help Scout exactly */
-  background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), 
-              linear-gradient(273.81deg, #FA75F8, #9E6EE5) !important;
-  
-  /* Remove box-shadow that was creating additional border effect */
-  box-shadow: none !important;
+  /* Fallback for older browsers using box-shadow */
+  box-shadow: 0 0 0 1px rgba(250, 117, 248, 0.7) !important;
   
   /* Ensure smooth transitions */
-  transition: opacity 0.3s ease, transform 0.2s ease !important;
+  transition: all 0.2s ease !important;
   
   /* Fix any webkit appearance issues */
   -webkit-appearance: none !important;
   appearance: none !important;
 }
 
-/* Hover effect */
+/* Hover state - apply to both approaches */
 form.search.search-full input[type="submit"]:hover,
 form.search.search-full input[name="commit"]:hover {
-  background: linear-gradient(273.81deg, #A252A5, #735196) !important;
+  /* Lighter overlay for hover */
+  background: 
+    linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)), 
+    linear-gradient(273.81deg, #FA75F8, #9E6EE5) padding-box,
+    linear-gradient(to right, #FA75F8, #9E6EE5) border-box !important;
+  
+  /* Subtle lift effect */
+  transform: translateY(-1px) !important;
+  
+  /* Enhanced glow for hover */
+  box-shadow: 0 0 0 1px rgba(250, 117, 248, 0.7),
+              0 4px 8px rgba(250, 117, 248, 0.2) !important;
+}
+
+/* Active/pressed state */
+form.search.search-full input[type="submit"]:active,
+form.search.search-full input[name="commit"]:active {
+  /* Darker overlay when pressed */
+  background: 
+    linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)), 
+    linear-gradient(273.81deg, #FA75F8, #9E6EE5) padding-box,
+    linear-gradient(to right, #FA75F8, #9E6EE5) border-box !important;
+  
+  /* Pushed down effect */
+  transform: translateY(1px) !important;
+  
+  /* Reduced glow when pressed */
+  box-shadow: 0 0 0 1px rgba(250, 117, 248, 0.5) !important;
+}
+
+/* Focus state for accessibility */
+form.search.search-full input[type="submit"]:focus,
+form.search.search-full input[name="commit"]:focus {
+  outline: none !important;
+  
+  /* Enhanced focus ring that doesn't interfere with the gradient border */
+  box-shadow: 0 0 0 1px rgba(250, 117, 248, 0.7),
+              0 0 0 3px rgba(250, 117, 248, 0.3) !important;
+}
+
+/* Disabled state if needed */
+form.search.search-full input[type="submit"]:disabled,
+form.search.search-full input[name="commit"]:disabled {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+  
+  /* Muted appearance for disabled state */
+  background: 
+    linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), 
+    linear-gradient(273.81deg, rgba(250, 117, 248, 0.7), rgba(158, 110, 229, 0.7)) padding-box,
+    linear-gradient(to right, rgba(250, 117, 248, 0.7), rgba(158, 110, 229, 0.7)) border-box !important;
+  
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* 
+ * For browsers that don't support the gradient border technique,
+ * provide a fallback with additional styles
+ */
+@supports not (background: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0) border-box) {
+  form.search.search-full input[type="submit"],
+  form.search.search-full input[name="commit"] {
+    /* Solid color border as fallback */
+    border: 1px solid #FA75F8 !important;
+    
+    /* Basic background without the border trick */
+    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
+                linear-gradient(273.81deg, #FA75F8, #9E6EE5) !important;
+  }
 }
 
 /* Make sure search input has matching height */
