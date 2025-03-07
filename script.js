@@ -1180,87 +1180,102 @@ function enhanceSearchButton() {
       fixSidebarAutocomplete();
     }
   });
+
+  function handleSearchBarDisplay() {
+    const searchPlaceholder = document.getElementById('search-placeholder');
+    const actualSearchBar = document.querySelector('#sidebar form.sidebar-search, #sidebar #searchBar');
+    
+    if (!searchPlaceholder || !actualSearchBar) return;
+    
+    // First, position the actual search off-screen but render it to get dimensions
+    actualSearchBar.style.position = 'absolute';
+    actualSearchBar.style.left = '-9999px';
+    actualSearchBar.style.visibility = 'hidden';
+    actualSearchBar.style.display = 'block';
+    
+    // Once the page has loaded and styles are applied
+    window.addEventListener('load', function() {
+      // Get measurements of the actual search
+      const actualHeight = actualSearchBar.offsetHeight;
+      const actualWidth = actualSearchBar.offsetWidth;
+      
+      // Set placeholder to match exact dimensions
+      searchPlaceholder.style.height = actualHeight + 'px';
+      searchPlaceholder.style.width = actualWidth + 'px';
+      
+      // Execute the search enhancements
+      enhanceSidebarSearch();
+      
+      // Set up a mutation observer to detect when search is styled
+      const observer = new MutationObserver(function(mutations) {
+        for (let mutation of mutations) {
+          if (mutation.attributeName === 'style' || mutation.attributeName === 'class') {
+            // Once styling is complete, swap them
+            setTimeout(function() {
+              // Position the real search bar in place of the placeholder
+              actualSearchBar.style.position = 'static';
+              actualSearchBar.style.visibility = 'visible';
+              actualSearchBar.style.opacity = '1';
+              
+              // Hide the placeholder
+              searchPlaceholder.style.display = 'none';
+              
+              // Disconnect once done
+              observer.disconnect();
+            }, 50);
+          }
+        }
+      });
+      
+      // Start observing the search bar for style changes
+      observer.observe(actualSearchBar, { attributes: true });
+    });
+  }
+  
+  // Call this function early in the page load
+  document.addEventListener('DOMContentLoaded', handleSearchBarDisplay);
   
   /**
  * Initializes the dark theme and handles various UI enhancements
  * This function runs once and makes itself a no-op on subsequent calls
  */
   function initDarkTheme() {
-    // Prevent this function from running multiple times
+    // Prevent multiple runs
     initDarkTheme = function() {
       console.log("Dark theme already initialized");
     };
   
-    // Immediately fix sidebar width to prevent layout shifts
-    const sidebar = document.querySelector('#sidebar');
-    if (sidebar) {
-      const currentWidth = sidebar.offsetWidth;
-      sidebar.style.width = currentWidth + 'px';
-    }
-  
-    // PHASE 1: Handle critical UI updates first
+    // Show the background element
     const backgroundElement = document.querySelector('.background');
     if (backgroundElement) {
       backgroundElement.getBoundingClientRect();
       backgroundElement.classList.add('visible');
     }
     
-    // PHASE 2: Schedule sidebar highlighting for the next animation frame
+    // Handle sidebar highlighting first (content visible to the user)
     requestAnimationFrame(function() {
-      // Determine if we're on an article page or category page
+      // Highlight sidebar based on current page
       const articleElement = document.getElementById('fullArticle');
       
-      // Apply the appropriate sidebar highlighting based on page type
       if (articleElement) {
+        // Article page highlighting logic
         if (!document.querySelector('#sidebar .nav-list li.active')) {
           const sectionName = articleElement.getAttribute('data-section-name');
-          const categoryLinks = document.querySelectorAll('#sidebar .nav-list li a');
-          
-          // Map section names to sidebar menu text
-          const categoryMap = {
-            "Billing": "Billing",
-            "Account": "Account Setup",
-            "Support": "Support",
-            "Features": "Features",
-            "Integrations": "Integrations",
-            "Use Cases": "Use Cases",
-            "Get Started": "Get Started",
-            "Level Up": "Level Up",
-            "Supercharge Your Team": "Supercharge Your Team"
-          };
-          
-          if (sectionName && categoryMap[sectionName]) {
-            const targetText = categoryMap[sectionName];
-            
-            for (let i = 0; i < categoryLinks.length; i++) {
-              if (categoryLinks[i].textContent.trim() === targetText) {
-                categoryLinks[i].parentElement.classList.add('active');
-                break;
-              }
-            }
+          if (sectionName) {
+            highlightSidebarItemBySection(sectionName);
           }
         }
       } else {
-        // We're on a category page
+        // Category page highlighting logic
         if (!document.querySelector('#sidebar .nav-list li.active')) {
           updateSidebarFromCategoryPage();
         }
       }
       
-      // IMPORTANT: SKIP search enhancement during initial load
-      // enhanceSidebarSearch() is removed from here
-  
-      // Enhance the search button with proper styling for the main search
-      const searchButton = document.querySelector('form.search.search-full input[type="submit"], form.search.search-full input[name="commit"]');
-      if (searchButton && !searchButton.parentElement.classList.contains('search-button-wrapper')) {
-        const wrapper = document.createElement('div');
-        wrapper.className = 'search-button-wrapper';
-        searchButton.parentNode.insertBefore(wrapper, searchButton);
-        wrapper.appendChild(searchButton);
-      }
+      // Don't enhance search here - that happens in the swap function
     });
     
-    // Non-critical updates
+    // Other non-critical updates
     if ('requestIdleCallback' in window) {
       requestIdleCallback(function() {
         updateArticleFooter();
@@ -1272,90 +1287,31 @@ function enhanceSearchButton() {
         fixNextPageButtons();
       }, 50);
     }
-    
-    // IMPORTANT: Move all sidebar search enhancements to after full page load
-    window.addEventListener('load', function() {
-      console.log("Page fully loaded, now enhancing sidebar search");
-      
-      // Now it's safe to enhance the search
-      // enhanceSidebarSearch();
-      
-      // Set up observer for autocomplete dropdown
-    //   const autocompleteObserver = new MutationObserver(function(mutations) {
-    //     const autocomplete = document.querySelector('#sidebar zd-autocomplete');
-    //     if (autocomplete) {
-    //       fixSidebarAutocomplete();
-    //     }
-    //   });
-      
-    //   // Start observing DOM changes but only after page is fully loaded
-    //   autocompleteObserver.observe(document.body, { childList: true, subtree: true });
-      
-    //   // Handle window resize to reposition autocomplete dropdown
-    //   window.addEventListener('resize', fixSidebarAutocomplete);
-      
-    //   // Add input event listener to sidebar search for autocomplete positioning
-    //   const searchInput = document.querySelector('#sidebar .search-query, #sidebar input[type="search"]');
-    //   if (searchInput) {
-    //     searchInput.addEventListener('input', function() {
-    //       setTimeout(fixSidebarAutocomplete, 100);
-    //     });
-    //   }
-      
-      // Remove fixed width after everything is stable
-      setTimeout(() => {
-        if (sidebar) {
-          sidebar.style.width = '';
-        }
-      }, 100);
-    });
   }
-
-  // At the end of initDarkTheme
-window.addEventListener('load', function() {
-    // Now it's safe to enhance the search since page has fully loaded
-    enhanceSidebarSearch();
-    
-    // Remove fixed width after everything is stable
-    setTimeout(() => {
-      const sidebar = document.querySelector('#sidebar');
-      if (sidebar) {
-        sidebar.style.width = '';
-      }
-    }, 100);
-  });
   
-  /**
-   * Performs URL-based sidebar highlighting without clearing existing active states
-   * This modified version reduces DOM operations to prevent layout jumps
-   */
-  function urlBasedMatchingWithoutClearingActive(sidebarLinks) {
-    const currentUrl = window.location.href.toLowerCase();
-    let bestMatch = { link: null, quality: 0 };
+  // Helper function to highlight sidebar based on section
+  function highlightSidebarItemBySection(sectionName) {
+    const categoryMap = {
+      "Billing": "Billing",
+      "Account": "Account Setup",
+      "Support": "Support",
+      "Features": "Features",
+      "Integrations": "Integrations",
+      "Use Cases": "Use Cases",
+      "Get Started": "Get Started",
+      "Level Up": "Level Up",
+      "Supercharge Your Team": "Supercharge Your Team"
+    };
     
-    // Check each sidebar link for potential URL match
-    for (let i = 0; i < sidebarLinks.length; i++) {
-      const link = sidebarLinks[i];
-      const href = (link.getAttribute('href') || '').toLowerCase();
-      let matchQuality = 0;
+    if (categoryMap[sectionName]) {
+      const targetText = categoryMap[sectionName];
+      const categoryLinks = document.querySelectorAll('#sidebar .nav-list li a');
       
-      // Determine match quality based on URL similarity
-      if (currentUrl === href || currentUrl.endsWith(href)) {
-        matchQuality = 100; // Exact match
-      } else if (href.length > 10 && currentUrl.includes(href)) {
-        matchQuality = 80 + (href.length / currentUrl.length) * 10; // Partial match
-      }
-      
-      // Keep track of the best match
-      if (matchQuality > bestMatch.quality) {
-        bestMatch = { link, quality: matchQuality };
-      }
-    }
-    
-    // Apply the best match if found without clearing existing active states
-    if (bestMatch.link && bestMatch.quality > 0) {
-      if (!bestMatch.link.parentElement.classList.contains('active')) {
-        bestMatch.link.parentElement.classList.add('active');
+      for (let i = 0; i < categoryLinks.length; i++) {
+        if (categoryLinks[i].textContent.trim() === targetText) {
+          categoryLinks[i].parentElement.classList.add('active');
+          break;
+        }
       }
     }
   }

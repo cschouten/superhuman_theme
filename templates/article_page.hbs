@@ -6,7 +6,15 @@
 <section id="contentArea" class="container-fluid">
   <div class="row-fluid">
     <aside id="sidebar" class="span3">
-      {{!-- {{search instant=settings.instant_search class='search search-full sidebar-search' submit=true}} --}}
+        <div class="search-area">
+            <!-- Placeholder for search -->
+            <div id="search-placeholder" class="search-placeholder"></div>
+            
+            <!-- Actual ZD search that will be swapped in -->
+            <div style="opacity: 0; position: absolute; left: -9999px;">
+                {{search instant=settings.instant_search class='search search-full sidebar-search' submit=true}}
+            </div>
+        </div>
       <h3>Categories</h3>
       <ul class="nav nav-list">
         <li><a href="/hc/en-us/articles/38448760193939">Get Started<i class="icon-arrow"></i></a></li>
