@@ -1140,7 +1140,7 @@ function enhanceSearchButtons() {
           height: 64px !important;
           padding: 0 32px !important;
           min-width: 150px !important;
-          border-radius: 6px !important;
+          border-radius: 8px !important;
           cursor: pointer !important;
           position: relative !important;
           
