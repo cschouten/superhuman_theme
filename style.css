@@ -857,7 +857,6 @@ body .background {
     height: 100%;
     z-index: -1;
     opacity: 0; /* Start hidden */
-    transition: opacity 0.3s ease; /* Smooth transition */
   }
 
 body .background.visible {
