@@ -757,52 +757,35 @@
       }
 
       function updateSidebarActiveClass() {
-        // Get current article metadata if available in the Help Center template
-        if (window.HelpCenter && window.HelpCenter.article) {
-          const article = window.HelpCenter.article;
-          
-          // Log article details for debugging
-          console.log('Article details:', article);
-          
-          // Get the section ID from the article
-          const sectionId = article.section_id;
-          console.log('Section ID:', sectionId);
-          
-          // Make an API call to get the section details, which includes the category ID
-          fetch(`/api/v2/help_center/en-us/sections/${sectionId}`)
-            .then(response => response.json())
-            .then(data => {
-              const section = data.section;
-              console.log('Section details:', section);
-              
-              // Get the category ID from the section
-              const categoryId = section.category_id;
-              console.log('Category ID:', categoryId);
-              
-              // Make another API call to get the category name/details
-              return fetch(`/api/v2/help_center/en-us/categories/${categoryId}`);
-            })
-            .then(response => response.json())
-            .then(data => {
-              const category = data.category;
-              console.log('Category details:', category);
-              
-              // Now highlight the corresponding sidebar item
-              highlightCategoryInSidebar(category.id, category.name);
-            })
-            .catch(error => {
-              console.error('Error fetching category data:', error);
-              
-              // Fallback to the previous URL-based matching if API calls fail
-              fallbackUrlMatching();
-            });
-        } else {
-          // Fallback to URL matching if the article object isn't available
+        // Get article element with data attributes
+        const articleEl = document.getElementById('fullArticle');
+        
+        if (!articleEl) {
+          console.log('Article element not found, using fallback method');
           fallbackUrlMatching();
+          return;
         }
-      }
-      
-      function highlightCategoryInSidebar(categoryId, categoryName) {
+        
+        // Get data from the article element
+        const categoryId = articleEl.getAttribute('data-category-id');
+        const categoryName = articleEl.getAttribute('data-category-name');
+        const sectionId = articleEl.getAttribute('data-section-id');
+        const sectionName = articleEl.getAttribute('data-section-name');
+        
+        // Log the data for debugging
+        console.log('Article data from Handlebars:', {
+          categoryId: categoryId,
+          categoryName: categoryName,
+          sectionId: sectionId,
+          sectionName: sectionName
+        });
+        
+        if (!categoryId && !categoryName) {
+          console.log('Category data not available, using fallback method');
+          fallbackUrlMatching();
+          return;
+        }
+        
         // Get all sidebar navigation links
         const navLinks = document.querySelectorAll('#sidebar .nav-list li a');
         
@@ -811,35 +794,59 @@
           li.classList.remove('active');
         });
         
-        // Find the matching category link
-        let foundMatch = false;
+        // Try to find a match for the category
+        let found = false;
         
         navLinks.forEach(function(link) {
           const linkUrl = link.getAttribute('href');
-          const linkText = link.textContent.trim();
+          const linkText = link.textContent.trim().replace(/\s*\i.*$/, ''); // Remove icon text
           
-          // Check for category ID in the URL
-          if (linkUrl.includes(`/categories/${categoryId}`)) {
+          // Check 1: Direct category ID match in URL
+          if (categoryId && linkUrl.includes(`/categories/${categoryId}`)) {
             link.parentElement.classList.add('active');
-            console.log(`Found and highlighted category by ID: ${categoryId}`);
-            foundMatch = true;
+            console.log(`Found category match by ID in URL: ${categoryId}`);
+            found = true;
           } 
-          // Check for category name in the link text
-          else if (linkText === categoryName) {
+          // Check 2: Check by category name
+          else if (categoryName && linkText.toLowerCase() === categoryName.toLowerCase()) {
             link.parentElement.classList.add('active');
-            console.log(`Found and highlighted category by name: ${categoryName}`);
-            foundMatch = true;
+            console.log(`Found category match by name: ${categoryName}`);
+            found = true;
           }
-          // Check if the URL contains the category ID as a string
-          else if (linkUrl.includes(categoryId.toString())) {
-            link.parentElement.classList.add('active');
-            console.log(`Found and highlighted category by ID string in URL: ${categoryId}`);
-            foundMatch = true;
+          // Check 3: For main section pages that might be linked directly
+          else if (linkUrl.includes('/articles/') && sectionName) {
+            // For certain top-level sections that might be in the sidebar
+            if (linkText.toLowerCase() === sectionName.toLowerCase()) {
+              link.parentElement.classList.add('active');
+              console.log(`Found section match by name: ${sectionName}`);
+              found = true;
+            }
           }
         });
         
-        if (!foundMatch) {
-          console.log(`Could not find a matching sidebar item for category: ${categoryName} (ID: ${categoryId})`);
+        if (!found) {
+          console.log('No match found using data attributes, trying partial URL matching');
+          // Try partial matching as a last resort
+          navLinks.forEach(function(link) {
+            const linkUrl = link.getAttribute('href');
+            
+            // Check if the URL contains parts of the category or section name
+            if (categoryName && linkUrl.toLowerCase().includes(categoryName.toLowerCase().replace(/\s+/g, '-'))) {
+              link.parentElement.classList.add('active');
+              console.log(`Found match by category name in URL: ${categoryName}`);
+              found = true;
+            }
+            else if (sectionName && linkUrl.toLowerCase().includes(sectionName.toLowerCase().replace(/\s+/g, '-'))) {
+              link.parentElement.classList.add('active');
+              console.log(`Found match by section name in URL: ${sectionName}`);
+              found = true;
+            }
+          });
+          
+          if (!found) {
+            console.log('No matches found, falling back to URL matching');
+            fallbackUrlMatching();
+          }
         }
       }
       
@@ -857,37 +864,62 @@
           li.classList.remove('active');
         });
         
-        // Check for exact URL match first
-        let exactMatch = false;
+        // Check for category in URL structure
+        const urlParts = currentPageUrl.split('/');
+        let categoryMatch = false;
         
-        navLinks.forEach(function(link) {
-          const linkUrl = link.getAttribute('href');
-          
-          if (currentPageUrl === linkUrl || currentPageUrl.endsWith(linkUrl)) {
-            // Add active class to the parent li element for exact match
-            link.parentElement.classList.add('active');
-            exactMatch = true;
+        // Try to find 'categories' segment in URL
+        for (let i = 0; i < urlParts.length; i++) {
+          if (urlParts[i] === 'categories' && i+1 < urlParts.length) {
+            const categoryId = urlParts[i+1];
+            
+            navLinks.forEach(function(link) {
+              const linkUrl = link.getAttribute('href');
+              if (linkUrl.includes(`/categories/${categoryId}`)) {
+                link.parentElement.classList.add('active');
+                categoryMatch = true;
+                console.log(`Found category match from URL path: ${categoryId}`);
+              }
+            });
+            
+            if (categoryMatch) break;
           }
-        });
+        }
         
-        // If no exact match found, check for partial matches
-        if (!exactMatch) {
+        // If no category match, try article or section matching
+        if (!categoryMatch) {
+          // Check for exact URL match first
+          let exactMatch = false;
+          
           navLinks.forEach(function(link) {
             const linkUrl = link.getAttribute('href');
             
-            // For category links
-            if (linkUrl.includes('/categories/') && currentPageUrl.includes(linkUrl.split('/categories/')[1])) {
+            if (currentPageUrl === linkUrl || currentPageUrl.endsWith(linkUrl)) {
+              // Add active class to the parent li element for exact match
               link.parentElement.classList.add('active');
-            }
-            // For article links that are part of a category
-            else if (linkUrl.includes('/articles/') && currentPageUrl.includes(linkUrl.split('/articles/')[1])) {
-              link.parentElement.classList.add('active');
-            }
-            // For more general URL matching
-            else if (currentPageUrl.includes(linkUrl) && linkUrl !== '/') {
-              link.parentElement.classList.add('active');
+              exactMatch = true;
             }
           });
+          
+          // If no exact match found, check for partial matches
+          if (!exactMatch) {
+            navLinks.forEach(function(link) {
+              const linkUrl = link.getAttribute('href');
+              
+              // For category links
+              if (linkUrl.includes('/categories/') && currentPageUrl.includes(linkUrl.split('/categories/')[1])) {
+                link.parentElement.classList.add('active');
+              }
+              // For article links that are part of a category
+              else if (linkUrl.includes('/articles/') && currentPageUrl.includes(linkUrl.split('/articles/')[1])) {
+                link.parentElement.classList.add('active');
+              }
+              // For more general URL matching
+              else if (currentPageUrl.includes(linkUrl) && linkUrl !== '/' && linkUrl.length > 3) {
+                link.parentElement.classList.add('active');
+              }
+            });
+          }
         }
       }
       
