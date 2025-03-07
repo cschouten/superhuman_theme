@@ -4007,3 +4007,22 @@ form.search.search-full {
 #sidebar form.search-full {
     position: relative !important;
 }
+
+.pagination-container {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.pagination a, .pagination span {
+    color: #7f5af0; /* Purple color like in your screenshot */
+    padding: 0 5px;
+    text-decoration: none;
+}
+
+.pagination .current {
+    font-weight: bold;
+}
+
+.pagination .next, .pagination .last {
+    margin-left: 5px;
+}
