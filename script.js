@@ -1201,7 +1201,7 @@ function enhanceSearchButton() {
       // Now that everything is set up, make the search visible
       searchForm.style.opacity = '1';
     }
-  } // This closing brace was commented out, causing the issue
+  }
   
   function fixSidebarAutocomplete() {
     const sidebarForm = document.querySelector('#sidebar form.search-full, #sidebar #searchBar.sm');
@@ -1357,4 +1357,4 @@ function enhanceSearchButton() {
   document.addEventListener('DOMContentLoaded', function() {
     // Initialize dark theme when DOM is ready
     initDarkTheme();
-  });
+  })});
