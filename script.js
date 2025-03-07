@@ -1123,86 +1123,86 @@ function urlBasedMatching(sidebarItems, sidebarLinks) {
   }
 }
 
-function enhanceSearchButton() {
-    // Find the submit button
-    const searchButton = document.querySelector('form.search.search-full input[type="submit"], form.search.search-full input[name="commit"]');
+// function enhanceSearchButton() {
+//     // Find the submit button
+//     const searchButton = document.querySelector('form.search.search-full input[type="submit"], form.search.search-full input[name="commit"]');
     
-    if (searchButton && !searchButton.parentElement.classList.contains('search-button-wrapper')) {
-      // Create wrapper element
-      const wrapper = document.createElement('div');
-      wrapper.className = 'search-button-wrapper';
+//     if (searchButton && !searchButton.parentElement.classList.contains('search-button-wrapper')) {
+//       // Create wrapper element
+//       const wrapper = document.createElement('div');
+//       wrapper.className = 'search-button-wrapper';
       
-      // Insert wrapper before button in the DOM
-      searchButton.parentNode.insertBefore(wrapper, searchButton);
+//       // Insert wrapper before button in the DOM
+//       searchButton.parentNode.insertBefore(wrapper, searchButton);
       
-      // Move button into wrapper
-      wrapper.appendChild(searchButton);
-    }
-  }
+//       // Move button into wrapper
+//       wrapper.appendChild(searchButton);
+//     }
+//   }
 
-  function enhanceSidebarSearch() {
-    // Target the Zendesk search component in the sidebar
-    const searchForm = document.querySelector('#sidebar form.sidebar-search');
+//   function enhanceSidebarSearch() {
+//     // Target the Zendesk search component in the sidebar
+//     const searchForm = document.querySelector('#sidebar form.sidebar-search');
     
-    if (searchForm) {
-      // Basic classes should already be applied by inline script
-      // but we add them again in case that failed
-      searchForm.id = 'searchBar';
-      searchForm.classList.add('sm');
+//     if (searchForm) {
+//       // Basic classes should already be applied by inline script
+//       // but we add them again in case that failed
+//       searchForm.id = 'searchBar';
+//       searchForm.classList.add('sm');
       
-      // Remove ALL original buttons and controls
-      const buttonsToRemove = searchForm.querySelectorAll('button, input[type="submit"], .search-button, .search-button-wrapper, .search-controls, .search-submit-wrapper');
-      buttonsToRemove.forEach(button => button.remove());
+//       // Remove ALL original buttons and controls
+//       const buttonsToRemove = searchForm.querySelectorAll('button, input[type="submit"], .search-button, .search-button-wrapper, .search-controls, .search-submit-wrapper');
+//       buttonsToRemove.forEach(button => button.remove());
       
-      // Handle the search input
-      const searchInput = searchForm.querySelector('input[type="search"]');
-      if (searchInput) {
-        searchInput.classList.add('search-query');
-        searchInput.placeholder = 'Search';
-        searchInput.setAttribute('aria-label', 'Search');
-      }
+//       // Handle the search input
+//       const searchInput = searchForm.querySelector('input[type="search"]');
+//       if (searchInput) {
+//         searchInput.classList.add('search-query');
+//         searchInput.placeholder = 'Search';
+//         searchInput.setAttribute('aria-label', 'Search');
+//       }
       
-      // Create new spyglass button
-      const newButton = document.createElement('button');
-      newButton.type = 'submit';
+//       // Create new spyglass button
+//       const newButton = document.createElement('button');
+//       newButton.type = 'submit';
       
-      // Add screen reader text
-      const srOnly = document.createElement('span');
-      srOnly.className = 'sr-only';
-      srOnly.textContent = 'Toggle Search';
-      newButton.appendChild(srOnly);
+//       // Add screen reader text
+//       const srOnly = document.createElement('span');
+//       srOnly.className = 'sr-only';
+//       srOnly.textContent = 'Toggle Search';
+//       newButton.appendChild(srOnly);
       
-      // Add search icon
-      const icon = document.createElement('i');
-      icon.className = 'icon-search';
-      newButton.appendChild(icon);
+//       // Add search icon
+//       const icon = document.createElement('i');
+//       icon.className = 'icon-search';
+//       newButton.appendChild(icon);
       
-      // Append the new button
-      searchForm.appendChild(newButton);
+//       // Append the new button
+//       searchForm.appendChild(newButton);
       
-      // Add the dropdown container
-      if (!searchForm.querySelector('#serp-dd')) {
-        const resultsContainer = document.createElement('div');
-        resultsContainer.id = 'serp-dd';
-        resultsContainer.className = 'sb';
-        resultsContainer.style.display = 'none';
+//       // Add the dropdown container
+//       if (!searchForm.querySelector('#serp-dd')) {
+//         const resultsContainer = document.createElement('div');
+//         resultsContainer.id = 'serp-dd';
+//         resultsContainer.className = 'sb';
+//         resultsContainer.style.display = 'none';
         
-        const resultsList = document.createElement('ul');
-        resultsList.className = 'result';
+//         const resultsList = document.createElement('ul');
+//         resultsList.className = 'result';
         
-        resultsContainer.appendChild(resultsList);
-        searchForm.appendChild(resultsContainer);
-      }
+//         resultsContainer.appendChild(resultsList);
+//         searchForm.appendChild(resultsContainer);
+//       }
       
-      // Remove any extra Zendesk elements
-      const extraElements = searchForm.querySelectorAll('.search-results-column, .search-box-separator');
-      extraElements.forEach(el => el.remove());
+//       // Remove any extra Zendesk elements
+//       const extraElements = searchForm.querySelectorAll('.search-results-column, .search-box-separator');
+//       extraElements.forEach(el => el.remove());
       
-      // Now that everything is set up, make the search visible
-      searchForm.style.opacity = '1';
-    }
+//       // Now that everything is set up, make the search visible
+//       searchForm.style.opacity = '1';
+//     }
     
-  }
+//   }
 
   function fixSidebarAutocomplete() {
     const sidebarForm = document.querySelector('#sidebar form.search-full, #sidebar #searchBar.sm');
@@ -1232,62 +1232,118 @@ function enhanceSearchButton() {
   });
   
   // Update the initDarkTheme function to include button enhancement
+// In your script.js file - at the beginning of the initDarkTheme function
 function initDarkTheme() {
-    // Make this function a no-op if it's called again
+    // Make this function a no-op if it's called again  
     initDarkTheme = function() {};
     
     // Show background immediately
     addBackground();
     
-    // Split tasks into critical and non-critical
-    const criticalTasks = () => {
-      // Prioritize sidebar navigation as it affects user experience immediately
-      const articleEl = document.getElementById('fullArticle');
-      
-      if (articleEl) {
-        // We're on an article page - use article data to highlight sidebar
-        updateSidebarFromArticle(articleEl);
-      } else {
-        // We're on a category page or another type of page
-        updateSidebarFromCategoryPage();
-      }
-      
-      // Apply button styling right away (it's lightweight CSS-only)
-      enhanceSearchButton();
-      enhanceSidebarSearch();
-      
-      // Start observing for autocomplete dropdown
-      autocompleteObserver.observe(document.body, { childList: true, subtree: true });
-      
-      // Add event listeners for autocomplete size fixing
-      window.addEventListener('resize', fixSidebarAutocomplete);
-      
-      // Add input event listener for search
-      const searchInput = document.querySelector('#sidebar .search-query, #sidebar input[type="search"]');
-      if (searchInput) {
-        searchInput.addEventListener('input', function() {
-          setTimeout(fixSidebarAutocomplete, 100);
-        });
-      }
-    };
-  
-    const nonCriticalTasks = () => {
-      // Less critical UI updates
-      updateArticleFooter();
-      fixNextPageButtons();
-    };
-  
-    // Execute critical tasks immediately
-    requestAnimationFrame(criticalTasks);
-  
-    // Defer non-critical tasks
+    // Run sidebar highlighting first (critical UI task)
+    highlightSidebarItem();
+    
+    // Add click listener to store the clicked link path
+    document.querySelectorAll('#sidebar .nav-list li a').forEach(link => {
+      link.addEventListener('click', function() {
+        sessionStorage.setItem('activeSidebarPath', this.getAttribute('href'));
+      });
+    });
+    
+    // Non-critical tasks can still be deferred
     if ('requestIdleCallback' in window) {
-      requestIdleCallback(nonCriticalTasks, { timeout: 500 });
+      requestIdleCallback(() => {
+        updateArticleFooter();
+        fixNextPageButtons();
+      }, { timeout: 500 });
     } else {
-      setTimeout(nonCriticalTasks, 50);
+      setTimeout(() => {
+        updateArticleFooter();
+        fixNextPageButtons();
+      }, 50);
     }
   }
-
+  
+  // Add this function to your script.js
+  function highlightSidebarItem() {
+    // Skip if an item is already active (was applied by the head script)
+    if (document.querySelector('#sidebar .nav-list li.active')) {
+      return;
+    }
+    
+    // Get article data if available
+    const articleEl = document.getElementById('fullArticle');
+    
+    if (articleEl) {
+      // Article page approach
+      const sectionId = articleEl.getAttribute('data-section-id');
+      const sectionName = articleEl.getAttribute('data-section-name');
+      
+      // Category mapping
+      const categoryMap = {
+        "Billing": "/hc/en-us/categories/38445127077651",
+        "Account Setup": "/hc/en-us/categories/38445089824531",
+        "Support": "/hc/en-us/categories/38445149992467",
+        "Features": "/hc/en-us/categories/38445131555603",
+        "Integrations": "/hc/en-us/categories/38445115561875",
+        "Use Cases": "/hc/en-us/categories/38445124666771",
+        "Get Started": "/hc/en-us/articles/38448760193939",
+        "Level Up": "/hc/en-us/articles/38450004008595",
+        "Supercharge Your Team": "/hc/en-us/articles/38450322526995"
+      };
+      
+      // First try matching by section name
+      if (sectionName) {
+        // Direct match
+        if (categoryMap[sectionName]) {
+          const targetPath = categoryMap[sectionName];
+          const links = document.querySelectorAll('#sidebar .nav-list li a');
+          
+          for (let i = 0; i < links.length; i++) {
+            if (links[i].getAttribute('href') === targetPath) {
+              links[i].parentElement.classList.add('active');
+              return;
+            }
+          }
+        }
+        
+        // Partial match
+        for (const [key, path] of Object.entries(categoryMap)) {
+          if (sectionName.includes(key)) {
+            const links = document.querySelectorAll('#sidebar .nav-list li a');
+            
+            for (let i = 0; i < links.length; i++) {
+              if (links[i].getAttribute('href') === path) {
+                links[i].parentElement.classList.add('active');
+                return;
+              }
+            }
+          }
+        }
+      }
+    }
+    
+    // Fallback to URL matching
+    const currentPath = window.location.pathname;
+    const links = document.querySelectorAll('#sidebar .nav-list li a');
+    
+    // Find the most specific match
+    let bestMatch = { link: null, length: 0 };
+    
+    for (let i = 0; i < links.length; i++) {
+      const href = links[i].getAttribute('href');
+      if (currentPath === href || currentPath.indexOf(href) === 0) {
+        const matchLength = href.length;
+        if (matchLength > bestMatch.length) {
+          bestMatch = { link: links[i], length: matchLength };
+        }
+      }
+    }
+    
+    if (bestMatch.link) {
+      bestMatch.link.parentElement.classList.add('active');
+    }
+  }
 // Initialize on DOMContentLoaded
 document.addEventListener('DOMContentLoaded', function() {
   // Initialize dark theme when DOM is ready

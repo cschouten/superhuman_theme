@@ -3,6 +3,24 @@
 <!-- Make the translated search clear button label available for use in JS -->
 <!-- See buildClearSearchButton() in script.js -->
 <script type="text/javascript">window.searchClearButtonLabelLocalized = "{{t 'search_clear'}}";</script>
+ <script>
+    // ONLY this small pre-highlighting script goes in the head
+    (function() {
+      // Try to highlight from sessionStorage immediately (before render)
+      const storedPath = sessionStorage.getItem('activeSidebarPath');
+      if (storedPath) {
+        document.addEventListener('DOMContentLoaded', function() {
+          const links = document.querySelectorAll('#sidebar .nav-list li a');
+          for (let i = 0; i < links.length; i++) {
+            if (links[i].getAttribute('href') === storedPath) {
+              links[i].parentElement.classList.add('active');
+              break;
+            }
+          }
+        });
+      }
+    })();
+  </script>
 <script type="text/javascript">
   // Load ES module polyfill only for browsers that don't support ES modules
   if (!(HTMLScriptElement.supports && HTMLScriptElement.supports('importmap'))) {
