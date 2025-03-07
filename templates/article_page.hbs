@@ -6,14 +6,16 @@
 <section id="contentArea" class="container-fluid">
   <div class="row-fluid">
     <aside id="sidebar" class="span3">
-        <div class="search-area">
-            <!-- Placeholder for search -->
-            <div id="search-placeholder" class="search-placeholder" style="height: 36px; width: 100%; background-color: rgba(255,255,255,0.1); border-radius: 4px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.2);">
-                <!-- Optional visual indicator of loading -->
+        <div class="search-area" style="position: relative; height: 36px; margin-bottom: 15px;">
+            <!-- Placeholder with exact same dimensions -->
+            <div id="search-placeholder" class="search-placeholder" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255,255,255,0.1); border-radius: 4px;">
+                <div style="display: flex; align-items: center; height: 100%; padding: 0 10px;">
+                <span style="color: rgba(255,255,255,0.5);">Search loading...</span>
+                </div>
             </div>
             
-            <!-- Actual ZD search that will be swapped in -->
-            <div style="opacity: 0; position: absolute; left: -9999px;">
+            <!-- Actual search will be absolutely positioned in the same container -->
+            <div id="search-wrapper" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0;">
                 {{search instant=settings.instant_search class='search search-full sidebar-search' submit=true}}
             </div>
         </div>
