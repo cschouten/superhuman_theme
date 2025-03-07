@@ -1157,11 +1157,9 @@ function enhanceSearchButtons() {
           background-origin: border-box !important;
           background-clip: padding-box, border-box !important;
           background-image: 
-            /* First gradient is the inner fill */
-            linear-gradient(to right, rgba(158, 110, 229, 0.8), rgba(250, 117, 248, 0.8)), 
-            /* Second and third gradients create the border effect */
-            linear-gradient(to bottom, #FA75F8, #9E6EE5),
-            linear-gradient(to bottom, #FA75F8, #9E6EE5) !important;
+            linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), 
+            linear-gradient(180deg, #FA75F8, #9E6EE5),
+            linear-gradient(180deg, #FA75F8, #9E6EE5) !important;
           
           /* Smooth transitions */
           transition: background-image 0.3s ease !important;
@@ -1175,7 +1173,7 @@ function enhanceSearchButtons() {
         form.search.search-full input[type="submit"]:hover,
         form.search.search-full input[name="commit"]:hover {
           background-image: 
-            linear-gradient(to right, rgba(158, 110, 229, 0.7), rgba(250, 117, 248, 0.7)), 
+            linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), 
             linear-gradient(to bottom, #FA75F8, #9E6EE5),
             linear-gradient(to bottom, #FA75F8, #9E6EE5) !important;
 
@@ -1185,7 +1183,7 @@ function enhanceSearchButtons() {
         form.search.search-full input[type="submit"]:active,
         form.search.search-full input[name="commit"]:active {
           background-image: 
-            linear-gradient(to right, rgba(158, 110, 229, 0.6), rgba(250, 117, 248, 0.6)), 
+            linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), 
             linear-gradient(to bottom, #FA75F8, #9E6EE5),
             linear-gradient(to bottom, #FA75F8, #9E6EE5) !important;
         }
