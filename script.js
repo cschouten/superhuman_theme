@@ -81,8 +81,9 @@
         }
       });
       
-      // Initialize Dark Theme Components
-      initDarkTheme();
+      // Initialize Superhuman theme
+      initSuperhumanTheme();
+      
     });
   
     const isPrintableChar = (str) => {
@@ -673,21 +674,16 @@
     });
   
     // Dark Theme functionality
-    function initDarkTheme() {
+    function initSuperhumanTheme() {
+        // Execute background and UI updates immediately
         addBackground();
         updateArticleFooter();
-        fixNextPageButtons(); 
+        fixNextPageButtons();
       
-        const articleEl = document.getElementById('fullArticle');
-        const categoryHeading = document.querySelector('h1, .page-header h1');
-      
-        if (articleEl) {
-          // We're on an article page - use article data to highlight sidebar
-          updateSidebarFromArticle();
-        } else {
-          // We're on a category page or another type of page - use URL and page title
-          updateSidebarFromCategoryPage();
-        }
+        // Defer sidebar highlighting to avoid blocking rendering
+        requestAnimationFrame(() => {
+          highlightSidebar();
+        });
       }
       
       function addBackground() {
@@ -705,41 +701,42 @@
       }
       
       function updateArticleFooter() {
-        const articleFoot = document.querySelector('.articleFoot')
-        if (!articleFoot) return
+        const articleFoot = document.querySelector('.articleFoot');
+        if (!articleFoot) return;
           
-        const feedbackDiv = document.createElement('div')
-        feedbackDiv.innerText = 'Have feedback? '
-        feedbackDiv.className = 'feedbackDiv'
+        const feedbackDiv = document.createElement('div');
+        feedbackDiv.innerText = 'Have feedback? ';
+        feedbackDiv.className = 'feedbackDiv';
           
-        const feedbackLink = document.createElement('a')
-        feedbackLink.className = 'feedbackLink'
-        feedbackLink.innerText = 'Let us know!'
-        feedbackLink.href = 'mailto:hello@superhuman.com?subject=Help%20Center%20Feedback'
+        const feedbackLink = document.createElement('a');
+        feedbackLink.className = 'feedbackLink';
+        feedbackLink.innerText = 'Let us know!';
+        feedbackLink.href = 'mailto:hello@superhuman.com?subject=Help%20Center%20Feedback';
           
-        feedbackDiv.append(feedbackLink)
-        articleFoot.prepend(feedbackDiv)
+        feedbackDiv.append(feedbackLink);
+        articleFoot.prepend(feedbackDiv);
       
-        // Add new code here - format the date in the time element
-        const timeElement = articleFoot.querySelector('time.lu')
+        // Format date in the time element
+        const timeElement = articleFoot.querySelector('time.lu');
         if (timeElement) {
-          const timestamp = timeElement.textContent.replace('Last updated on ', '')
-          const date = new Date(timestamp)
+          const timestamp = timeElement.textContent.replace('Last updated on ', '');
+          const date = new Date(timestamp);
           if (!isNaN(date)) {
-            const options = { year: 'numeric', month: 'long', day: 'numeric' }
-            timeElement.textContent = 'Last updated on ' + date.toLocaleDateString('en-US', options)
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            timeElement.textContent = 'Last updated on ' + date.toLocaleDateString('en-US', options);
           }
         }
               
-        const articleRatings = document.querySelector('.articleRatings')
+        const articleRatings = document.querySelector('.articleRatings');
         if (articleRatings) {
-          articleFoot.append(articleRatings)
+          articleFoot.append(articleRatings);
         }
       }
       
       function fixNextPageButtons() {
         // Find all nextPageButton divs
         const nextPageButtons = document.querySelectorAll('.nextPageButton');
+        if (!nextPageButtons.length) return;
               
         nextPageButtons.forEach(button => {
           // Get the current HTML and text content
@@ -748,11 +745,8 @@
                 
           // Check for several possible patterns
           if (
-            // Case 1: Contains &nbsp; and "Up Next" (your original check)
             (currentHTML.includes('&nbsp;') && currentHTML.includes('Up Next')) ||
-            // Case 2: Contains "Up Next" without proper paragraph structure
             (textContent.startsWith('Up Next') && !currentHTML.includes('<p>Up Next</p>')) ||
-            // Case 3: Has "Up Next" text directly adjacent to the link
             /Up Next\s*<a/.test(currentHTML)
           ) {
             // Extract the link or links
@@ -765,271 +759,159 @@
         });
       }
       
-      function updateSidebarFromArticle() {
-        // Cache DOM selections to avoid repetitive queries
+      // Combined sidebar highlighting function that handles both article and category pages
+      function highlightSidebar() {
+        // Cache all DOM selections
+        const sidebarItems = document.querySelectorAll('#sidebar .nav-list li');
+        const sidebarLinks = document.querySelectorAll('#sidebar .nav-list li a');
         const articleEl = document.getElementById('fullArticle');
-        const sidebarItems = document.querySelectorAll('#sidebar .nav-list li');
-        const sidebarLinks = document.querySelectorAll('#sidebar .nav-list li a');
-        
-        // Exit early if article element doesn't exist
-        if (!articleEl) {
-          console.log('Article element not found');
-          return;
-        }
-        
-        // Get section data
-        const sectionId = articleEl.getAttribute('data-section-id');
-        const sectionName = articleEl.getAttribute('data-section-name');
-        
-        // Build a map of link text to DOM elements for faster lookups
-        const menuMap = buildMenuMap(sidebarLinks);
-        
-        // First, try direct matching
-        if (sectionName) {
-          // Direct category mapping based on section name
-          const categoryMap = {
-            "Billing": "Billing",
-            "Account": "Account Setup",
-            "Support": "Support",
-            "Features": "Features",
-            "Feature": "Features",
-            "Integrations": "Integrations",
-            "Integration": "Integrations",
-            "Use Cases": "Use Cases",
-            "Use Case": "Use Cases",
-            "Get Started": "Get Started",
-            "Level Up": "Level Up",
-            "Supercharge Your Team": "Supercharge Your Team"
-          };
-          
-          // Try exact match first
-          if (categoryMap[sectionName]) {
-            if (highlightMenuItem(sidebarItems, menuMap, categoryMap[sectionName])) {
-              return;
-            }
-          }
-          
-          // Try partial match
-          for (const [pattern, category] of Object.entries(categoryMap)) {
-            if (sectionName.includes(pattern)) {
-              if (highlightMenuItem(sidebarItems, menuMap, category)) {
-                return;
-              }
-            }
-          }
-          
-          // Case-insensitive keyword check as final content-based approach
-          const lowerSectionName = sectionName.toLowerCase();
-          if (lowerSectionName.includes("billing")) {
-            highlightMenuItem(sidebarItems, menuMap, "Billing");
-            return;
-          } else if (lowerSectionName.includes("account")) {
-            highlightMenuItem(sidebarItems, menuMap, "Account Setup");
-            return;
-          } else if (lowerSectionName.includes("support")) {
-            highlightMenuItem(sidebarItems, menuMap, "Support");
-            return;
-          } else if (lowerSectionName.includes("feature")) {
-            highlightMenuItem(sidebarItems, menuMap, "Features");
-            return;
-          } else if (lowerSectionName.includes("integration")) {
-            highlightMenuItem(sidebarItems, menuMap, "Integrations");
-            return;
-          } else if (lowerSectionName.includes("use case")) {
-            highlightMenuItem(sidebarItems, menuMap, "Use Cases");
-            return;
-          }
-        }
-        
-        // If we get here, try URL-based matching
-        urlBasedMatching(sidebarItems, sidebarLinks);
-      }
-      
-      function updateSidebarFromCategoryPage() {
-        // This function handles category pages specifically
-        const sidebarItems = document.querySelectorAll('#sidebar .nav-list li');
-        const sidebarLinks = document.querySelectorAll('#sidebar .nav-list li a');
-        
-        // Method 1: Use the current URL to find category ID
-        const currentUrl = window.location.href;
-        const categoryIdMatch = currentUrl.match(/\/categories\/(\d+)/);
-        
-        if (categoryIdMatch && categoryIdMatch[1]) {
-          const categoryId = categoryIdMatch[1];
-          
-          // Clear any existing active classes
-          sidebarItems.forEach(item => item.classList.remove('active'));
-          
-          // Try to find sidebar item with matching category ID in its href
-          let found = false;
-          sidebarLinks.forEach(link => {
-            const href = link.getAttribute('href');
-            if (href && href.includes(`/categories/${categoryId}`)) {
-              link.parentElement.classList.add('active');
-              found = true;
-            }
-          });
-          
-          if (found) return;
-        }
-        
-        // Method 2: Use the page heading/title to identify the category
         const pageHeading = document.querySelector('h1, .page-header h1');
-        if (pageHeading) {
-          const headingText = pageHeading.textContent.trim();
-          const menuMap = buildMenuMap(sidebarLinks);
-          
-          // Clear any existing active classes
-          sidebarItems.forEach(item => item.classList.remove('active'));
-          
-          // Try exact match with heading text
-          if (highlightMenuItem(sidebarItems, menuMap, headingText)) {
-            return;
-          }
-          
-          // If no exact match, try known category names
-          const knownCategories = [
-            "Integrations", "Account Setup", "Billing", 
-            "Support", "Features", "Use Cases"
-          ];
-          
-          for (const category of knownCategories) {
-            if (headingText.includes(category)) {
-              highlightMenuItem(sidebarItems, menuMap, category);
-              return;
-            }
-          }
-        }
-        
-        // Method 3: Fallback to URL-based matching
-        urlBasedMatching(sidebarItems, sidebarLinks);
-      }
-      
-      // Build a case-insensitive map of menu text to elements for faster lookups
-      function buildMenuMap(links) {
-        const map = {};
-        
-        links.forEach(link => {
-          // Get clean text (without icons)
-          const text = getCleanLinkText(link);
-          map[text.toLowerCase()] = link;
-        });
-        
-        return map;
-      }
-      
-      // Extract clean text from a link, removing any icon text
-      function getCleanLinkText(link) {
-        // First try to get direct text without child elements
-        let linkText = "";
-        for (let i = 0; i < link.childNodes.length; i++) {
-          if (link.childNodes[i].nodeType === 3) { // Text node
-            linkText += link.childNodes[i].textContent.trim();
-          }
-        }
-        
-        // Fallback to full text and strip icon if needed
-        if (!linkText) {
-          linkText = link.textContent.trim();
-          // Simple approach to remove icon text - just take up to the first icon class
-          const iconIndex = linkText.indexOf('icon-');
-          if (iconIndex !== -1) {
-            linkText = linkText.substring(0, iconIndex).trim();
-          }
-        }
-        
-        return linkText;
-      }
-      
-      // Highlight a menu item by text, using the pre-built map for efficiency
-      function highlightMenuItem(items, menuMap, targetText) {
-        // Look up the target in our map (case-insensitive)
-        const targetKey = targetText.toLowerCase();
-        const matchedLink = menuMap[targetKey];
-        
-        if (matchedLink) {
-          // Remove active class from all items (single DOM operation)
-          items.forEach(item => item.classList.remove('active'));
-          matchedLink.parentElement.classList.add('active');
-          return true;
-        }
-        
-        return false;
-      }
-      
-      // URL-based matching as last resort
-      function urlBasedMatching(sidebarItems, sidebarLinks) {
         const currentUrl = window.location.href.toLowerCase();
         
-        // Simple URL patterns for quick matching
-        const urlPatternsMap = {
-          'billing': 'Billing',
-          'account': 'Account Setup',
-          'support': 'Support',
-          'feature': 'Features',
-          'integration': 'Integrations',
-          'use-case': 'Use Cases',
-          'get-started': 'Get Started',
-          'level-up': 'Level Up',
-          'supercharge': 'Supercharge Your Team'
+        // Exit if no sidebar
+        if (!sidebarItems.length) return;
+        
+        // Pre-process sidebar links once
+        // Map URLs to elements and text to elements for fast lookups
+        const urlMap = {};
+        const textMap = {};
+        
+        sidebarLinks.forEach(link => {
+          const href = link.getAttribute('href')?.toLowerCase() || '';
+          urlMap[href] = link;
+          
+          // Get clean text content
+          let textContent = '';
+          for (let i = 0; i < link.childNodes.length; i++) {
+            if (link.childNodes[i].nodeType === 3) { // Text node
+              textContent += link.childNodes[i].textContent.trim();
+            }
+          }
+          
+          // Fallback: use full text and remove icon text
+          if (!textContent) {
+            textContent = link.textContent.trim();
+            const iconIndex = textContent.indexOf('icon-');
+            if (iconIndex !== -1) {
+              textContent = textContent.substring(0, iconIndex).trim();
+            }
+          }
+          
+          // Store in our text map (lowercase for case-insensitive matching)
+          textMap[textContent.toLowerCase()] = link;
+        });
+        
+        // Define direct category mapping
+        const categoryMap = {
+          "billing": "Billing",
+          "account": "Account Setup",
+          "support": "Support",
+          "feature": "Features",
+          "features": "Features",
+          "integration": "Integrations",
+          "integrations": "Integrations",
+          "use case": "Use Cases",
+          "use cases": "Use Cases",
+          "get started": "Get Started",
+          "level up": "Level Up",
+          "supercharge your team": "Supercharge Your Team"
         };
         
-        // Clear active state
+        // Remove active class from all items once
         sidebarItems.forEach(item => item.classList.remove('active'));
         
-        // Check for category ID in URL
-        const categoryMatch = currentUrl.match(/\/categories\/(\d+)/);
-        if (categoryMatch && categoryMatch[1]) {
-          const categoryId = categoryMatch[1];
+        // Strategy 1: Direct URL category ID matching (most reliable)
+        const categoryIdMatch = currentUrl.match(/\/categories\/(\d+)/);
+        if (categoryIdMatch && categoryIdMatch[1]) {
+          const categoryId = categoryIdMatch[1];
+          let found = false;
           
-          // Check for category ID match
-          for (let i = 0; i < sidebarLinks.length; i++) {
-            const link = sidebarLinks[i];
-            const href = link.getAttribute('href').toLowerCase();
-            
-            if (href.includes(`/categories/${categoryId}`)) {
+          // Check for direct category ID match in URLs
+          for (const [url, link] of Object.entries(urlMap)) {
+            if (url.includes(`/categories/${categoryId}`)) {
               link.parentElement.classList.add('active');
-              return;
+              return; // Exit early on direct match
             }
           }
         }
         
-        // Try pattern matching
-        for (const [pattern, menuText] of Object.entries(urlPatternsMap)) {
-          if (currentUrl.includes(pattern)) {
-            // Find and highlight the corresponding menu item
-            for (let i = 0; i < sidebarLinks.length; i++) {
-              const link = sidebarLinks[i];
-              const linkText = getCleanLinkText(link);
-              
-              if (linkText.toLowerCase() === menuText.toLowerCase()) {
-                link.parentElement.classList.add('active');
+        // Strategy 2: Article section matching
+        if (articleEl) {
+          const sectionName = articleEl.getAttribute('data-section-name');
+          if (sectionName) {
+            const sectionLower = sectionName.toLowerCase();
+            
+            // Try direct map match first
+            for (const [pattern, categoryName] of Object.entries(categoryMap)) {
+              if (sectionLower.includes(pattern)) {
+                const targetLink = textMap[categoryName.toLowerCase()];
+                if (targetLink) {
+                  targetLink.parentElement.classList.add('active');
+                  return; // Exit on match
+                }
+              }
+            }
+          }
+        }
+        
+        // Strategy 3: Page heading matching for category pages
+        if (pageHeading && !articleEl) {
+          const headingText = pageHeading.textContent.trim().toLowerCase();
+          
+          // Direct match with menu items
+          const headingLink = textMap[headingText];
+          if (headingLink) {
+            headingLink.parentElement.classList.add('active');
+            return;
+          }
+          
+          // Try known category patterns
+          for (const [pattern, categoryName] of Object.entries(categoryMap)) {
+            if (headingText.includes(pattern)) {
+              const targetLink = textMap[categoryName.toLowerCase()];
+              if (targetLink) {
+                targetLink.parentElement.classList.add('active');
                 return;
               }
             }
           }
         }
         
-        // Last resort: Check for partial URL matches
-        sidebarLinks.forEach(link => {
-          const href = link.getAttribute('href').toLowerCase();
-          
-          // For exact matches
-          if (currentUrl === href || currentUrl.endsWith(href)) {
-            link.parentElement.classList.add('active');
+        // Strategy 4: URL pattern matching
+        for (const [pattern, categoryName] of Object.entries(categoryMap)) {
+          if (currentUrl.includes(pattern.toLowerCase().replace(/\s+/g, '-'))) {
+            const targetLink = textMap[categoryName.toLowerCase()];
+            if (targetLink) {
+              targetLink.parentElement.classList.add('active');
+              return;
+            }
           }
+        }
+        
+        // Strategy 5: Fallback for exact URL matches
+        for (const [url, link] of Object.entries(urlMap)) {
+          if (currentUrl === url || currentUrl.endsWith(url)) {
+            link.parentElement.classList.add('active');
+            return;
+          }
+        }
+        
+        // Strategy 6: Last resort for partial matches
+        for (const [url, link] of Object.entries(urlMap)) {
           // For article matches
-          else if (href.includes('/articles/') && currentUrl.includes('/articles/')) {
-            const articleId = href.split('/articles/')[1];
+          if (url.includes('/articles/') && currentUrl.includes('/articles/')) {
+            const articleId = url.split('/articles/')[1];
             if (currentUrl.includes(articleId)) {
               link.parentElement.classList.add('active');
+              return;
             }
           }
           // For significant partial matches
-          else if (href.length > 10 && currentUrl.includes(href)) {
+          else if (url.length > 10 && currentUrl.includes(url)) {
             link.parentElement.classList.add('active');
+            return;
           }
-        });
+        }
       }
       
   })();
