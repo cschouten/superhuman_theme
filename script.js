@@ -672,266 +672,173 @@
       }
     });
   
-    // Dark Theme functionality
-    function initDarkTheme() {
-  addBackground();
-  updateArticleFooter();
-  fixNextPageButtons(); 
-
-  const articleEl = document.getElementById('fullArticle');
-  const categoryHeading = document.querySelector('h1, .page-header h1');
-
-  if (articleEl) {
-    // We're on an article page - use article data to highlight sidebar
-    updateSidebarFromArticle();
-  } else {
-    // We're on a category page or another type of page - use URL and page title
-    updateSidebarFromCategoryPage();
+    // Cache for DOM selectors to avoid repeated queries
+const selectorCache = {};
+function getElements(selector) {
+  if (!selectorCache[selector]) {
+    selectorCache[selector] = document.querySelectorAll(selector);
   }
+  return selectorCache[selector];
 }
 
-function addBackground() {
-  const background = document.createElement('div');
-  const blueGradient = document.createElement('div');
-  const pinkGradient = document.createElement('div');
-
-  background.className = 'background';
-  blueGradient.className = 'blue';
-  pinkGradient.className = 'pink';
-
-  background.appendChild(blueGradient);
-  background.appendChild(pinkGradient);
-  document.body.prepend(background);
-}
-
-function updateArticleFooter() {
-  const articleFoot = document.querySelector('.articleFoot')
-  if (!articleFoot) return
-    
-  const feedbackDiv = document.createElement('div')
-  feedbackDiv.innerText = 'Have feedback? '
-  feedbackDiv.className = 'feedbackDiv'
-    
-  const feedbackLink = document.createElement('a')
-  feedbackLink.className = 'feedbackLink'
-  feedbackLink.innerText = 'Let us know!'
-  feedbackLink.href = 'mailto:hello@superhuman.com?subject=Help%20Center%20Feedback'
-    
-  feedbackDiv.append(feedbackLink)
-  articleFoot.prepend(feedbackDiv)
-
-  // Add new code here - format the date in the time element
-  const timeElement = articleFoot.querySelector('time.lu')
-  if (timeElement) {
-    const timestamp = timeElement.textContent.replace('Last updated on ', '')
-    const date = new Date(timestamp)
-    if (!isNaN(date)) {
-      const options = { year: 'numeric', month: 'long', day: 'numeric' }
-      timeElement.textContent = 'Last updated on ' + date.toLocaleDateString('en-US', options)
-    }
-  }
-        
-  const articleRatings = document.querySelector('.articleRatings')
-  if (articleRatings) {
-    articleFoot.append(articleRatings)
-  }
-}
-
-function fixNextPageButtons() {
-  // Find all nextPageButton divs
-  const nextPageButtons = document.querySelectorAll('.nextPageButton');
-        
-  nextPageButtons.forEach(button => {
-    // Get the current HTML and text content
-    const currentHTML = button.innerHTML;
-    const textContent = button.textContent.trim();
-          
-    // Check for several possible patterns
-    if (
-      // Case 1: Contains &nbsp; and "Up Next" (your original check)
-      (currentHTML.includes('&nbsp;') && currentHTML.includes('Up Next')) ||
-      // Case 2: Contains "Up Next" without proper paragraph structure
-      (textContent.startsWith('Up Next') && !currentHTML.includes('<p>Up Next</p>')) ||
-      // Case 3: Has "Up Next" text directly adjacent to the link
-      /Up Next\s*<a/.test(currentHTML)
-    ) {
-      // Extract the link or links
-      const linkMatches = currentHTML.match(/<a[^>]*>([^<]*)<\/a>/g);
-      const links = linkMatches ? linkMatches.join('') : '';
-            
-      // Create the correct structure with just one "Up Next" followed by the links
-      button.innerHTML = `<p>Up Next</p>${links}`;
-    }
-  });
-}
-
-function updateSidebarFromArticle() {
-  // Cache DOM selections to avoid repetitive queries
-  const articleEl = document.getElementById('fullArticle');
-  const sidebarItems = document.querySelectorAll('#sidebar .nav-list li');
-  const sidebarLinks = document.querySelectorAll('#sidebar .nav-list li a');
+// Main initialization function
+function initDarkTheme() {
+  // Make this function a no-op if it's called again
+  initDarkTheme = function() {};
   
-  // Exit early if article element doesn't exist
-  if (!articleEl) {
-    console.log('Article element not found');
+  // Show background immediately
+  addBackground();
+  
+  // Split tasks into critical and non-critical
+  const criticalTasks = () => {
+    // Prioritize sidebar navigation as it affects user experience immediately
+    const articleEl = document.getElementById('fullArticle');
+    
+    if (articleEl) {
+      // We're on an article page - use article data to highlight sidebar
+      updateSidebarFromArticle(articleEl);
+    } else {
+      // We're on a category page or another type of page
+      updateSidebarFromCategoryPage();
+    }
+  };
+
+  const nonCriticalTasks = () => {
+    // Less critical UI updates
+    updateArticleFooter();
+    fixNextPageButtons();
+  };
+
+  // Execute critical tasks immediately
+  requestAnimationFrame(criticalTasks);
+
+  // Defer non-critical tasks
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(nonCriticalTasks, { timeout: 500 });
+  } else {
+    setTimeout(nonCriticalTasks, 50);
+  }
+}
+
+// Reveal the background that's already in the HTML
+function addBackground() {
+  const background = document.querySelector('.background');
+  if (background) {
+    // Force a reflow before adding the class to ensure smooth transition
+    background.getBoundingClientRect();
+    background.classList.add('visible');
+  }
+}
+
+// Optimized article footer update
+function updateArticleFooter() {
+  const articleFoot = document.querySelector('.articleFoot');
+  if (!articleFoot || articleFoot.querySelector('.feedbackDiv')) {
+    // Exit early if no footer or already processed
     return;
   }
   
-  // Get section data
-  const sectionId = articleEl.getAttribute('data-section-id');
-  const sectionName = articleEl.getAttribute('data-section-name');
+  // Create elements once and append in a single operation
+  const fragment = document.createDocumentFragment();
   
-  // Build a map of link text to DOM elements for faster lookups
-  const menuMap = buildMenuMap(sidebarLinks);
+  const feedbackDiv = document.createElement('div');
+  feedbackDiv.innerText = 'Have feedback? ';
+  feedbackDiv.className = 'feedbackDiv';
   
-  // First, try direct matching
-  if (sectionName) {
-    // Direct category mapping based on section name
-    const categoryMap = {
-      "Billing": "Billing",
-      "Account": "Account Setup",
-      "Support": "Support",
-      "Features": "Features",
-      "Feature": "Features",
-      "Integrations": "Integrations",
-      "Integration": "Integrations",
-      "Use Cases": "Use Cases",
-      "Use Case": "Use Cases",
-      "Get Started": "Get Started",
-      "Level Up": "Level Up",
-      "Supercharge Your Team": "Supercharge Your Team"
-    };
-    
-    // Try exact match first
-    if (categoryMap[sectionName]) {
-      if (highlightMenuItem(sidebarItems, menuMap, categoryMap[sectionName])) {
-        return;
-      }
-    }
-    
-    // Try partial match
-    for (const [pattern, category] of Object.entries(categoryMap)) {
-      if (sectionName.includes(pattern)) {
-        if (highlightMenuItem(sidebarItems, menuMap, category)) {
-          return;
-        }
-      }
-    }
-    
-    // Case-insensitive keyword check as final content-based approach
-    const lowerSectionName = sectionName.toLowerCase();
-    if (lowerSectionName.includes("billing")) {
-      highlightMenuItem(sidebarItems, menuMap, "Billing");
-      return;
-    } else if (lowerSectionName.includes("account")) {
-      highlightMenuItem(sidebarItems, menuMap, "Account Setup");
-      return;
-    } else if (lowerSectionName.includes("support")) {
-      highlightMenuItem(sidebarItems, menuMap, "Support");
-      return;
-    } else if (lowerSectionName.includes("feature")) {
-      highlightMenuItem(sidebarItems, menuMap, "Features");
-      return;
-    } else if (lowerSectionName.includes("integration")) {
-      highlightMenuItem(sidebarItems, menuMap, "Integrations");
-      return;
-    } else if (lowerSectionName.includes("use case")) {
-      highlightMenuItem(sidebarItems, menuMap, "Use Cases");
-      return;
+  const feedbackLink = document.createElement('a');
+  feedbackLink.className = 'feedbackLink';
+  feedbackLink.innerText = 'Let us know!';
+  feedbackLink.href = 'mailto:hello@superhuman.com?subject=Help%20Center%20Feedback';
+  
+  feedbackDiv.appendChild(feedbackLink);
+  fragment.appendChild(feedbackDiv);
+  
+  // Format date in the time element
+  const timeElement = articleFoot.querySelector('time.lu');
+  if (timeElement) {
+    const timestamp = timeElement.textContent.replace('Last updated on ', '');
+    const date = new Date(timestamp);
+    if (!isNaN(date)) {
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      timeElement.textContent = 'Last updated on ' + date.toLocaleDateString('en-US', options);
     }
   }
   
-  // If we get here, try URL-based matching
-  urlBasedMatching(sidebarItems, sidebarLinks);
+  // Add to DOM in a single operation
+  articleFoot.insertBefore(fragment, articleFoot.firstChild);
+  
+  // Move article ratings to the end if they exist
+  const articleRatings = document.querySelector('.articleRatings');
+  if (articleRatings && articleRatings.parentNode !== articleFoot) {
+    articleFoot.appendChild(articleRatings);
+  }
 }
 
-function updateSidebarFromCategoryPage() {
-  // This function handles category pages specifically
-  const sidebarItems = document.querySelectorAll('#sidebar .nav-list li');
-  const sidebarLinks = document.querySelectorAll('#sidebar .nav-list li a');
+// Optimize next page button fix with batched processing
+function fixNextPageButtons() {
+  // Use more specific selector to reduce search space
+  const nextPageButtons = document.querySelectorAll('.nextPageButton');
+  if (!nextPageButtons.length) return;
   
-  // Method 1: Use the current URL to find category ID
-  const currentUrl = window.location.href;
-  const categoryIdMatch = currentUrl.match(/\/categories\/(\d+)/);
+  // Process in batches for better performance
+  const batchSize = 5;
+  let index = 0;
   
-  if (categoryIdMatch && categoryIdMatch[1]) {
-    const categoryId = categoryIdMatch[1];
+  function processBatch() {
+    const endIndex = Math.min(index + batchSize, nextPageButtons.length);
     
-    // Clear any existing active classes
-    sidebarItems.forEach(item => item.classList.remove('active'));
-    
-    // Try to find sidebar item with matching category ID in its href
-    let found = false;
-    sidebarLinks.forEach(link => {
-      const href = link.getAttribute('href');
-      if (href && href.includes(`/categories/${categoryId}`)) {
-        link.parentElement.classList.add('active');
-        found = true;
+    for (let i = index; i < endIndex; i++) {
+      const button = nextPageButtons[i];
+      // Skip if already processed
+      if (button.dataset.processed) continue;
+      
+      const currentHTML = button.innerHTML;
+      const textContent = button.textContent.trim();
+      
+      if (
+        (currentHTML.includes('&nbsp;') && currentHTML.includes('Up Next')) ||
+        (textContent.startsWith('Up Next') && !currentHTML.includes('<p>Up Next</p>')) ||
+        /Up Next\s*<a/.test(currentHTML)
+      ) {
+        const linkMatches = currentHTML.match(/<a[^>]*>([^<]*)<\/a>/g);
+        const links = linkMatches ? linkMatches.join('') : '';
+        
+        button.innerHTML = `<p>Up Next</p>${links}`;
       }
-    });
-    
-    if (found) return;
-  }
-  
-  // Method 2: Use the page heading/title to identify the category
-  const pageHeading = document.querySelector('h1, .page-header h1');
-  if (pageHeading) {
-    const headingText = pageHeading.textContent.trim();
-    const menuMap = buildMenuMap(sidebarLinks);
-    
-    // Clear any existing active classes
-    sidebarItems.forEach(item => item.classList.remove('active'));
-    
-    // Try exact match with heading text
-    if (highlightMenuItem(sidebarItems, menuMap, headingText)) {
-      return;
+      
+      // Mark as processed
+      button.dataset.processed = 'true';
     }
     
-    // If no exact match, try known category names
-    const knownCategories = [
-      "Integrations", "Account Setup", "Billing", 
-      "Support", "Features", "Use Cases"
-    ];
+    index = endIndex;
     
-    for (const category of knownCategories) {
-      if (headingText.includes(category)) {
-        highlightMenuItem(sidebarItems, menuMap, category);
-        return;
-      }
+    // Continue processing if there are more items
+    if (index < nextPageButtons.length) {
+      requestAnimationFrame(processBatch);
     }
   }
   
-  // Method 3: Fallback to URL-based matching
-  urlBasedMatching(sidebarItems, sidebarLinks);
-}
-
-// Build a case-insensitive map of menu text to elements for faster lookups
-function buildMenuMap(links) {
-  const map = {};
-  
-  links.forEach(link => {
-    // Get clean text (without icons)
-    const text = getCleanLinkText(link);
-    map[text.toLowerCase()] = link;
-  });
-  
-  return map;
+  // Start processing
+  requestAnimationFrame(processBatch);
 }
 
 // Extract clean text from a link, removing any icon text
 function getCleanLinkText(link) {
-  // First try to get direct text without child elements
+  // Try to get direct text nodes first
   let linkText = "";
-  for (let i = 0; i < link.childNodes.length; i++) {
-    if (link.childNodes[i].nodeType === 3) { // Text node
-      linkText += link.childNodes[i].textContent.trim();
+  let node = link.firstChild;
+  
+  while (node) {
+    if (node.nodeType === 3) { // Text node
+      linkText += node.nodeType === 3 ? node.textContent.trim() : '';
     }
+    node = node.nextSibling;
   }
   
   // Fallback to full text and strip icon if needed
   if (!linkText) {
     linkText = link.textContent.trim();
-    // Simple approach to remove icon text - just take up to the first icon class
+    // Remove icon text if present
     const iconIndex = linkText.indexOf('icon-');
     if (iconIndex !== -1) {
       linkText = linkText.substring(0, iconIndex).trim();
@@ -941,68 +848,233 @@ function getCleanLinkText(link) {
   return linkText;
 }
 
-// Highlight a menu item by text, using the pre-built map for efficiency
+// Build menu map efficiently for faster lookups
+function buildMenuMap(links) {
+  const map = {};
+  
+  for (let i = 0; i < links.length; i++) {
+    const link = links[i];
+    const text = getCleanLinkText(link);
+    map[text.toLowerCase()] = link;
+  }
+  
+  return map;
+}
+
+// Efficiently highlight menu item by text
 function highlightMenuItem(items, menuMap, targetText) {
-  // Look up the target in our map (case-insensitive)
+  if (!targetText) return false;
+  
+  // Case-insensitive lookup
   const targetKey = targetText.toLowerCase();
   const matchedLink = menuMap[targetKey];
   
   if (matchedLink) {
-    // Remove active class from all items (single DOM operation)
-    items.forEach(item => item.classList.remove('active'));
-    matchedLink.parentElement.classList.add('active');
+    // First check if already active to avoid unnecessary DOM updates
+    const parent = matchedLink.parentElement;
+    if (parent.classList.contains('active')) {
+      return true;
+    }
+    
+    // Remove active class from all items
+    for (let i = 0; i < items.length; i++) {
+      items[i].classList.remove('active');
+    }
+    
+    // Add active to the matched element
+    parent.classList.add('active');
     return true;
   }
   
   return false;
 }
 
-// URL-based matching as last resort
-function urlBasedMatching(sidebarItems, sidebarLinks) {
-  const currentUrl = window.location.href.toLowerCase();
+// Optimized sidebar update for article pages
+function updateSidebarFromArticle(articleEl) {
+  // If articleEl is not provided, use cached or get it
+  articleEl = articleEl || document.getElementById('fullArticle');
   
-  // Simple URL patterns for quick matching
-  const urlPatternsMap = {
-    'billing': 'Billing',
-    'account': 'Account Setup',
-    'support': 'Support',
-    'feature': 'Features',
-    'integration': 'Integrations',
-    'use-case': 'Use Cases',
-    'get-started': 'Get Started',
-    'level-up': 'Level Up',
-    'supercharge': 'Supercharge Your Team'
+  // Exit early if article element doesn't exist
+  if (!articleEl) return;
+  
+  // Get section data
+  const sectionId = articleEl.getAttribute('data-section-id');
+  const sectionName = articleEl.getAttribute('data-section-name');
+  
+  // Get sidebar items once
+  const sidebarItems = getElements('#sidebar .nav-list li');
+  const sidebarLinks = getElements('#sidebar .nav-list li a');
+  
+  // Exit early if no sidebar
+  if (!sidebarItems.length) return;
+  
+  // Create category map for direct matching
+  const categoryMap = {
+    "Billing": "Billing",
+    "Account": "Account Setup",
+    "Support": "Support",
+    "Features": "Features",
+    "Feature": "Features",
+    "Integrations": "Integrations",
+    "Integration": "Integrations",
+    "Use Cases": "Use Cases",
+    "Use Case": "Use Cases",
+    "Get Started": "Get Started",
+    "Level Up": "Level Up",
+    "Supercharge Your Team": "Supercharge Your Team"
   };
   
-  // Clear active state
-  sidebarItems.forEach(item => item.classList.remove('active'));
+  // Build menu map once
+  const menuMap = buildMenuMap(sidebarLinks);
   
-  // Check for category ID in URL
-  const categoryMatch = currentUrl.match(/\/categories\/(\d+)/);
-  if (categoryMatch && categoryMatch[1]) {
-    const categoryId = categoryMatch[1];
+  // Try section name matching if available
+  if (sectionName) {
+    // 1. Try exact match first
+    if (categoryMap[sectionName] && highlightMenuItem(sidebarItems, menuMap, categoryMap[sectionName])) {
+      return;
+    }
     
-    // Check for category ID match
+    // 2. Try partial match
+    for (const [pattern, category] of Object.entries(categoryMap)) {
+      if (sectionName.includes(pattern) && highlightMenuItem(sidebarItems, menuMap, category)) {
+        return;
+      }
+    }
+    
+    // 3. Case-insensitive keyword check
+    const lowerSectionName = sectionName.toLowerCase();
+    for (const keyword of ["billing", "account", "support", "feature", "integration", "use case"]) {
+      if (lowerSectionName.includes(keyword)) {
+        const mappedCategory = categoryMap[keyword.charAt(0).toUpperCase() + keyword.slice(1)];
+        if (mappedCategory && highlightMenuItem(sidebarItems, menuMap, mappedCategory)) {
+          return;
+        }
+      }
+    }
+  }
+  
+  // If no match found by content, try URL-based matching
+  urlBasedMatching(sidebarItems, sidebarLinks);
+}
+
+// Optimized sidebar update for category pages
+function updateSidebarFromCategoryPage() {
+  // Get sidebar elements once
+  const sidebarItems = getElements('#sidebar .nav-list li');
+  const sidebarLinks = getElements('#sidebar .nav-list li a');
+  
+  // Exit early if no sidebar
+  if (!sidebarItems.length) return;
+  
+  // Method 1: Use URL for category ID (highest specificity)
+  const currentUrl = window.location.href;
+  const categoryIdMatch = currentUrl.match(/\/categories\/(\d+)/);
+  
+  if (categoryIdMatch && categoryIdMatch[1]) {
+    const categoryId = categoryIdMatch[1];
+    const idSelector = `/categories/${categoryId}`;
+    
+    // Check links for matching category ID
     for (let i = 0; i < sidebarLinks.length; i++) {
       const link = sidebarLinks[i];
-      const href = link.getAttribute('href').toLowerCase();
-      
-      if (href.includes(`/categories/${categoryId}`)) {
+      const href = link.getAttribute('href');
+      if (href && href.includes(idSelector)) {
+        // Clear any existing active classes
+        sidebarItems.forEach(item => item.classList.remove('active'));
         link.parentElement.classList.add('active');
         return;
       }
     }
   }
   
-  // Try pattern matching
-  for (const [pattern, menuText] of Object.entries(urlPatternsMap)) {
+  // Method 2: Use page heading
+  const pageHeading = document.querySelector('h1, .page-header h1');
+  if (pageHeading) {
+    const headingText = pageHeading.textContent.trim();
+    const menuMap = buildMenuMap(sidebarLinks);
+    
+    // Try exact match with heading text
+    if (highlightMenuItem(sidebarItems, menuMap, headingText)) {
+      return;
+    }
+    
+    // Try known categories
+    const knownCategories = [
+      "Integrations", "Account Setup", "Billing", 
+      "Support", "Features", "Use Cases"
+    ];
+    
+    for (let i = 0; i < knownCategories.length; i++) {
+      const category = knownCategories[i];
+      if (headingText.includes(category) && highlightMenuItem(sidebarItems, menuMap, category)) {
+        return;
+      }
+    }
+  }
+  
+  // Method 3: URL-based matching as fallback
+  urlBasedMatching(sidebarItems, sidebarLinks);
+}
+
+// Optimized URL-based matching with faster pattern matching
+function urlBasedMatching(sidebarItems, sidebarLinks) {
+  const currentUrl = window.location.href.toLowerCase();
+  
+  // Fast pattern matching
+  const urlPatterns = [
+    ['billing', 'Billing'],
+    ['account', 'Account Setup'],
+    ['support', 'Support'],
+    ['feature', 'Features'],
+    ['integration', 'Integrations'],
+    ['use-case', 'Use Cases'],
+    ['get-started', 'Get Started'],
+    ['level-up', 'Level Up'],
+    ['supercharge', 'Supercharge Your Team']
+  ];
+  
+  // Clear active state once
+  let needsClearActive = true;
+  
+  // Check for category ID in URL first (most specific)
+  const categoryMatch = currentUrl.match(/\/categories\/(\d+)/);
+  if (categoryMatch && categoryMatch[1]) {
+    const categoryId = `/categories/${categoryMatch[1]}`;
+    
+    for (let i = 0; i < sidebarLinks.length; i++) {
+      const link = sidebarLinks[i];
+      const href = (link.getAttribute('href') || '').toLowerCase();
+      
+      if (href.includes(categoryId)) {
+        if (needsClearActive) {
+          for (let j = 0; j < sidebarItems.length; j++) {
+            sidebarItems[j].classList.remove('active');
+          }
+          needsClearActive = false;
+        }
+        link.parentElement.classList.add('active');
+        return;
+      }
+    }
+  }
+  
+  // Try URL pattern matching
+  for (let i = 0; i < urlPatterns.length; i++) {
+    const [pattern, menuText] = urlPatterns[i];
+    
     if (currentUrl.includes(pattern)) {
-      // Find and highlight the corresponding menu item
-      for (let i = 0; i < sidebarLinks.length; i++) {
-        const link = sidebarLinks[i];
+      // Search for matching menu item
+      for (let j = 0; j < sidebarLinks.length; j++) {
+        const link = sidebarLinks[j];
         const linkText = getCleanLinkText(link);
         
         if (linkText.toLowerCase() === menuText.toLowerCase()) {
+          if (needsClearActive) {
+            for (let k = 0; k < sidebarItems.length; k++) {
+              sidebarItems[k].classList.remove('active');
+            }
+            needsClearActive = false;
+          }
           link.parentElement.classList.add('active');
           return;
         }
@@ -1011,26 +1083,50 @@ function urlBasedMatching(sidebarItems, sidebarLinks) {
   }
   
   // Last resort: Check for partial URL matches
-  sidebarLinks.forEach(link => {
-    const href = link.getAttribute('href').toLowerCase();
+  // Create a match quality map to find the best match
+  let bestMatch = { link: null, quality: 0 };
+  
+  for (let i = 0; i < sidebarLinks.length; i++) {
+    const link = sidebarLinks[i];
+    const href = (link.getAttribute('href') || '').toLowerCase();
+    let matchQuality = 0;
     
-    // For exact matches
+    // Exact match (highest priority)
     if (currentUrl === href || currentUrl.endsWith(href)) {
-      link.parentElement.classList.add('active');
-    }
-    // For article matches
+      matchQuality = 100;
+    } 
+    // Article ID match
     else if (href.includes('/articles/') && currentUrl.includes('/articles/')) {
       const articleId = href.split('/articles/')[1];
       if (currentUrl.includes(articleId)) {
-        link.parentElement.classList.add('active');
+        matchQuality = 90;
       }
     }
-    // For significant partial matches
+    // Significant partial match
     else if (href.length > 10 && currentUrl.includes(href)) {
-      link.parentElement.classList.add('active');
+      matchQuality = 80 + (href.length / currentUrl.length) * 10;
     }
-  });
+    
+    if (matchQuality > bestMatch.quality) {
+      bestMatch = { link, quality: matchQuality };
+    }
+  }
+  
+  // Apply the best match if found
+  if (bestMatch.link && bestMatch.quality > 0) {
+    if (needsClearActive) {
+      for (let i = 0; i < sidebarItems.length; i++) {
+        sidebarItems[i].classList.remove('active');
+      }
+    }
+    bestMatch.link.parentElement.classList.add('active');
+  }
 }
-      
+
+// Initialize on DOMContentLoaded
+document.addEventListener('DOMContentLoaded', function() {
+  // Initialize dark theme when DOM is ready
+  initDarkTheme();
+});
   
   })();
