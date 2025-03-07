@@ -3637,8 +3637,8 @@ form.search.search-full {
     /* z-index: 1 !important;  */
     display: inline-block !important;
     border-radius: 6px !important;
-    /* background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), 
-                linear-gradient(273.81deg, #FA75F8, #9E6EE5) !important; */
+    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), 
+                linear-gradient(273.81deg, #FA75F8, #9E6EE5) !important;
   }
   
   /* Border gradient using ::before */
