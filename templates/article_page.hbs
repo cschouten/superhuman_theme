@@ -6,18 +6,37 @@
 <section id="contentArea" class="container-fluid">
   <div class="row-fluid">
     <aside id="sidebar" class="span3">
-        <div class="search-area" style="position: relative; height: 36px; margin-bottom: 15px;">
-            <!-- Placeholder with exact same dimensions -->
-            <div id="search-placeholder" class="search-placeholder" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255,255,255,0.1); border-radius: 4px;">
-                <div style="display: flex; align-items: center; height: 100%; padding: 0 10px;">
-                <span style="color: rgba(255,255,255,0.5);">Search loading...</span>
-                </div>
+        <div class="search-area" style="position: relative; margin-bottom: 15px; height: 40px;">
+        <!-- Placeholder with exact same styles as the .search-query -->
+        <div id="search-placeholder" class="search-placeholder" style="
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            padding: 4px 24px 0px 24px;
+            outline-style: solid;
+            outline-color: rgba(255, 255, 255, 0.2);
+            transition: outline-color 0.3s ease;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            border: none;
+            font-family: 'Adelle Sans';
+            font-size: 16px;
+            line-height: 100%;
+            outline-width: 1px;
+            padding-left: 24px;
+            border-radius: 4px;
+            display: block;">
+            <div style="display: flex; align-items: center; height: 100%;">
+            <span style="color: rgba(255,255,255,0.5);">Search</span>
             </div>
-            
-            <!-- Actual search will be absolutely positioned in the same container -->
-            <div id="search-wrapper" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0;">
-                {{search instant=settings.instant_search class='search search-full sidebar-search' submit=true}}
-            </div>
+        </div>
+        
+        <!-- Actual search wrapper -->
+        <div id="search-wrapper" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0;">
+            {{search instant=settings.instant_search class='search search-full sidebar-search' submit=true}}
+        </div>
         </div>
       <h3>Categories</h3>
       <ul class="nav nav-list">
