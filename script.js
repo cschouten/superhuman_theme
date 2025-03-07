@@ -756,83 +756,63 @@
         });
       }
 
-      function updateSidebarActiveClass() {
-        // Cache DOM selections to avoid repetitive queries
-        const articleEl = document.getElementById('fullArticle');
+      function updateSidebarFromCategoryPage() {
+        // This function handles category pages specifically
         const sidebarItems = document.querySelectorAll('#sidebar .nav-list li');
         const sidebarLinks = document.querySelectorAll('#sidebar .nav-list li a');
         
-        // Exit early if article element doesn't exist
-        if (!articleEl) {
-          console.log('Article element not found');
-          return;
+        // Method 1: Use the current URL to find category ID
+        const currentUrl = window.location.href;
+        const categoryIdMatch = currentUrl.match(/\/categories\/(\d+)/);
+        
+        if (categoryIdMatch && categoryIdMatch[1]) {
+          const categoryId = categoryIdMatch[1];
+          
+          // Clear any existing active classes
+          sidebarItems.forEach(item => item.classList.remove('active'));
+          
+          // Try to find sidebar item with matching category ID in its href
+          let found = false;
+          sidebarLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            if (href && href.includes(`/categories/${categoryId}`)) {
+              link.parentElement.classList.add('active');
+              found = true;
+            }
+          });
+          
+          if (found) return;
         }
         
-        // Get section data
-        const sectionId = articleEl.getAttribute('data-section-id');
-        const sectionName = articleEl.getAttribute('data-section-name');
-        
-        // Build a map of link text to DOM elements for faster lookups
-        const menuMap = buildMenuMap(sidebarLinks);
-        
-        // First, try direct matching
-        if (sectionName) {
-          // Direct category mapping based on section name
-          const categoryMap = {
-            "Billing": "Billing",
-            "Account": "Account Setup",
-            "Support": "Support",
-            "Features": "Features",
-            "Feature": "Features",
-            "Integrations": "Integrations",
-            "Integration": "Integrations",
-            "Use Cases": "Use Cases",
-            "Use Case": "Use Cases",
-            "Get Started": "Get Started",
-            "Level Up": "Level Up",
-            "Supercharge Your Team": "Supercharge Your Team"
-          };
+        // Method 2: Use the page heading/title to identify the category
+        const pageHeading = document.querySelector('h1, .page-header h1');
+        if (pageHeading) {
+          const headingText = pageHeading.textContent.trim();
+          const menuMap = buildMenuMap(sidebarLinks);
           
-          // Try exact match first
-          if (categoryMap[sectionName]) {
-            if (highlightMenuItem(sidebarItems, menuMap, categoryMap[sectionName])) {
+          // Clear any existing active classes
+          sidebarItems.forEach(item => item.classList.remove('active'));
+          
+          // Try exact match with heading text
+          if (highlightMenuItem(sidebarItems, menuMap, headingText)) {
+            return;
+          }
+          
+          // If no exact match, try known category names
+          const knownCategories = [
+            "Integrations", "Account Setup", "Billing", 
+            "Support", "Features", "Use Cases"
+          ];
+          
+          for (const category of knownCategories) {
+            if (headingText.includes(category)) {
+              highlightMenuItem(sidebarItems, menuMap, category);
               return;
             }
           }
-          
-          // Try partial match
-          for (const [pattern, category] of Object.entries(categoryMap)) {
-            if (sectionName.includes(pattern)) {
-              if (highlightMenuItem(sidebarItems, menuMap, category)) {
-                return;
-              }
-            }
-          }
-          
-          // Case-insensitive keyword check as final content-based approach
-          const lowerSectionName = sectionName.toLowerCase();
-          if (lowerSectionName.includes("billing")) {
-            highlightMenuItem(sidebarItems, menuMap, "Billing");
-            return;
-          } else if (lowerSectionName.includes("account")) {
-            highlightMenuItem(sidebarItems, menuMap, "Account Setup");
-            return;
-          } else if (lowerSectionName.includes("support")) {
-            highlightMenuItem(sidebarItems, menuMap, "Support");
-            return;
-          } else if (lowerSectionName.includes("feature")) {
-            highlightMenuItem(sidebarItems, menuMap, "Features");
-            return;
-          } else if (lowerSectionName.includes("integration")) {
-            highlightMenuItem(sidebarItems, menuMap, "Integrations");
-            return;
-          } else if (lowerSectionName.includes("use case")) {
-            highlightMenuItem(sidebarItems, menuMap, "Use Cases");
-            return;
-          }
         }
         
-        // If we get here, try URL-based matching
+        // Method 3: Fallback to URL-based matching
         urlBasedMatching(sidebarItems, sidebarLinks);
       }
       
@@ -874,14 +854,13 @@
       
       // Highlight a menu item by text, using the pre-built map for efficiency
       function highlightMenuItem(items, menuMap, targetText) {
-        // Remove active class from all items (single DOM operation)
-        items.forEach(item => item.classList.remove('active'));
-        
         // Look up the target in our map (case-insensitive)
         const targetKey = targetText.toLowerCase();
         const matchedLink = menuMap[targetKey];
         
         if (matchedLink) {
+          // Remove active class from all items (single DOM operation)
+          items.forEach(item => item.classList.remove('active'));
           matchedLink.parentElement.classList.add('active');
           return true;
         }
