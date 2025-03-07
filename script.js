@@ -681,45 +681,6 @@ function getElements(selector) {
   return selectorCache[selector];
 }
 
-// // Main initialization function
-// function initDarkTheme() {
-//   // Make this function a no-op if it's called again
-//   initDarkTheme = function() {};
-  
-//   // Show background immediately
-//   addBackground();
-  
-//   // Split tasks into critical and non-critical
-//   const criticalTasks = () => {
-//     // Prioritize sidebar navigation as it affects user experience immediately
-//     const articleEl = document.getElementById('fullArticle');
-    
-//     if (articleEl) {
-//       // We're on an article page - use article data to highlight sidebar
-//       updateSidebarFromArticle(articleEl);
-//     } else {
-//       // We're on a category page or another type of page
-//       updateSidebarFromCategoryPage();
-//     }
-//   };
-
-//   const nonCriticalTasks = () => {
-//     // Less critical UI updates
-//     updateArticleFooter();
-//     fixNextPageButtons();
-//   };
-
-//   // Execute critical tasks immediately
-//   requestAnimationFrame(criticalTasks);
-
-//   // Defer non-critical tasks
-//   if ('requestIdleCallback' in window) {
-//     requestIdleCallback(nonCriticalTasks, { timeout: 500 });
-//   } else {
-//     setTimeout(nonCriticalTasks, 50);
-//   }
-// }
-
 // Reveal the background that's already in the HTML
 function addBackground() {
   const background = document.querySelector('.background');
@@ -892,10 +853,10 @@ function highlightMenuItem(items, menuMap, targetText) {
 // Optimized sidebar update for article pages
 // Simplify the updateSidebarFromArticle function
 function updateSidebarFromArticle(articleEl) {
-    // If item is already highlighted, do nothing
-    if (document.querySelector('#sidebar .nav-list li.active')) return;
+    // Get current active element
+    const currentActive = document.querySelector('#sidebar .nav-list li.active');
     
-    // Get section data - use direct element access for speed
+    // Get section data
     const sectionName = articleEl.getAttribute('data-section-name');
     
     // Create direct mapping object for speed
@@ -911,18 +872,21 @@ function updateSidebarFromArticle(articleEl) {
       "Supercharge Your Team": "Supercharge Your Team"
     };
     
-    // Use fast DOM methods
-    const links = document.querySelectorAll('#sidebar .nav-list li a');
-    
-    // Try direct match first (fastest)
+    // Try direct match
     if (sectionName && categoryMap[sectionName]) {
-      const targetText = categoryMap[sectionName];
-      for (let i = 0; i < links.length; i++) {
-        if (links[i].textContent.trim() === targetText) {
-          links[i].parentElement.classList.add('active');
-          return;
+        const targetText = categoryMap[sectionName];
+        const links = document.querySelectorAll('#sidebar .nav-list li a');
+        
+        for (let i = 0; i < links.length; i++) {
+          if (links[i].textContent.trim() === targetText) {
+            // Only make changes if needed
+            if (currentActive !== links[i].parentElement) {
+              if (currentActive) currentActive.classList.remove('active');
+              links[i].parentElement.classList.add('active');
+            }
+            return;
+          }
         }
-      }
     }
     
     // If no match, fall back to URL-based matching
@@ -1217,51 +1181,184 @@ function enhanceSearchButton() {
     }
   });
   
-  // Update the initDarkTheme function to include button enhancement
-  function initDarkTheme() {
-    // Make this function a no-op if it's called again
-    initDarkTheme = function() {};
+  /**
+ * Initializes the dark theme and handles various UI enhancements
+ * This function runs once and makes itself a no-op on subsequent calls
+ */
+function initDarkTheme() {
+    // Prevent this function from running multiple times
+    // by redefining it as an empty function after first execution
+    initDarkTheme = function() {
+      // Do nothing on subsequent calls
+      console.log("Dark theme already initialized");
+    };
+  
+    // PHASE 1: Handle critical UI updates first
+    // ----------------------------------------
     
-    // IMPORTANT: Run sidebar highlighting SYNCHRONOUSLY before any other tasks
-    const articleEl = document.getElementById('fullArticle');
-    if (articleEl) {
-      updateSidebarFromArticle(articleEl);
-    } else {
-      updateSidebarFromCategoryPage();
+    // Show the background element that's already in the HTML
+    const backgroundElement = document.querySelector('.background');
+    if (backgroundElement) {
+      // Force a layout recalculation before adding the visible class
+      // This ensures a smooth transition effect
+      backgroundElement.getBoundingClientRect();
+      backgroundElement.classList.add('visible');
     }
     
-    // AFTER highlighting is complete, handle background and other tasks
-    // using requestAnimationFrame to ensure they happen in next paint cycle
-    requestAnimationFrame(() => {
-      addBackground();
-      enhanceSearchButton();
+    // PHASE 2: Schedule sidebar highlighting for the next animation frame
+    // ------------------------------------------------------------------
+    requestAnimationFrame(function() {
+      // Determine if we're on an article page or category page
+      const articleElement = document.getElementById('fullArticle');
+      
+      // Apply the appropriate sidebar highlighting based on page type
+      if (articleElement) {
+        // We're on an article page, highlight the corresponding sidebar item
+        // but only if no sidebar item is already highlighted
+        if (!document.querySelector('#sidebar .nav-list li.active')) {
+          const sectionName = articleElement.getAttribute('data-section-name');
+          const categoryLinks = document.querySelectorAll('#sidebar .nav-list li a');
+          
+          // Map section names to sidebar menu text
+          const categoryMap = {
+            "Billing": "Billing",
+            "Account": "Account Setup",
+            "Support": "Support",
+            "Features": "Features",
+            "Integrations": "Integrations",
+            "Use Cases": "Use Cases",
+            "Get Started": "Get Started",
+            "Level Up": "Level Up",
+            "Supercharge Your Team": "Supercharge Your Team"
+          };
+          
+          // Try to find and highlight the matching sidebar item
+          if (sectionName && categoryMap[sectionName]) {
+            const targetText = categoryMap[sectionName];
+            let found = false;
+            
+            for (let i = 0; i < categoryLinks.length; i++) {
+              if (categoryLinks[i].textContent.trim() === targetText) {
+                // Only add the active class if it's not already active
+                if (!categoryLinks[i].parentElement.classList.contains('active')) {
+                  categoryLinks[i].parentElement.classList.add('active');
+                }
+                found = true;
+                break;
+              }
+            }
+            
+            // If no match was found by text, try URL-based matching
+            if (!found) {
+              urlBasedMatchingWithoutClearingActive(categoryLinks);
+            }
+          }
+        }
+      } else {
+        // We're on a category page, handle sidebar highlighting for category pages
+        // Only proceed if no sidebar item is already highlighted
+        if (!document.querySelector('#sidebar .nav-list li.active')) {
+          updateSidebarFromCategoryPage();
+        }
+      }
+      
+      // PHASE 3: Enhance search UI components
+      // ------------------------------------
+      
+      // Enhance the search button with proper styling
+      const searchButton = document.querySelector('form.search.search-full input[type="submit"], form.search.search-full input[name="commit"]');
+      
+      if (searchButton && !searchButton.parentElement.classList.contains('search-button-wrapper')) {
+        // Create a wrapper for better styling and positioning
+        const wrapper = document.createElement('div');
+        wrapper.className = 'search-button-wrapper';
+        
+        // Insert wrapper before the button
+        searchButton.parentNode.insertBefore(wrapper, searchButton);
+        
+        // Move the button into the wrapper
+        wrapper.appendChild(searchButton);
+      }
+      
+      // Enhance the sidebar search functionality
       enhanceSidebarSearch();
       
-      // Start observing for autocomplete dropdown
+      // Set up observer for autocomplete dropdown to fix its positioning
+      const autocompleteObserver = new MutationObserver(function(mutations) {
+        const autocomplete = document.querySelector('#sidebar zd-autocomplete');
+        if (autocomplete) {
+          fixSidebarAutocomplete();
+        }
+      });
+      
+      // Start observing DOM changes to detect autocomplete appearance
       autocompleteObserver.observe(document.body, { childList: true, subtree: true });
       
-      // Add event listeners
+      // Handle window resize to reposition autocomplete dropdown
       window.addEventListener('resize', fixSidebarAutocomplete);
       
+      // Add input event listener to sidebar search for autocomplete positioning
       const searchInput = document.querySelector('#sidebar .search-query, #sidebar input[type="search"]');
       if (searchInput) {
         searchInput.addEventListener('input', function() {
+          // Use setTimeout to ensure the autocomplete has time to appear
           setTimeout(fixSidebarAutocomplete, 100);
         });
       }
     });
     
-    // Defer truly non-critical tasks
+    // PHASE 4: Schedule non-critical UI updates for idle time
+    // -----------------------------------------------------
     if ('requestIdleCallback' in window) {
-      requestIdleCallback(() => {
+      // Use requestIdleCallback if available for non-critical tasks
+      requestIdleCallback(function() {
+        // Update article footer with feedback link and formatted date
         updateArticleFooter();
+        
+        // Fix formatting of "next page" buttons
         fixNextPageButtons();
-      }, { timeout: 500 });
+      }, { timeout: 500 }); // Ensure it runs within 500ms even if the browser remains busy
     } else {
-      setTimeout(() => {
+      // Fallback to setTimeout for browsers that don't support requestIdleCallback
+      setTimeout(function() {
         updateArticleFooter();
         fixNextPageButtons();
       }, 50);
+    }
+  }
+  
+  /**
+   * Performs URL-based sidebar highlighting without clearing existing active states
+   * This modified version reduces DOM operations to prevent layout jumps
+   */
+  function urlBasedMatchingWithoutClearingActive(sidebarLinks) {
+    const currentUrl = window.location.href.toLowerCase();
+    let bestMatch = { link: null, quality: 0 };
+    
+    // Check each sidebar link for potential URL match
+    for (let i = 0; i < sidebarLinks.length; i++) {
+      const link = sidebarLinks[i];
+      const href = (link.getAttribute('href') || '').toLowerCase();
+      let matchQuality = 0;
+      
+      // Determine match quality based on URL similarity
+      if (currentUrl === href || currentUrl.endsWith(href)) {
+        matchQuality = 100; // Exact match
+      } else if (href.length > 10 && currentUrl.includes(href)) {
+        matchQuality = 80 + (href.length / currentUrl.length) * 10; // Partial match
+      }
+      
+      // Keep track of the best match
+      if (matchQuality > bestMatch.quality) {
+        bestMatch = { link, quality: matchQuality };
+      }
+    }
+    
+    // Apply the best match if found without clearing existing active states
+    if (bestMatch.link && bestMatch.quality > 0) {
+      if (!bestMatch.link.parentElement.classList.contains('active')) {
+        bestMatch.link.parentElement.classList.add('active');
+      }
     }
   }
   
