@@ -1124,152 +1124,107 @@ function urlBasedMatching(sidebarItems, sidebarLinks) {
 }
 
 function enhanceSearchButtons() {
-    // Find all search submit buttons - using cached selector if possible
-    const submitButtons = selectorCache['form.search.search-full input[type="submit"], form.search.search-full input[name="commit"]'] || 
-                         document.querySelectorAll('form.search.search-full input[type="submit"], form.search.search-full input[name="commit"]');
-    
-    if (!submitButtons.length) return;
-  
-    // Process in batches for better performance
-    const batchSize = 2; // Process max 2 buttons at a time (likely there's only 1 anyway)
-    let index = 0;
-    
-    function processBatch() {
-      const endIndex = Math.min(index + batchSize, submitButtons.length);
-      
-      for (let i = index; i < endIndex; i++) {
-        const button = submitButtons[i];
-        
-        // Skip if already processed
-        if (button.dataset.enhanced) continue;
-        
-        // Create a wrapper div with position relative
-        const wrapper = document.createElement('div');
-        wrapper.className = 'search-button-wrapper';
-        wrapper.style.display = 'inline-block';
-        wrapper.style.position = 'relative';
-        
-        // Insert the wrapper before the button
-        button.parentNode.insertBefore(wrapper, button);
-        
-        // Move button into wrapper
-        wrapper.appendChild(button);
-        
-        // Create gradient border element (::before equivalent)
-        const borderElement = document.createElement('div');
-        borderElement.className = 'search-button-border';
-        borderElement.style.position = 'absolute';
-        borderElement.style.inset = '-2px';
-        borderElement.style.borderRadius = '8px';
-        borderElement.style.border = '2px solid transparent';
-        
-        // Set up the masking for the gradient border
-        borderElement.style.webkitMask = 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)';
-        borderElement.style.webkitMaskComposite = 'xor';
-        borderElement.style.mask = 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)';
-        borderElement.style.maskComposite = 'exclude';
-        
-        // Apply the gradient background
-        borderElement.style.background = 'linear-gradient(#FA75F8, #9E6EE5) border-box';
-        borderElement.style.zIndex = '0';
-        borderElement.style.pointerEvents = 'none';
-        
-        // Create hover effect element (::after equivalent)
-        const hoverElement = document.createElement('div');
-        hoverElement.className = 'search-button-hover';
-        hoverElement.style.position = 'absolute';
-        hoverElement.style.inset = '0';
-        hoverElement.style.borderRadius = '6px';
-        hoverElement.style.background = 'linear-gradient(273.81deg, #914694, #62438B)';
-        hoverElement.style.opacity = '0';
-        hoverElement.style.transition = 'opacity 0.3s ease';
-        hoverElement.style.zIndex = '1';
-        hoverElement.style.pointerEvents = 'none';
-        
-        // Insert elements in the correct order
-        wrapper.insertBefore(borderElement, button);
-        wrapper.insertBefore(hoverElement, button);
-        
-        // Style the button
-        button.style.position = 'relative';
-        button.style.zIndex = '2';
-        button.style.background = 'linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), linear-gradient(273.81deg, #FA75F8, #9E6EE5)';
-        button.style.border = 'none';
-        
-        // Add hover events
-        wrapper.addEventListener('mouseenter', () => {
-          hoverElement.style.opacity = '1';
-        });
-        
-        wrapper.addEventListener('mouseleave', () => {
-          hoverElement.style.opacity = '0';
-        });
-        
-        // Handle disabled state
-        if (button.disabled) {
-          wrapper.classList.add('disabled');
-          button.style.background = 'transparent';
-          hoverElement.style.display = 'none';
+    // Add CSS for styling instead of manipulating DOM structure or applying inline styles
+    // This approach ensures the button's functionality is preserved
+    if (!document.getElementById('search-button-styles')) {
+      const styleSheet = document.createElement('style');
+      styleSheet.id = 'search-button-styles';
+      styleSheet.textContent = `
+        /* Base button styles */
+        form.search.search-full input[type="submit"],
+        form.search.search-full input[name="commit"] {
+          color: #ffffff !important;
+          font-family: "Adelle Sans", sans-serif !important;
+          font-size: 24px !important;
+          line-height: 100% !important;
+          height: 64px !important;
+          padding: 0 32px !important;
+          min-width: 150px !important;
+          border-radius: 6px !important;
+          cursor: pointer !important;
+          position: relative !important;
+          
+          /* Preserve functionality while fixing appearance */
+          border: 2px solid transparent !important;
+          outline: none !important;
+          
+          /* Gradient background and border trick */
+          background-origin: border-box !important;
+          background-clip: padding-box, border-box !important;
+          background-image: 
+            linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), 
+            linear-gradient(273.81deg, #FA75F8, #9E6EE5),
+            linear-gradient(to right, #FA75F8, #9E6EE5) !important;
+          
+          /* Smooth transitions */
+          transition: transform 0.2s ease, box-shadow 0.2s ease, background-image 0.3s ease !important;
+          
+          /* Fix any browser styling issues */
+          -webkit-appearance: none !important;
+          appearance: none !important;
         }
         
-        // Add responsive behavior using a single resize handler for all buttons
-        if (i === 0) {
-          setupResponsiveHandling();
+        /* Hover state */
+        form.search.search-full input[type="submit"]:hover,
+        form.search.search-full input[name="commit"]:hover {
+          background-image: 
+            linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), 
+            linear-gradient(273.81deg, #914694, #62438B),
+            linear-gradient(to right, #FA75F8, #9E6EE5) !important;
+          transform: translateY(-1px) !important;
+          box-shadow: 0 4px 8px rgba(250, 117, 248, 0.3) !important;
         }
         
-        // Mark as processed
-        button.dataset.enhanced = 'true';
-      }
+        /* Active/pressed state */
+        form.search.search-full input[type="submit"]:active,
+        form.search.search-full input[name="commit"]:active {
+          background-image: 
+            linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), 
+            linear-gradient(273.81deg, #914694, #62438B),
+            linear-gradient(to right, #FA75F8, #9E6EE5) !important;
+          transform: translateY(1px) !important;
+          box-shadow: none !important;
+        }
+        
+        /* Focus state */
+        form.search.search-full input[type="submit"]:focus,
+        form.search.search-full input[name="commit"]:focus {
+          box-shadow: 0 0 0 3px rgba(250, 117, 248, 0.3) !important;
+        }
+        
+        /* Responsive styles */
+        @media (min-width: 768px) and (max-width: 1199px) {
+          form.search.search-full input[type="submit"],
+          form.search.search-full input[name="commit"] {
+            font-size: 20px !important;
+            height: 48px !important;
+            padding: 0 16px !important;
+            border-radius: 3px !important;
+            border-width: 1px !important;
+          }
+        }
+        
+        @media (max-width: 767px) {
+          form.search.search-full input[type="submit"],
+          form.search.search-full input[name="commit"] {
+            font-size: 18px !important;
+            height: 40px !important;
+            padding: 0 16px !important;
+            border-radius: 3px !important;
+            border-width: 1px !important;
+            width: 100% !important;
+          }
+        }
+      `;
       
-      index = endIndex;
-      
-      // Continue processing if there are more items
-      if (index < submitButtons.length) {
-        requestAnimationFrame(processBatch);
-      }
+      // Add stylesheet to head
+      document.head.appendChild(styleSheet);
     }
     
-    // Start processing
-    processBatch();
+    // No need to manipulate the DOM or add event listeners
+    // The CSS handles all the styling and states
   }
   
-  // A single resize handler for all buttons
-  function setupResponsiveHandling() {
-    // Only set up once
-    if (window.searchButtonsResponsiveSetup) return;
-    window.searchButtonsResponsiveSetup = true;
-    
-    // Use debounce to avoid excessive handlers on resize
-    const handleResize = debounce(() => {
-      const windowWidth = window.innerWidth;
-      const borderElements = document.querySelectorAll('.search-button-border');
-      const hoverElements = document.querySelectorAll('.search-button-hover');
-      
-      borderElements.forEach(el => {
-        if (windowWidth >= 1200) {
-          el.style.inset = '-2px';
-          el.style.borderRadius = '8px';
-        } else {
-          el.style.inset = '-1px';
-          el.style.borderRadius = '4px';
-        }
-      });
-      
-      hoverElements.forEach(el => {
-        if (windowWidth >= 1200) {
-          el.style.borderRadius = '6px';
-        } else {
-          el.style.borderRadius = '3px';
-        }
-      });
-    }, 100);
-    
-    // Initial setup
-    handleResize();
-    
-    // Attach to window resize
-    window.addEventListener('resize', handleResize);
-  }
   
   // Update the initDarkTheme function to include button enhancement
   function initDarkTheme() {
@@ -1291,14 +1246,15 @@ function enhanceSearchButtons() {
         // We're on a category page or another type of page
         updateSidebarFromCategoryPage();
       }
+      
+      // Apply button styling right away (it's lightweight CSS-only)
+      enhanceSearchButtons();
     };
   
     const nonCriticalTasks = () => {
       // Less critical UI updates
       updateArticleFooter();
       fixNextPageButtons();
-      // Add the search button enhancement as a non-critical task
-      enhanceSearchButtons();
     };
   
     // Execute critical tasks immediately
