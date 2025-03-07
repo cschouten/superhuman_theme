@@ -4026,13 +4026,12 @@ form.search.search-full {
 .pagination .next, .pagination .last {
     margin-left: 5px;
 }
-
-.custom-pagination {
+  .custom-pagination {
     margin-top: 20px;
     margin-bottom: 20px;
     text-align: left;
     font-family: 'Adelle Sans', sans-serif;
-    padding-left: 12px; /* Add left padding to the entire container to match the alignment */
+    padding-left: 12px;
   }
   
   .custom-pagination a, 
@@ -4042,8 +4041,8 @@ form.search.search-full {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     text-decoration: none;
-    padding: 0 12px; /* Change from margin to padding */
-    display: inline-block; /* Ensure padding works properly */
+    padding: 0 12px;
+    display: inline-block;
   }
   
   .custom-pagination a:hover {
@@ -4066,12 +4065,12 @@ form.search.search-full {
   }
   
   .custom-pagination span.current {
-    font-weight: bold;
+    font-weight: bold; /* Make current page number bold */
   }
   
   .custom-pagination .separator {
     color: white;
     font-weight: normal;
     padding: 0;
-    margin: 0 -2px; /* Adjust separator positioning */
+    margin: 0 -2px;
   }
