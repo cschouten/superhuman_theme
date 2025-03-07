@@ -1135,7 +1135,9 @@ function enhanceSearchButtons() {
           font-family: "Adelle Sans", sans-serif !important;
           font-size: 24px !important;
           line-height: 100% !important;
-          height: 64px !important;
+          height: 68px !important; /* 64px content height + 4px for borders */
+          min-height: 68px !important;
+          max-height: 68px !important;
           padding: 0 32px !important;
           min-width: 150px !important;
           border-radius: 6px !important;
@@ -1240,7 +1242,7 @@ function enhanceSearchButtons() {
       }
       
       // Apply button styling right away (it's lightweight CSS-only)
-      // enhanceSearchButtons();
+      enhanceSearchButtons();
     };
   
     const nonCriticalTasks = () => {
