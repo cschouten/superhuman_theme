@@ -3721,6 +3721,8 @@ form.search.search-full {
     padding: 0;
     margin-bottom: 30px;
     position: relative;
+    border: none;
+    background: transparent;
   }
   
   #sidebar #searchBar.sm .search-query {
@@ -3846,20 +3848,21 @@ form.search.search-full {
   left: -9999px !important;
 }
 
-/* Add back the light grey outline around the search box */
+/* Search box border styling */
 #sidebar form.search-full input[type="search"],
 #sidebar #searchBar.sm .search-query {
-  outline-style: solid;
-  outline-width: 1px;
-  outline-color: rgba(255, 255, 255, 0.2);
-  transition: outline-color 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  outline: none;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  transition: border-color 0.3s ease;
 }
 
 #sidebar form.search-full input[type="search"]:focus,
 #sidebar #searchBar.sm .search-query:focus {
-  outline-width: 1px;
-  outline-color: #ffffff;
-  outline-style: solid;
+  border-color: #ffffff;
+  outline: none;
+  box-shadow: none;
 }
 
 
