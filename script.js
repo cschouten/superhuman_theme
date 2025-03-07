@@ -1138,7 +1138,7 @@ function enhanceSearchButtons() {
           vertical-align: top !important; /* Align to the top */
           margin-top: 0 !important; /* Ensure no top margin */
           position: relative !important;
-          top: 0 !important; /* Ensure no top offset */
+          top: -1px !important;
           height: 68px !important; /* 64px content height + 4px for borders */
           min-height: 68px !important;
           max-height: 68px !important;
