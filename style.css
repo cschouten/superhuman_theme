@@ -4031,19 +4031,21 @@ form.search.search-full {
     margin-top: 20px;
     margin-bottom: 20px;
     text-align: left;
+    font-family: 'Adelle Sans', sans-serif;
   }
   
-  .custom-pagination a, .custom-pagination span {
-    color: #7f5af0; /* Purple color like in your screenshots */
-    padding: 0 5px;
+  .custom-pagination a, 
+  .custom-pagination span.current {
+    color: #7f5af0; /* Purple color for page numbers */
     text-decoration: none;
-    margin: 0 2px;
+    padding: 0 2px;
   }
   
   .custom-pagination span.current {
     font-weight: bold;
   }
   
-  .custom-pagination a:hover {
-    text-decoration: underline;
+  .custom-pagination .separator {
+    color: white; /* White color for the pipes */
+    font-weight: normal;
   }
