@@ -1185,36 +1185,33 @@ function enhanceSearchButton() {
  * Initializes the dark theme and handles various UI enhancements
  * This function runs once and makes itself a no-op on subsequent calls
  */
-function initDarkTheme() {
+  function initDarkTheme() {
     // Prevent this function from running multiple times
-    // by redefining it as an empty function after first execution
     initDarkTheme = function() {
-      // Do nothing on subsequent calls
       console.log("Dark theme already initialized");
     };
   
+    // Immediately fix sidebar width to prevent layout shifts
+    const sidebar = document.querySelector('#sidebar');
+    if (sidebar) {
+      const currentWidth = sidebar.offsetWidth;
+      sidebar.style.width = currentWidth + 'px';
+    }
+  
     // PHASE 1: Handle critical UI updates first
-    // ----------------------------------------
-    
-    // Show the background element that's already in the HTML
     const backgroundElement = document.querySelector('.background');
     if (backgroundElement) {
-      // Force a layout recalculation before adding the visible class
-      // This ensures a smooth transition effect
       backgroundElement.getBoundingClientRect();
       backgroundElement.classList.add('visible');
     }
     
     // PHASE 2: Schedule sidebar highlighting for the next animation frame
-    // ------------------------------------------------------------------
     requestAnimationFrame(function() {
       // Determine if we're on an article page or category page
       const articleElement = document.getElementById('fullArticle');
       
       // Apply the appropriate sidebar highlighting based on page type
       if (articleElement) {
-        // We're on an article page, highlight the corresponding sidebar item
-        // but only if no sidebar item is already highlighted
         if (!document.querySelector('#sidebar .nav-list li.active')) {
           const sectionName = articleElement.getAttribute('data-section-name');
           const categoryLinks = document.querySelectorAll('#sidebar .nav-list li a');
@@ -1232,58 +1229,58 @@ function initDarkTheme() {
             "Supercharge Your Team": "Supercharge Your Team"
           };
           
-          // Try to find and highlight the matching sidebar item
           if (sectionName && categoryMap[sectionName]) {
             const targetText = categoryMap[sectionName];
-            let found = false;
             
             for (let i = 0; i < categoryLinks.length; i++) {
               if (categoryLinks[i].textContent.trim() === targetText) {
-                // Only add the active class if it's not already active
-                if (!categoryLinks[i].parentElement.classList.contains('active')) {
-                  categoryLinks[i].parentElement.classList.add('active');
-                }
-                found = true;
+                categoryLinks[i].parentElement.classList.add('active');
                 break;
               }
-            }
-            
-            // If no match was found by text, try URL-based matching
-            if (!found) {
-              urlBasedMatchingWithoutClearingActive(categoryLinks);
             }
           }
         }
       } else {
-        // We're on a category page, handle sidebar highlighting for category pages
-        // Only proceed if no sidebar item is already highlighted
+        // We're on a category page
         if (!document.querySelector('#sidebar .nav-list li.active')) {
           updateSidebarFromCategoryPage();
         }
       }
       
-      // PHASE 3: Enhance search UI components
-      // ------------------------------------
-      
-      // Enhance the search button with proper styling
+      // IMPORTANT: SKIP search enhancement during initial load
+      // enhanceSidebarSearch() is removed from here
+  
+      // Enhance the search button with proper styling for the main search
       const searchButton = document.querySelector('form.search.search-full input[type="submit"], form.search.search-full input[name="commit"]');
-      
       if (searchButton && !searchButton.parentElement.classList.contains('search-button-wrapper')) {
-        // Create a wrapper for better styling and positioning
         const wrapper = document.createElement('div');
         wrapper.className = 'search-button-wrapper';
-        
-        // Insert wrapper before the button
         searchButton.parentNode.insertBefore(wrapper, searchButton);
-        
-        // Move the button into the wrapper
         wrapper.appendChild(searchButton);
       }
+    });
+    
+    // Non-critical updates
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(function() {
+        updateArticleFooter();
+        fixNextPageButtons();
+      }, { timeout: 500 });
+    } else {
+      setTimeout(function() {
+        updateArticleFooter();
+        fixNextPageButtons();
+      }, 50);
+    }
+    
+    // IMPORTANT: Move all sidebar search enhancements to after full page load
+    window.addEventListener('load', function() {
+      console.log("Page fully loaded, now enhancing sidebar search");
       
-      // Enhance the sidebar search functionality
+      // Now it's safe to enhance the search
       enhanceSidebarSearch();
       
-      // Set up observer for autocomplete dropdown to fix its positioning
+      // Set up observer for autocomplete dropdown
       const autocompleteObserver = new MutationObserver(function(mutations) {
         const autocomplete = document.querySelector('#sidebar zd-autocomplete');
         if (autocomplete) {
@@ -1291,7 +1288,7 @@ function initDarkTheme() {
         }
       });
       
-      // Start observing DOM changes to detect autocomplete appearance
+      // Start observing DOM changes but only after page is fully loaded
       autocompleteObserver.observe(document.body, { childList: true, subtree: true });
       
       // Handle window resize to reposition autocomplete dropdown
@@ -1301,30 +1298,17 @@ function initDarkTheme() {
       const searchInput = document.querySelector('#sidebar .search-query, #sidebar input[type="search"]');
       if (searchInput) {
         searchInput.addEventListener('input', function() {
-          // Use setTimeout to ensure the autocomplete has time to appear
           setTimeout(fixSidebarAutocomplete, 100);
         });
       }
+      
+      // Remove fixed width after everything is stable
+      setTimeout(() => {
+        if (sidebar) {
+          sidebar.style.width = '';
+        }
+      }, 100);
     });
-    
-    // PHASE 4: Schedule non-critical UI updates for idle time
-    // -----------------------------------------------------
-    if ('requestIdleCallback' in window) {
-      // Use requestIdleCallback if available for non-critical tasks
-      requestIdleCallback(function() {
-        // Update article footer with feedback link and formatted date
-        updateArticleFooter();
-        
-        // Fix formatting of "next page" buttons
-        fixNextPageButtons();
-      }, { timeout: 500 }); // Ensure it runs within 500ms even if the browser remains busy
-    } else {
-      // Fallback to setTimeout for browsers that don't support requestIdleCallback
-      setTimeout(function() {
-        updateArticleFooter();
-        fixNextPageButtons();
-      }, 50);
-    }
   }
 
   // At the end of initDarkTheme
