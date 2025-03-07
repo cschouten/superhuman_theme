@@ -778,7 +778,7 @@
           sectionName: sectionName
         });
         
-        // Use sectionId to fetch the category information
+        // Use sectionId to find the category information
         if (sectionId) {
           console.log('Attempting to find category from section ID:', sectionId);
           
@@ -798,17 +798,6 @@
           { name: "Supercharge Your Team", article: "38450322526995" }
         ];
         
-        // Try to map section to a known category based on common patterns
-        const sectionCategoryMap = {
-          // Map section name patterns to their category
-          "Account": "Account Setup",
-          "Billing": "Billing",
-          "Support": "Support",
-          "Feature": "Features",
-          "Integration": "Integrations",
-          "Use Case": "Use Cases"
-        };
-        
         // First, check if this is a top-level section directly in our sidebar
         const isTopLevelSection = topLevelSections.some(section => {
           // Check if the section name matches
@@ -824,14 +813,41 @@
           return;
         }
         
-        // Next, try to find a category match based on section name patterns
+        // Use direct mapping for common categories
+        // Fixed: Added direct mapping for Billing with exact match
         if (sectionName) {
-          for (const [pattern, category] of Object.entries(sectionCategoryMap)) {
-            if (sectionName.includes(pattern)) {
-              highlightMenuItemByText(category);
-              console.log(`Found category match "${category}" based on section name containing "${pattern}"`);
-              return;
-            }
+          // Direct mapping for exact section names to categories
+          // This handles the Billing case specifically
+          if (sectionName === "Billing") {
+            console.log("Found exact match for Billing section");
+            directlyHighlightMenuItem("Billing");
+            return;
+          }
+          
+          // Special case handling for common sections
+          if (sectionName.includes("Account")) {
+            directlyHighlightMenuItem("Account Setup");
+            return;
+          }
+          if (sectionName.toLowerCase().includes("billing")) {
+            directlyHighlightMenuItem("Billing");
+            return;
+          }
+          if (sectionName.includes("Support")) {
+            directlyHighlightMenuItem("Support");
+            return;
+          }
+          if (sectionName.toLowerCase().includes("feature")) {
+            directlyHighlightMenuItem("Features");
+            return;
+          }
+          if (sectionName.toLowerCase().includes("integration")) {
+            directlyHighlightMenuItem("Integrations");
+            return;
+          }
+          if (sectionName.toLowerCase().includes("use case")) {
+            directlyHighlightMenuItem("Use Cases");
+            return;
           }
         }
         
@@ -864,6 +880,62 @@
         fallbackUrlMatching();
       }
       
+      // New function for direct highlighting with more reliable selector
+      function directlyHighlightMenuItem(targetText) {
+        console.log(`Using direct menu item highlight for: "${targetText}"`);
+        
+        // Remove any existing active classes first
+        document.querySelectorAll('#sidebar .nav-list li').forEach(function(li) {
+          li.classList.remove('active');
+        });
+        
+        // Find all links in the sidebar
+        const sidebarLinks = document.querySelectorAll('#sidebar .nav-list li a');
+        let matched = false;
+        
+        // Check each link
+        for (let i = 0; i < sidebarLinks.length; i++) {
+          const link = sidebarLinks[i];
+          // Get the text without any child elements
+          let linkText = "";
+          
+          // Extract just the direct text content, not including child elements
+          for (let j = 0; j < link.childNodes.length; j++) {
+            if (link.childNodes[j].nodeType === 3) { // Text node
+              linkText += link.childNodes[j].textContent.trim();
+            }
+          }
+          
+          // If that didn't work, try getting the text and stripping the icon
+          if (!linkText) {
+            linkText = link.textContent.trim();
+            // Remove any trailing content that might be from the icon
+            const iconIndex = linkText.indexOf('icon-');
+            if (iconIndex !== -1) {
+              linkText = linkText.substring(0, iconIndex).trim();
+            }
+          }
+          
+          console.log(`Checking link text: "${linkText}" against target: "${targetText}"`);
+          
+          // Exact match check (case insensitive)
+          if (linkText.toLowerCase() === targetText.toLowerCase()) {
+            link.parentElement.classList.add('active');
+            console.log(`MATCHED! Added 'active' class to: ${linkText}`);
+            matched = true;
+            break;
+          }
+        }
+        
+        if (!matched) {
+          console.log(`WARNING: Could not find exact match for "${targetText}" in sidebar`);
+          // Fall back to the regular method
+          highlightMenuItemByText(targetText);
+        }
+        
+        return matched;
+      }
+      
       function highlightMenuItemByText(categoryText) {
         const navLinks = document.querySelectorAll('#sidebar .nav-list li a');
         let found = false;
@@ -874,8 +946,13 @@
         });
         
         navLinks.forEach(function(link) {
-          // Extract text without icon
-          const linkText = link.textContent.trim().replace(/\s*\i.*$/, '');
+          // Get just the text content (improved method)
+          let linkText = link.textContent.trim();
+          
+          // Remove any icon text at the end (improved regex)
+          linkText = linkText.replace(/\s*icon-.*$/, '');
+          
+          console.log(`Comparing: "${linkText}" with "${categoryText}"`);
           
           if (linkText.toLowerCase() === categoryText.toLowerCase()) {
             link.parentElement.classList.add('active');
@@ -883,6 +960,10 @@
             console.log(`Highlighted menu item: ${linkText}`);
           }
         });
+        
+        if (!found) {
+          console.log(`Could not find menu item matching: "${categoryText}"`);
+        }
         
         return found;
       }
@@ -932,16 +1013,22 @@
           { pattern: 'billing', text: 'Billing' },
           { pattern: 'support', text: 'Support' },
           { pattern: 'features', text: 'Features' },
-          { pattern: 'integrations', text: 'Integrations' },
-          { pattern: 'use-cases', text: 'Use Cases' }
+          { pattern: 'integration', text: 'Integrations' },
+          { pattern: 'use-case', text: 'Use Cases' }
         ];
+        
+        // Check for "billing" in the URL as a special case
+        if (currentPageUrl.toLowerCase().includes('billing')) {
+          directlyHighlightMenuItem('Billing');
+          return;
+        }
         
         // Try to match URL patterns first
         let patternMatch = false;
         
         urlPatterns.forEach(function(item) {
           if (currentPageUrl.toLowerCase().includes(item.pattern.toLowerCase())) {
-            patternMatch = highlightMenuItemByText(item.text);
+            patternMatch = directlyHighlightMenuItem(item.text);
             if (patternMatch) {
               console.log(`Matched URL pattern "${item.pattern}" to menu item "${item.text}"`);
             }
