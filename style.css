@@ -3846,6 +3846,23 @@ form.search.search-full {
   left: -9999px !important;
 }
 
+/* Add back the light grey outline around the search box */
+#sidebar form.search-full input[type="search"],
+#sidebar #searchBar.sm .search-query {
+  outline-style: solid;
+  outline-width: 1px;
+  outline-color: rgba(255, 255, 255, 0.2);
+  transition: outline-color 0.3s ease;
+}
+
+#sidebar form.search-full input[type="search"]:focus,
+#sidebar #searchBar.sm .search-query:focus {
+  outline-width: 1px;
+  outline-color: #ffffff;
+  outline-style: solid;
+}
+
+
 /* Make sure the search box takes full width */
 #sidebar form.search-full {
   width: 100% !important;
