@@ -1251,13 +1251,14 @@ function enhanceSearchButton() {
       // enhanceSidebarSearch() is removed from here
   
       // Enhance the search button with proper styling for the main search
-      const searchButton = document.querySelector('form.search.search-full input[type="submit"], form.search.search-full input[name="commit"]');
-      if (searchButton && !searchButton.parentElement.classList.contains('search-button-wrapper')) {
-        const wrapper = document.createElement('div');
-        wrapper.className = 'search-button-wrapper';
-        searchButton.parentNode.insertBefore(wrapper, searchButton);
-        wrapper.appendChild(searchButton);
-      }
+      
+    //   const searchButton = document.querySelector('form.search.search-full input[type="submit"], form.search.search-full input[name="commit"]');
+    //   if (searchButton && !searchButton.parentElement.classList.contains('search-button-wrapper')) {
+    //     const wrapper = document.createElement('div');
+    //     wrapper.className = 'search-button-wrapper';
+    //     searchButton.parentNode.insertBefore(wrapper, searchButton);
+    //     wrapper.appendChild(searchButton);
+    //   }
     });
     
     // Non-critical updates
