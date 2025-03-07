@@ -3713,6 +3713,7 @@ form.search.search-full {
   /* Wrapper styling for pseudo-elements */
   .search-button-wrapper {
     position: relative !important;
+    z-index: 1 !important; /* Base layer */
     display: inline-block !important;
     border-radius: 6px !important;
     background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), 
@@ -3729,7 +3730,7 @@ form.search.search-full {
     bottom: -2px !important;
     border-radius: 8px !important;
     background: linear-gradient(180deg, #FA75F8, #9E6EE5) !important;
-    z-index: 0 !important;
+    z-index: 0 !important; /* Behind the wrapper */
   }
   
   /* Hover effect using ::after */
