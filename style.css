@@ -3591,131 +3591,76 @@ zd-autocomplete-multibrand zd-autocomplete-breadcrumbs-multibrand {
     }
 }
 
-/**
- * Optimal Solution for Zendesk Guide Search Button
- * This creates the most accurate visual match to the Help Scout button
- * that can be achieved with CSS alone on input elements.
- */
+/* Base button styling */
+form.search.search-full input[type="submit"],
+form.search.search-full input[name="commit"] {
+  /* Text styling */
+  color: #ffffff !important;
+  font-family: "Adelle Sans", sans-serif !important;
+  font-size: 24px !important;
+  line-height: 100% !important;
+  text-shadow: none !important;
+  
+  /* Box model */
+  height: 64px !important;
+  padding: 0 32px !important;
+  min-width: 150px !important;
+  border-radius: 6px !important;
+  
+  /* Remove default styling */
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  
+  /* Button background */
+  background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), 
+              linear-gradient(273.81deg, #FA75F8, #9E6EE5) !important;
+  
+  /* Cursor */
+  cursor: pointer !important;
+  
+  /* Fix browser styling */
+  -webkit-appearance: none !important;
+  appearance: none !important;
+}
 
-/* 
- * Add this to your Zendesk Guide CSS
- */
+/* Wrapper styles to handle position */
+.search-button-wrapper {
+  display: inline-block !important;
+  position: relative !important;
+}
 
- form.search.search-full input[type="submit"],
- form.search.search-full input[name="commit"] {
-   /* Text styling */
-   color: #ffffff !important;
-   font-family: "Adelle Sans", sans-serif !important;
-   font-size: 24px !important;
-   line-height: 100% !important;
-   text-shadow: none !important;
-   
-   /* Box model */
-   height: 64px !important;
-   padding: 0 32px !important;
-   min-width: 150px !important;
-   border-radius: 6px !important;
-   
-   /* Remove default styling */
-   border: none !important;
-   
-   /* Position relative for positioning context */
-   position: relative !important;
-   z-index: 1 !important;
-   
-   /* Exact background gradient */
-   background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), 
-               linear-gradient(273.81deg, #FA75F8, #9E6EE5) !important;
-   
-   /* Create a gradient-like border using a combination of techniques */
-   outline: 2px solid transparent !important;
-   box-shadow: 0 0 0 2px #FA75F8 !important;
-   
-   /* Ensure smooth transitions */
-   transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease !important;
-   
-   /* Fix any browser-specific styling issues */
-   -webkit-appearance: none !important;
-   appearance: none !important;
-   cursor: pointer !important;
- }
- 
- /* Hover state - mimic the ::after overlay */
- form.search.search-full input[type="submit"]:hover,
- form.search.search-full input[name="commit"]:hover {
-   /* Use the hover gradient from Help Scout */
-   background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), 
-               linear-gradient(273.81deg, #914694, #62438B) !important;
-   
-   /* Enhanced glow on hover */
-   box-shadow: 0 0 0 2px #FA75F8, 0 0 8px rgba(250, 117, 248, 0.4) !important;
- }
- 
- /* Active/pressed state */
- form.search.search-full input[type="submit"]:active,
- form.search.search-full input[name="commit"]:active {
-   /* Slightly darker when pressed */
-   background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), 
-               linear-gradient(273.81deg, #914694, #62438B) !important;
-   
-   /* Subtle pressed effect */
-   transform: translateY(1px) !important;
- }
- 
- /* Focus state for accessibility */
- form.search.search-full input[type="submit"]:focus,
- form.search.search-full input[name="commit"]:focus {
-   outline: 2px solid transparent !important;
-   box-shadow: 0 0 0 2px #FA75F8, 0 0 0 4px rgba(250, 117, 248, 0.3) !important;
- }
- 
- /* Disabled state */
- form.search.search-full input[type="submit"]:disabled,
- form.search.search-full input[name="commit"]:disabled {
-   background: transparent !important;
-   opacity: 0.6 !important;
-   cursor: not-allowed !important;
-   box-shadow: 0 0 0 1px rgba(250, 117, 248, 0.4) !important;
- }
- 
- /* Media queries for responsive design */
- @media (min-width: 768px) and (max-width: 1199px) {
-   form.search.search-full input[type="submit"],
-   form.search.search-full input[name="commit"] {
-     font-size: 20px !important;
-     height: 48px !important;
-     padding: 0 16px !important;
-     border-radius: 3px !important;
-     
-     /* Adjust border for smaller size */
-     outline-width: 1px !important;
-     box-shadow: 0 0 0 1px #FA75F8 !important;
-   }
-   
-   form.search.search-full input[type="submit"]:focus,
-   form.search.search-full input[name="commit"]:focus {
-     outline-width: 1px !important;
-     box-shadow: 0 0 0 1px #FA75F8, 0 0 0 3px rgba(250, 117, 248, 0.3) !important;
-   }
- }
- 
- @media (max-width: 767px) {
-   form.search.search-full input[type="submit"],
-   form.search.search-full input[name="commit"] {
-     font-size: 18px !important;
-     height: 40px !important;
-     padding: 0 16px !important;
-     border-radius: 3px !important;
-     width: 100% !important;
-     
-     /* Adjust border for smaller size */
-     outline-width: 1px !important;
-     box-shadow: 0 0 0 1px #FA75F8 !important;
-   }
-   
-   form.search.search-full input[type="submit"]:focus,
-   form.search.search-full input[name="commit"]:focus {
-     outline-width: 1px !important;
-     box-shadow: 0 0 0 1px #FA75F8, 0 0 0 3px rgba(250, 117, 248, 0.3) !important;
-   }
- }
+/* Disabled state */
+.search-button-wrapper.disabled input[type="submit"],
+.search-button-wrapper.disabled input[name="commit"] {
+  background: transparent !important;
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+}
+
+/* Media queries for responsive design */
+@media (min-width: 768px) and (max-width: 1199px) {
+  form.search.search-full input[type="submit"],
+  form.search.search-full input[name="commit"] {
+    font-size: 20px !important;
+    height: 48px !important;
+    padding: 0 16px !important;
+    border-radius: 3px !important;
+  }
+}
+
+@media (max-width: 767px) {
+  form.search.search-full input[type="submit"],
+  form.search.search-full input[name="commit"] {
+    font-size: 18px !important;
+    height: 40px !important;
+    padding: 0 16px !important;
+    border-radius: 3px !important;
+    width: 100% !important;
+  }
+  
+  .search-button-wrapper {
+    display: block !important;
+    width: 100% !important;
+  }
+}

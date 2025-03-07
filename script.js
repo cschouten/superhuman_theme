@@ -1123,6 +1123,195 @@ function urlBasedMatching(sidebarItems, sidebarLinks) {
   }
 }
 
+function enhanceSearchButtons() {
+    // Find all search submit buttons - using cached selector if possible
+    const submitButtons = selectorCache['form.search.search-full input[type="submit"], form.search.search-full input[name="commit"]'] || 
+                         document.querySelectorAll('form.search.search-full input[type="submit"], form.search.search-full input[name="commit"]');
+    
+    if (!submitButtons.length) return;
+  
+    // Process in batches for better performance
+    const batchSize = 2; // Process max 2 buttons at a time (likely there's only 1 anyway)
+    let index = 0;
+    
+    function processBatch() {
+      const endIndex = Math.min(index + batchSize, submitButtons.length);
+      
+      for (let i = index; i < endIndex; i++) {
+        const button = submitButtons[i];
+        
+        // Skip if already processed
+        if (button.dataset.enhanced) continue;
+        
+        // Create a wrapper div with position relative
+        const wrapper = document.createElement('div');
+        wrapper.className = 'search-button-wrapper';
+        wrapper.style.display = 'inline-block';
+        wrapper.style.position = 'relative';
+        
+        // Insert the wrapper before the button
+        button.parentNode.insertBefore(wrapper, button);
+        
+        // Move button into wrapper
+        wrapper.appendChild(button);
+        
+        // Create gradient border element (::before equivalent)
+        const borderElement = document.createElement('div');
+        borderElement.className = 'search-button-border';
+        borderElement.style.position = 'absolute';
+        borderElement.style.inset = '-2px';
+        borderElement.style.borderRadius = '8px';
+        borderElement.style.border = '2px solid transparent';
+        
+        // Set up the masking for the gradient border
+        borderElement.style.webkitMask = 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)';
+        borderElement.style.webkitMaskComposite = 'xor';
+        borderElement.style.mask = 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)';
+        borderElement.style.maskComposite = 'exclude';
+        
+        // Apply the gradient background
+        borderElement.style.background = 'linear-gradient(#FA75F8, #9E6EE5) border-box';
+        borderElement.style.zIndex = '0';
+        borderElement.style.pointerEvents = 'none';
+        
+        // Create hover effect element (::after equivalent)
+        const hoverElement = document.createElement('div');
+        hoverElement.className = 'search-button-hover';
+        hoverElement.style.position = 'absolute';
+        hoverElement.style.inset = '0';
+        hoverElement.style.borderRadius = '6px';
+        hoverElement.style.background = 'linear-gradient(273.81deg, #914694, #62438B)';
+        hoverElement.style.opacity = '0';
+        hoverElement.style.transition = 'opacity 0.3s ease';
+        hoverElement.style.zIndex = '1';
+        hoverElement.style.pointerEvents = 'none';
+        
+        // Insert elements in the correct order
+        wrapper.insertBefore(borderElement, button);
+        wrapper.insertBefore(hoverElement, button);
+        
+        // Style the button
+        button.style.position = 'relative';
+        button.style.zIndex = '2';
+        button.style.background = 'linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), linear-gradient(273.81deg, #FA75F8, #9E6EE5)';
+        button.style.border = 'none';
+        
+        // Add hover events
+        wrapper.addEventListener('mouseenter', () => {
+          hoverElement.style.opacity = '1';
+        });
+        
+        wrapper.addEventListener('mouseleave', () => {
+          hoverElement.style.opacity = '0';
+        });
+        
+        // Handle disabled state
+        if (button.disabled) {
+          wrapper.classList.add('disabled');
+          button.style.background = 'transparent';
+          hoverElement.style.display = 'none';
+        }
+        
+        // Add responsive behavior using a single resize handler for all buttons
+        if (i === 0) {
+          setupResponsiveHandling();
+        }
+        
+        // Mark as processed
+        button.dataset.enhanced = 'true';
+      }
+      
+      index = endIndex;
+      
+      // Continue processing if there are more items
+      if (index < submitButtons.length) {
+        requestAnimationFrame(processBatch);
+      }
+    }
+    
+    // Start processing
+    processBatch();
+  }
+  
+  // A single resize handler for all buttons
+  function setupResponsiveHandling() {
+    // Only set up once
+    if (window.searchButtonsResponsiveSetup) return;
+    window.searchButtonsResponsiveSetup = true;
+    
+    // Use debounce to avoid excessive handlers on resize
+    const handleResize = debounce(() => {
+      const windowWidth = window.innerWidth;
+      const borderElements = document.querySelectorAll('.search-button-border');
+      const hoverElements = document.querySelectorAll('.search-button-hover');
+      
+      borderElements.forEach(el => {
+        if (windowWidth >= 1200) {
+          el.style.inset = '-2px';
+          el.style.borderRadius = '8px';
+        } else {
+          el.style.inset = '-1px';
+          el.style.borderRadius = '4px';
+        }
+      });
+      
+      hoverElements.forEach(el => {
+        if (windowWidth >= 1200) {
+          el.style.borderRadius = '6px';
+        } else {
+          el.style.borderRadius = '3px';
+        }
+      });
+    }, 100);
+    
+    // Initial setup
+    handleResize();
+    
+    // Attach to window resize
+    window.addEventListener('resize', handleResize);
+  }
+  
+  // Update the initDarkTheme function to include button enhancement
+  function initDarkTheme() {
+    // Make this function a no-op if it's called again
+    initDarkTheme = function() {};
+    
+    // Show background immediately
+    addBackground();
+    
+    // Split tasks into critical and non-critical
+    const criticalTasks = () => {
+      // Prioritize sidebar navigation as it affects user experience immediately
+      const articleEl = document.getElementById('fullArticle');
+      
+      if (articleEl) {
+        // We're on an article page - use article data to highlight sidebar
+        updateSidebarFromArticle(articleEl);
+      } else {
+        // We're on a category page or another type of page
+        updateSidebarFromCategoryPage();
+      }
+    };
+  
+    const nonCriticalTasks = () => {
+      // Less critical UI updates
+      updateArticleFooter();
+      fixNextPageButtons();
+      // Add the search button enhancement as a non-critical task
+      enhanceSearchButtons();
+    };
+  
+    // Execute critical tasks immediately
+    requestAnimationFrame(criticalTasks);
+  
+    // Defer non-critical tasks
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(nonCriticalTasks, { timeout: 500 });
+    } else {
+      setTimeout(nonCriticalTasks, 50);
+    }
+  }
+
 // Initialize on DOMContentLoaded
 document.addEventListener('DOMContentLoaded', function() {
   // Initialize dark theme when DOM is ready
