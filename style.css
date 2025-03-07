@@ -4044,7 +4044,6 @@ form.search.search-full {
     text-decoration: none;
     padding: 0 12px;
     display: inline-block;
-    position: relative;
   }
   
   .custom-pagination a:hover {
@@ -4067,27 +4066,7 @@ form.search.search-full {
   }
   
   .custom-pagination span.current {
-    font-weight: bold;
-    position: relative;
-    z-index: 1;
-    display: inline-flex;  /* Change to inline-flex */
-    justify-content: center;  /* Center horizontally */
-    align-items: center;  /* Center vertically */
-    width: 28px;  /* Fixed width for the element */
-    height: 28px;  /* Fixed height for the element */
-    padding: 0;  /* Remove padding */
-  }
-  
-  .custom-pagination span.current::after {
-    content: "";
-    position: absolute;
-    left: 0;  /* Position from left edge */
-    top: 0;  /* Position from top edge */
-    width: 100%;  /* Use full width of parent */
-    height: 100%;  /* Use full height of parent */
-    border: 1px solid rgba(249, 145, 249, 0.5);
-    border-radius: 50%;
-    z-index: -1;
+    font-weight: 600; /* Make current page number bold - using 600 (semibold) since you have that weight defined */
   }
   
   .custom-pagination .separator {
