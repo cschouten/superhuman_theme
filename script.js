@@ -1182,321 +1182,148 @@ function enhanceSearchButton() {
   });
   
   /**
- * Initializes UI enhancements with layout stability in mind
+ * Initializes the dark theme and handles various UI enhancements
+ * This function runs once and makes itself a no-op on subsequent calls
  */
 function initDarkTheme() {
-    // Make this function a no-op for subsequent calls
-    initDarkTheme = function() {};
+    // Prevent this function from running multiple times
+    // by redefining it as an empty function after first execution
+    initDarkTheme = function() {
+      // Do nothing on subsequent calls
+      console.log("Dark theme already initialized");
+    };
+  
+    // PHASE 1: Handle critical UI updates first
+    // ----------------------------------------
     
-    // STEP 1: Add the background first (minimal DOM impact)
-    const background = document.querySelector('.background');
-    if (background) {
-      // Force reflow before adding class to ensure smooth transition
-      background.getBoundingClientRect();
-      background.classList.add('visible');
+    // Show the background element that's already in the HTML
+    const backgroundElement = document.querySelector('.background');
+    if (backgroundElement) {
+      // Force a layout recalculation before adding the visible class
+      // This ensures a smooth transition effect
+      backgroundElement.getBoundingClientRect();
+      backgroundElement.classList.add('visible');
     }
     
-    // STEP 2: Pre-calculate sidebar dimensions to maintain them during updates
-    const sidebar = document.querySelector('#sidebar');
-    let sidebarWidth = 0;
-    let sidebarHeight = 0;
-    
-    if (sidebar) {
-      // Save original dimensions
-      sidebarWidth = sidebar.offsetWidth;
-      sidebarHeight = sidebar.offsetHeight;
+    // PHASE 2: Schedule sidebar highlighting for the next animation frame
+    // ------------------------------------------------------------------
+    requestAnimationFrame(function() {
+      // Determine if we're on an article page or category page
+      const articleElement = document.getElementById('fullArticle');
       
-      // Apply fixed dimensions during processing to prevent layout shifts
-      sidebar.style.width = sidebarWidth + 'px';
-      sidebar.style.height = sidebarHeight + 'px';
-      sidebar.style.overflow = 'hidden'; // Prevent content from causing expansion
-    }
-    
-    // STEP 3: Handle sidebar search enhancements in a layout-stable way
-    const searchForm = document.querySelector('#sidebar form.sidebar-search');
-    if (searchForm) {
-      // Save search form dimensions before modification
-      const searchFormWidth = searchForm.offsetWidth;
-      const searchFormHeight = searchForm.offsetHeight;
-      
-      // Apply fixed size to prevent layout shifts
-      searchForm.style.width = searchFormWidth + 'px';
-      searchForm.style.height = searchFormHeight + 'px';
-      
-      // Apply basic classes but don't modify structure right away
-      searchForm.id = 'searchBar';
-      searchForm.classList.add('sm');
-      
-      // Defer structural changes to prevent layout shifts during page load
-      setTimeout(() => {
-        // Modify search form structure all at once to minimize layout thrashing
-        modifySidebarSearch(searchForm);
-        
-        // Restore natural dimensions after modifications
-        searchForm.style.width = '';
-        searchForm.style.height = '';
-      }, 300);
-    }
-    
-    // STEP 4: Handle sidebar highlighting without causing layout shifts
-    requestAnimationFrame(() => {
-      highlightSidebarItem();
-      
-      // After highlighting is done, enhance search button
-      enhanceSearchButton();
-      
-      // Set up autocomplete handling with layout stability focus
-      setupStableAutocomplete();
-      
-      // Finally, restore sidebar dimensions
-      if (sidebar) {
-        // Use transition for smooth size restoration
-        sidebar.style.transition = 'width 0.2s, height 0.2s';
-        
-        setTimeout(() => {
-          sidebar.style.width = '';
-          sidebar.style.height = '';
-          sidebar.style.overflow = '';
+      // Apply the appropriate sidebar highlighting based on page type
+      if (articleElement) {
+        // We're on an article page, highlight the corresponding sidebar item
+        // but only if no sidebar item is already highlighted
+        if (!document.querySelector('#sidebar .nav-list li.active')) {
+          const sectionName = articleElement.getAttribute('data-section-name');
+          const categoryLinks = document.querySelectorAll('#sidebar .nav-list li a');
           
-          // Remove transition after restoration
-          setTimeout(() => {
-            sidebar.style.transition = '';
-          }, 250);
-        }, 100);
-      }
-    });
-    
-    // STEP 5: Schedule non-critical updates with low priority
-    if ('requestIdleCallback' in window) {
-      requestIdleCallback(() => {
-        updateArticleFooter();
-        fixNextPageButtons();
-      }, { timeout: 500 });
-    } else {
-      setTimeout(() => {
-        updateArticleFooter();
-        fixNextPageButtons();
-      }, 200);
-    }
-  }
-  
-  /**
-   * Updates the sidebar search form structure in a single batch to prevent layout thrashing
-   */
-  function modifySidebarSearch(searchForm) {
-    // Create a document fragment to build modifications off-DOM
-    const fragment = document.createDocumentFragment();
-    
-    // 1. Handle the search input
-    const searchInput = searchForm.querySelector('input[type="search"]');
-    if (searchInput) {
-      // Apply classes without removing the input
-      searchInput.classList.add('search-query');
-      searchInput.placeholder = 'Search';
-      searchInput.setAttribute('aria-label', 'Search');
-    }
-    
-    // 2. Remove original controls in a single batch
-    searchForm.querySelectorAll('button, input[type="submit"], .search-button, .search-button-wrapper, .search-controls, .search-submit-wrapper').forEach(el => {
-      el.remove();
-    });
-    
-    // 3. Create new button
-    const newButton = document.createElement('button');
-    newButton.type = 'submit';
-    
-    // Add screen reader text
-    const srOnly = document.createElement('span');
-    srOnly.className = 'sr-only';
-    srOnly.textContent = 'Toggle Search';
-    newButton.appendChild(srOnly);
-    
-    // Add search icon
-    const icon = document.createElement('i');
-    icon.className = 'icon-search';
-    newButton.appendChild(icon);
-    
-    // 4. Add the dropdown container if needed
-    if (!searchForm.querySelector('#serp-dd')) {
-      const resultsContainer = document.createElement('div');
-      resultsContainer.id = 'serp-dd';
-      resultsContainer.className = 'sb';
-      resultsContainer.style.display = 'none';
-      
-      const resultsList = document.createElement('ul');
-      resultsList.className = 'result';
-      
-      resultsContainer.appendChild(resultsList);
-      fragment.appendChild(resultsContainer);
-    }
-    
-    // 5. Add button to fragment
-    fragment.appendChild(newButton);
-    
-    // 6. Apply all changes in a single DOM operation
-    searchForm.appendChild(fragment);
-    
-    // 7. Make search visible
-    searchForm.style.opacity = '1';
-  }
-  
-  /**
-   * Sets up autocomplete handling with focus on layout stability
-   */
-  function setupStableAutocomplete() {
-    // Create a single observer instance
-    const observer = new MutationObserver((mutations) => {
-      const autocomplete = document.querySelector('#sidebar zd-autocomplete');
-      if (autocomplete) {
-        // Apply position fixes in a requestAnimationFrame for layout stability
-        requestAnimationFrame(() => {
-          const sidebarForm = document.querySelector('#sidebar form.search-full, #sidebar #searchBar.sm');
-          if (sidebarForm) {
-            const formWidth = sidebarForm.offsetWidth;
+          // Map section names to sidebar menu text
+          const categoryMap = {
+            "Billing": "Billing",
+            "Account": "Account Setup",
+            "Support": "Support",
+            "Features": "Features",
+            "Integrations": "Integrations",
+            "Use Cases": "Use Cases",
+            "Get Started": "Get Started",
+            "Level Up": "Level Up",
+            "Supercharge Your Team": "Supercharge Your Team"
+          };
+          
+          // Try to find and highlight the matching sidebar item
+          if (sectionName && categoryMap[sectionName]) {
+            const targetText = categoryMap[sectionName];
+            let found = false;
             
-            // Position the autocomplete using transform instead of width/top/left
-            // This avoids layout recalculation
-            autocomplete.style.width = formWidth + 'px';
-            autocomplete.style.position = 'absolute';
-            autocomplete.style.top = '42px';
-            autocomplete.style.left = '0';
-            autocomplete.style.maxWidth = formWidth + 'px';
+            for (let i = 0; i < categoryLinks.length; i++) {
+              if (categoryLinks[i].textContent.trim() === targetText) {
+                // Only add the active class if it's not already active
+                if (!categoryLinks[i].parentElement.classList.contains('active')) {
+                  categoryLinks[i].parentElement.classList.add('active');
+                }
+                found = true;
+                break;
+              }
+            }
+            
+            // If no match was found by text, try URL-based matching
+            if (!found) {
+              urlBasedMatchingWithoutClearingActive(categoryLinks);
+            }
           }
+        }
+      } else {
+        // We're on a category page, handle sidebar highlighting for category pages
+        // Only proceed if no sidebar item is already highlighted
+        if (!document.querySelector('#sidebar .nav-list li.active')) {
+          updateSidebarFromCategoryPage();
+        }
+      }
+      
+      // PHASE 3: Enhance search UI components
+      // ------------------------------------
+      
+      // Enhance the search button with proper styling
+      const searchButton = document.querySelector('form.search.search-full input[type="submit"], form.search.search-full input[name="commit"]');
+      
+      if (searchButton && !searchButton.parentElement.classList.contains('search-button-wrapper')) {
+        // Create a wrapper for better styling and positioning
+        const wrapper = document.createElement('div');
+        wrapper.className = 'search-button-wrapper';
+        
+        // Insert wrapper before the button
+        searchButton.parentNode.insertBefore(wrapper, searchButton);
+        
+        // Move the button into the wrapper
+        wrapper.appendChild(searchButton);
+      }
+      
+      // Enhance the sidebar search functionality
+      enhanceSidebarSearch();
+      
+      // Set up observer for autocomplete dropdown to fix its positioning
+      const autocompleteObserver = new MutationObserver(function(mutations) {
+        const autocomplete = document.querySelector('#sidebar zd-autocomplete');
+        if (autocomplete) {
+          fixSidebarAutocomplete();
+        }
+      });
+      
+      // Start observing DOM changes to detect autocomplete appearance
+      autocompleteObserver.observe(document.body, { childList: true, subtree: true });
+      
+      // Handle window resize to reposition autocomplete dropdown
+      window.addEventListener('resize', fixSidebarAutocomplete);
+      
+      // Add input event listener to sidebar search for autocomplete positioning
+      const searchInput = document.querySelector('#sidebar .search-query, #sidebar input[type="search"]');
+      if (searchInput) {
+        searchInput.addEventListener('input', function() {
+          // Use setTimeout to ensure the autocomplete has time to appear
+          setTimeout(fixSidebarAutocomplete, 100);
         });
       }
     });
     
-    // Start observing with a more targeted approach
-    const sidebar = document.querySelector('#sidebar');
-    if (sidebar) {
-      observer.observe(sidebar, { childList: true, subtree: true });
-    }
-    
-    // Set up resize handler with debounce to prevent excessive updates
-    let resizeTimeout;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(() => {
-        const autocomplete = document.querySelector('#sidebar zd-autocomplete');
-        if (autocomplete) {
-          requestAnimationFrame(() => {
-            const sidebarForm = document.querySelector('#sidebar form.search-full, #sidebar #searchBar.sm');
-            if (sidebarForm) {
-              autocomplete.style.width = sidebarForm.offsetWidth + 'px';
-              autocomplete.style.maxWidth = sidebarForm.offsetWidth + 'px';
-            }
-          });
-        }
-      }, 100);
-    });
-  }
-  
-  /**
-   * Highlights the appropriate sidebar item based on current page
-   * with focus on minimizing DOM operations
-   */
-  function highlightSidebarItem() {
-    // Only proceed if no item is already active
-    const alreadyActive = document.querySelector('#sidebar .nav-list li.active');
-    if (alreadyActive) return;
-    
-    // Determine page type
-    const articleEl = document.getElementById('fullArticle');
-    
-    if (articleEl) {
-      // Article page highlighting
-      const sectionName = articleEl.getAttribute('data-section-name');
-      const categoryMap = {
-        "Billing": "Billing",
-        "Account": "Account Setup",
-        "Support": "Support",
-        "Features": "Features",
-        "Integrations": "Integrations",
-        "Use Cases": "Use Cases",
-        "Get Started": "Get Started",
-        "Level Up": "Level Up",
-        "Supercharge Your Team": "Supercharge Your Team"
-      };
-      
-      const links = document.querySelectorAll('#sidebar .nav-list li a');
-      
-      // Try direct match
-      if (sectionName && categoryMap[sectionName]) {
-        const targetText = categoryMap[sectionName];
-        for (let i = 0; i < links.length; i++) {
-          if (links[i].textContent.trim() === targetText) {
-            links[i].parentElement.classList.add('active');
-            return;
-          }
-        }
-      }
-      
-      // Fallback to URL matching
-      const currentUrl = window.location.href.toLowerCase();
-      let bestLink = null;
-      let bestScore = 0;
-      
-      for (let i = 0; i < links.length; i++) {
-        const href = (links[i].getAttribute('href') || '').toLowerCase();
-        let score = 0;
+    // PHASE 4: Schedule non-critical UI updates for idle time
+    // -----------------------------------------------------
+    if ('requestIdleCallback' in window) {
+      // Use requestIdleCallback if available for non-critical tasks
+      requestIdleCallback(function() {
+        // Update article footer with feedback link and formatted date
+        updateArticleFooter();
         
-        if (currentUrl === href) {
-          score = 100;
-        } else if (currentUrl.includes(href) && href.length > 5) {
-          score = 50 + (href.length / 10);
-        }
-        
-        if (score > bestScore) {
-          bestScore = score;
-          bestLink = links[i];
-        }
-      }
-      
-      if (bestLink) {
-        bestLink.parentElement.classList.add('active');
-      }
+        // Fix formatting of "next page" buttons
+        fixNextPageButtons();
+      }, { timeout: 500 }); // Ensure it runs within 500ms even if the browser remains busy
     } else {
-      // Category page highlighting
-      const currentUrl = window.location.href.toLowerCase();
-      const sidebarLinks = document.querySelectorAll('#sidebar .nav-list li a');
-      
-      // Check for category ID in URL
-      const categoryMatch = currentUrl.match(/\/categories\/(\d+)/);
-      if (categoryMatch && categoryMatch[1]) {
-        const categoryId = `/categories/${categoryMatch[1]}`;
-        
-        for (let i = 0; i < sidebarLinks.length; i++) {
-          const href = (sidebarLinks[i].getAttribute('href') || '').toLowerCase();
-          if (href.includes(categoryId)) {
-            sidebarLinks[i].parentElement.classList.add('active');
-            return;
-          }
-        }
-      }
-      
-      // Try pattern matching
-      const patterns = [
-        ['billing', 'Billing'],
-        ['account', 'Account Setup'],
-        ['support', 'Support'],
-        ['feature', 'Features'],
-        ['integration', 'Integrations'],
-        ['use-case', 'Use Cases'],
-        ['get-started', 'Get Started'],
-        ['level-up', 'Level Up'],
-        ['supercharge', 'Supercharge Your Team']
-      ];
-      
-      for (let i = 0; i < patterns.length; i++) {
-        if (currentUrl.includes(patterns[i][0])) {
-          for (let j = 0; j < sidebarLinks.length; j++) {
-            if (sidebarLinks[j].textContent.trim() === patterns[i][1]) {
-              sidebarLinks[j].parentElement.classList.add('active');
-              return;
-            }
-          }
-        }
-      }
+      // Fallback to setTimeout for browsers that don't support requestIdleCallback
+      setTimeout(function() {
+        updateArticleFooter();
+        fixNextPageButtons();
+      }, 50);
     }
   }
   
