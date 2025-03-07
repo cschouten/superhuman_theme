@@ -681,19 +681,6 @@ function getElements(selector) {
   return selectorCache[selector];
 }
 
-// Add this to the beginning of your script
-document.addEventListener('DOMContentLoaded', function() {
-    // Pre-initialize sidebar search form structure
-    const searchForm = document.querySelector('#sidebar form.sidebar-search');
-    if (searchForm) {
-      searchForm.id = 'searchBar';
-      searchForm.classList.add('sm');
-      
-      // Make it visible immediately
-      searchForm.style.opacity = '1';
-    }
-  });
-
 // Reveal the background that's already in the HTML
 function addBackground() {
   const background = document.querySelector('.background');
@@ -1198,45 +1185,105 @@ function enhanceSearchButton() {
  * Initializes the dark theme and handles various UI enhancements
  * This function runs once and makes itself a no-op on subsequent calls
  */
-  function initDarkTheme() {
+function initDarkTheme() {
     // Prevent this function from running multiple times
+    // by redefining it as an empty function after first execution
     initDarkTheme = function() {
+      // Do nothing on subsequent calls
       console.log("Dark theme already initialized");
     };
   
-    // PHASE 1: Critical UI updates first (do this immediately)
-    addBackground();
-    enhanceSidebarSearch(); // Move this up to load search immediately
-    enhanceSearchButton();
-  
-    // PHASE 2: Non-critical UI updates (do this next frame)
-    requestAnimationFrame(function() {
-      // Simplified sidebar highlighting that works for both page types
-      const sidebarItems = document.querySelectorAll('#sidebar .nav-list li');
-      const sidebarLinks = document.querySelectorAll('#sidebar .nav-list li a');
-      
-      if (sidebarItems.length && !document.querySelector('#sidebar .nav-list li.active')) {
-        // Use URL-based matching which is faster and works for both article and category pages
-        urlBasedMatchingWithoutClearingActive(sidebarLinks);
-      }
-    });
+    // PHASE 1: Handle critical UI updates first
+    // ----------------------------------------
     
-    // PHASE 3: Non-critical updates (do this when browser is idle)
-    if ('requestIdleCallback' in window) {
-      requestIdleCallback(function() {
-        updateArticleFooter();
-        fixNextPageButtons();
-      }, { timeout: 500 });
-    } else {
-      setTimeout(function() {
-        updateArticleFooter();
-        fixNextPageButtons();
-      }, 50);
+    // Show the background element that's already in the HTML
+    const backgroundElement = document.querySelector('.background');
+    if (backgroundElement) {
+      // Force a layout recalculation before adding the visible class
+      // This ensures a smooth transition effect
+      backgroundElement.getBoundingClientRect();
+      backgroundElement.classList.add('visible');
     }
     
-    // PHASE 4: Setup observers for dynamic elements (do this after page load)
-    window.addEventListener('load', function() {
-      // Set up observer for autocomplete dropdown
+    // PHASE 2: Schedule sidebar highlighting for the next animation frame
+    // ------------------------------------------------------------------
+    requestAnimationFrame(function() {
+      // Determine if we're on an article page or category page
+      const articleElement = document.getElementById('fullArticle');
+      
+      // Apply the appropriate sidebar highlighting based on page type
+      if (articleElement) {
+        // We're on an article page, highlight the corresponding sidebar item
+        // but only if no sidebar item is already highlighted
+        if (!document.querySelector('#sidebar .nav-list li.active')) {
+          const sectionName = articleElement.getAttribute('data-section-name');
+          const categoryLinks = document.querySelectorAll('#sidebar .nav-list li a');
+          
+          // Map section names to sidebar menu text
+          const categoryMap = {
+            "Billing": "Billing",
+            "Account": "Account Setup",
+            "Support": "Support",
+            "Features": "Features",
+            "Integrations": "Integrations",
+            "Use Cases": "Use Cases",
+            "Get Started": "Get Started",
+            "Level Up": "Level Up",
+            "Supercharge Your Team": "Supercharge Your Team"
+          };
+          
+          // Try to find and highlight the matching sidebar item
+          if (sectionName && categoryMap[sectionName]) {
+            const targetText = categoryMap[sectionName];
+            let found = false;
+            
+            for (let i = 0; i < categoryLinks.length; i++) {
+              if (categoryLinks[i].textContent.trim() === targetText) {
+                // Only add the active class if it's not already active
+                if (!categoryLinks[i].parentElement.classList.contains('active')) {
+                  categoryLinks[i].parentElement.classList.add('active');
+                }
+                found = true;
+                break;
+              }
+            }
+            
+            // If no match was found by text, try URL-based matching
+            if (!found) {
+              urlBasedMatchingWithoutClearingActive(categoryLinks);
+            }
+          }
+        }
+      } else {
+        // We're on a category page, handle sidebar highlighting for category pages
+        // Only proceed if no sidebar item is already highlighted
+        if (!document.querySelector('#sidebar .nav-list li.active')) {
+          updateSidebarFromCategoryPage();
+        }
+      }
+      
+      // PHASE 3: Enhance search UI components
+      // ------------------------------------
+      
+      // Enhance the search button with proper styling
+      const searchButton = document.querySelector('form.search.search-full input[type="submit"], form.search.search-full input[name="commit"]');
+      
+      if (searchButton && !searchButton.parentElement.classList.contains('search-button-wrapper')) {
+        // Create a wrapper for better styling and positioning
+        const wrapper = document.createElement('div');
+        wrapper.className = 'search-button-wrapper';
+        
+        // Insert wrapper before the button
+        searchButton.parentNode.insertBefore(wrapper, searchButton);
+        
+        // Move the button into the wrapper
+        wrapper.appendChild(searchButton);
+      }
+      
+      // Enhance the sidebar search functionality
+      enhanceSidebarSearch();
+      
+      // Set up observer for autocomplete dropdown to fix its positioning
       const autocompleteObserver = new MutationObserver(function(mutations) {
         const autocomplete = document.querySelector('#sidebar zd-autocomplete');
         if (autocomplete) {
@@ -1244,104 +1291,41 @@ function enhanceSearchButton() {
         }
       });
       
-      // Start observing DOM changes
+      // Start observing DOM changes to detect autocomplete appearance
       autocompleteObserver.observe(document.body, { childList: true, subtree: true });
       
-      // Handle window resize
+      // Handle window resize to reposition autocomplete dropdown
       window.addEventListener('resize', fixSidebarAutocomplete);
-    });
-  }
-
-  function urlBasedMatchingWithoutClearingActive(sidebarLinks) {
-    const currentUrl = window.location.href.toLowerCase();
-    const currentPath = window.location.pathname;
-    
-    // Fast path - direct matching
-    for (let i = 0; i < sidebarLinks.length; i++) {
-      const link = sidebarLinks[i];
-      const href = link.getAttribute('href');
       
-      // Direct match for page type
-      if (currentPath.includes('/articles/') && href.includes('level-up') ||
-          currentPath.includes('/articles/') && href.includes('get-started') ||
-          currentPath.includes('/articles/') && href.includes('supercharge')) {
-        link.parentElement.classList.add('active');
-        return;
-      }
-      
-      // Category match
-      if (currentPath.includes(href) && href.length > 5) {
-        link.parentElement.classList.add('active');
-        return;
-      }
-    }
-    
-    // No direct match found, use original urlBasedMatchingWithoutClearingActive logic
-    // (code from your original implementation)
-  }
-    
-    // IMPORTANT: SKIP search enhancement during initial load
-    // enhanceSidebarSearch() is removed from here
-
-    // Enhance the search button with proper styling for the main search
-    const searchButton = document.querySelector('form.search.search-full input[type="submit"], form.search.search-full input[name="commit"]');
-    if (searchButton && !searchButton.parentElement.classList.contains('search-button-wrapper')) {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'search-button-wrapper';
-      searchButton.parentNode.insertBefore(wrapper, searchButton);
-      wrapper.appendChild(searchButton);
-    }
-  });
-  
-  // Non-critical updates
-  if ('requestIdleCallback' in window) {
-    requestIdleCallback(function() {
-      updateArticleFooter();
-      fixNextPageButtons();
-    }, { timeout: 500 });
-  } else {
-    setTimeout(function() {
-      updateArticleFooter();
-      fixNextPageButtons();
-    }, 50);
-  }
-  
-  // IMPORTANT: Move all sidebar search enhancements to after full page load
-  window.addEventListener('load', function() {
-    console.log("Page fully loaded, now enhancing sidebar search");
-    
-    // Now it's safe to enhance the search
-    enhanceSidebarSearch();
-    
-    // Set up observer for autocomplete dropdown
-    const autocompleteObserver = new MutationObserver(function(mutations) {
-      const autocomplete = document.querySelector('#sidebar zd-autocomplete');
-      if (autocomplete) {
-        fixSidebarAutocomplete();
+      // Add input event listener to sidebar search for autocomplete positioning
+      const searchInput = document.querySelector('#sidebar .search-query, #sidebar input[type="search"]');
+      if (searchInput) {
+        searchInput.addEventListener('input', function() {
+          // Use setTimeout to ensure the autocomplete has time to appear
+          setTimeout(fixSidebarAutocomplete, 100);
+        });
       }
     });
     
-    // Start observing DOM changes but only after page is fully loaded
-    autocompleteObserver.observe(document.body, { childList: true, subtree: true });
-    
-    // Handle window resize to reposition autocomplete dropdown
-    window.addEventListener('resize', fixSidebarAutocomplete);
-    
-    // Add input event listener to sidebar search for autocomplete positioning
-    const searchInput = document.querySelector('#sidebar .search-query, #sidebar input[type="search"]');
-    if (searchInput) {
-      searchInput.addEventListener('input', function() {
-        setTimeout(fixSidebarAutocomplete, 100);
-      });
+    // PHASE 4: Schedule non-critical UI updates for idle time
+    // -----------------------------------------------------
+    if ('requestIdleCallback' in window) {
+      // Use requestIdleCallback if available for non-critical tasks
+      requestIdleCallback(function() {
+        // Update article footer with feedback link and formatted date
+        updateArticleFooter();
+        
+        // Fix formatting of "next page" buttons
+        fixNextPageButtons();
+      }, { timeout: 500 }); // Ensure it runs within 500ms even if the browser remains busy
+    } else {
+      // Fallback to setTimeout for browsers that don't support requestIdleCallback
+      setTimeout(function() {
+        updateArticleFooter();
+        fixNextPageButtons();
+      }, 50);
     }
-    
-    // Remove fixed width after everything is stable
-    setTimeout(() => {
-      if (sidebar) {
-        sidebar.style.width = '';
-      }
-    }, 100);
-  });
+  }
 
   // At the end of initDarkTheme
 window.addEventListener('load', function() {
@@ -1356,8 +1340,8 @@ window.addEventListener('load', function() {
       }
     }, 100);
   });
-    
-   /**
+  
+  /**
    * Performs URL-based sidebar highlighting without clearing existing active states
    * This modified version reduces DOM operations to prevent layout jumps
    */
@@ -1391,3 +1375,5 @@ window.addEventListener('load', function() {
       }
     }
   }
+  
+})();
