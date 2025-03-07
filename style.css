@@ -3601,50 +3601,50 @@ form.search.search-full input[type="text"]::-ms-clear {
 }
 
 /* Base button styling */
-form.search.search-full {
+/* form.search.search-full {
     display: flex !important;
-    align-items: flex-start !important; /* Align children to top */
+    align-items: flex-start !important; 
   }
 
 form.search.search-full input[type="submit"],
 form.search.search-full input[name="commit"] {
-  /* Text styling */
+
   color: #ffffff !important;
   font-family: "Adelle Sans", sans-serif !important;
   font-size: 24px !important;
   line-height: 100% !important;
   text-shadow: none !important;
   
-  /* Box model */
+
   height: 64px !important;
   padding: 0 32px !important;
   min-width: 150px !important;
   border-radius: 6px !important;
   
-  /* Remove default styling */
+
   border: none !important;
   outline: none !important;
   box-shadow: none !important;
   
-  /* Button background */
+
   background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), 
               linear-gradient(273.81deg, #FA75F8, #9E6EE5) !important;
   
-  /* Cursor */
+
   cursor: pointer !important;
   
-  /* Fix browser styling */
+
   -webkit-appearance: none !important;
   appearance: none !important;
 }
 
-/* Wrapper styles to handle position */
+
 .search-button-wrapper {
   display: inline-block !important;
   position: relative !important;
 }
 
-/* Disabled state */
+
 .search-button-wrapper.disabled input[type="submit"],
 .search-button-wrapper.disabled input[name="commit"] {
   background: transparent !important;
@@ -3652,7 +3652,7 @@ form.search.search-full input[name="commit"] {
   cursor: not-allowed !important;
 }
 
-/* Media queries for responsive design */
+
 @media (min-width: 768px) and (max-width: 1199px) {
   form.search.search-full input[type="submit"],
   form.search.search-full input[name="commit"] {
@@ -3677,4 +3677,131 @@ form.search.search-full input[name="commit"] {
     display: block !important;
     width: 100% !important;
   }
-}
+} */
+
+/* Base form styling */
+form.search.search-full {
+    display: flex !important;
+    align-items: stretch !important;
+  }
+  
+  /* Search button base styling */
+  form.search.search-full input[type="submit"],
+  form.search.search-full input[name="commit"] {
+    color: #ffffff !important;
+    font-family: "Adelle Sans", sans-serif !important;
+    font-size: 24px !important;
+    line-height: 100% !important;
+    height: 64px !important;
+    padding: 0 32px !important;
+    min-width: 150px !important;
+    
+    /* Make button transparent to show the gradient background from the wrapper */
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    
+    position: relative !important;
+    z-index: 2 !important; /* Ensure button content is above pseudo-elements */
+    cursor: pointer !important;
+    
+    -webkit-appearance: none !important;
+    appearance: none !important;
+  }
+  
+  /* Wrapper styling for pseudo-elements */
+  .search-button-wrapper {
+    position: relative !important;
+    display: inline-block !important;
+    border-radius: 6px !important;
+    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), 
+                linear-gradient(273.81deg, #FA75F8, #9E6EE5) !important;
+  }
+  
+  /* Border gradient using ::before */
+  .search-button-wrapper::before {
+    content: "" !important;
+    position: absolute !important;
+    top: -2px !important;
+    left: -2px !important;
+    right: -2px !important;
+    bottom: -2px !important;
+    border-radius: 8px !important;
+    background: linear-gradient(180deg, #FA75F8, #9E6EE5) !important;
+    z-index: 0 !important;
+  }
+  
+  /* Hover effect using ::after */
+  .search-button-wrapper::after {
+    content: "" !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    border-radius: 6px !important;
+    background: linear-gradient(90.81deg, #914694, #62438B) !important;
+    z-index: 1 !important;
+    opacity: 0 !important;
+    transition: opacity 0.3s ease !important;
+  }
+  
+  /* Hover effect */
+  .search-button-wrapper:hover::after {
+    opacity: 1 !important;
+  }
+  
+  /* Media queries */
+  @media (min-width: 768px) and (max-width: 1199px) {
+    form.search.search-full input[type="submit"],
+    form.search.search-full input[name="commit"] {
+      font-size: 20px !important;
+      height: 48px !important;
+      padding: 0 16px !important;
+    }
+    
+    .search-button-wrapper {
+      border-radius: 3px !important;
+    }
+    
+    .search-button-wrapper::before {
+      top: -1px !important;
+      left: -1px !important;
+      right: -1px !important;
+      bottom: -1px !important;
+      border-radius: 4px !important;
+    }
+    
+    .search-button-wrapper::after {
+      border-radius: 3px !important;
+    }
+  }
+  
+  @media (max-width: 767px) {
+    form.search.search-full input[type="submit"],
+    form.search.search-full input[name="commit"] {
+      font-size: 18px !important;
+      height: 40px !important;
+      padding: 0 16px !important;
+      width: 100% !important;
+    }
+    
+    .search-button-wrapper {
+      display: block !important;
+      width: 100% !important;
+      border-radius: 3px !important;
+    }
+    
+    .search-button-wrapper::before {
+      top: -1px !important;
+      left: -1px !important;
+      right: -1px !important;
+      bottom: -1px !important;
+      border-radius: 4px !important;
+    }
+    
+    .search-button-wrapper::after {
+      border-radius: 3px !important;
+    }
+  }
