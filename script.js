@@ -1140,7 +1140,7 @@ function enhanceSearchButtons() {
           max-height: 68px !important;
           padding: 0 32px !important;
           min-width: 150px !important;
-          border-radius: 6px !important;
+          border-radius: 8px !important;
           cursor: pointer !important;
           position: relative !important;
           box-sizing: border-box !important;
@@ -1181,12 +1181,6 @@ function enhanceSearchButtons() {
             linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), 
             linear-gradient(273.81deg, #FA75F8, #9E6EE5),
             linear-gradient(to right, #FA75F8, #9E6EE5) !important;
-        }
-        
-        /* Focus state */
-        form.search.search-full input[type="submit"]:focus,
-        form.search.search-full input[name="commit"]:focus {
-          box-shadow: 0 0 0 3px rgba(250, 117, 248, 0.3) !important;
         }
         
         /* Responsive styles */
