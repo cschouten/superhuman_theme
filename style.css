@@ -4007,3 +4007,21 @@ form.search.search-full {
 #sidebar form.search-full {
     position: relative !important;
 }
+
+/* Prevent sidebar jiggle when active class is applied */
+#sidebar .nav-list li a {
+    position: relative;
+    display: block;
+    /* Use consistent padding that won't change when active */
+    padding: 8px 15px 8px 15px;
+    /* Reserve space for any indicators */
+    border-left: 3px solid transparent;
+    transition: color 0.15s ease; /* Only transition color, not layout properties */
+  }
+  
+  /* Only change colors and visual properties, not layout properties */
+  #sidebar .nav-list li.active a {
+    border-left-color: #7c4bff; /* Or whatever your highlight color is */
+    color: #fff; /* Active text color */
+    /* Don't change padding, margin, font-weight or any property that would affect layout */
+  }
