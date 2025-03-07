@@ -681,6 +681,19 @@ function getElements(selector) {
   return selectorCache[selector];
 }
 
+// Add this to the beginning of your script
+document.addEventListener('DOMContentLoaded', function() {
+    // Pre-initialize sidebar search form structure
+    const searchForm = document.querySelector('#sidebar form.sidebar-search');
+    if (searchForm) {
+      searchForm.id = 'searchBar';
+      searchForm.classList.add('sm');
+      
+      // Make it visible immediately
+      searchForm.style.opacity = '1';
+    }
+  });
+
 // Reveal the background that's already in the HTML
 function addBackground() {
   const background = document.querySelector('.background');
@@ -1185,67 +1198,87 @@ function enhanceSearchButton() {
  * Initializes the dark theme and handles various UI enhancements
  * This function runs once and makes itself a no-op on subsequent calls
  */
-function initDarkTheme() {
-  // Prevent this function from running multiple times
-  initDarkTheme = function() {
-    console.log("Dark theme already initialized");
-  };
-
-  // Immediately fix sidebar width to prevent layout shifts
-  const sidebar = document.querySelector('#sidebar');
-  if (sidebar) {
-    const currentWidth = sidebar.offsetWidth;
-    sidebar.style.width = currentWidth + 'px';
-  }
-
-  // PHASE 1: Handle critical UI updates first
-  const backgroundElement = document.querySelector('.background');
-  if (backgroundElement) {
-    backgroundElement.getBoundingClientRect();
-    backgroundElement.classList.add('visible');
-  }
+  function initDarkTheme() {
+    // Prevent this function from running multiple times
+    initDarkTheme = function() {
+      console.log("Dark theme already initialized");
+    };
   
-  // PHASE 2: Schedule sidebar highlighting for the next animation frame
-  requestAnimationFrame(function() {
-    // Determine if we're on an article page or category page
-    const articleElement = document.getElementById('fullArticle');
-    
-    // Apply the appropriate sidebar highlighting based on page type
-    if (articleElement) {
-      if (!document.querySelector('#sidebar .nav-list li.active')) {
-        const sectionName = articleElement.getAttribute('data-section-name');
-        const categoryLinks = document.querySelectorAll('#sidebar .nav-list li a');
-        
-        // Map section names to sidebar menu text
-        const categoryMap = {
-          "Billing": "Billing",
-          "Account": "Account Setup",
-          "Support": "Support",
-          "Features": "Features",
-          "Integrations": "Integrations",
-          "Use Cases": "Use Cases",
-          "Get Started": "Get Started",
-          "Level Up": "Level Up",
-          "Supercharge Your Team": "Supercharge Your Team"
-        };
-        
-        if (sectionName && categoryMap[sectionName]) {
-          const targetText = categoryMap[sectionName];
-          
-          for (let i = 0; i < categoryLinks.length; i++) {
-            if (categoryLinks[i].textContent.trim() === targetText) {
-              categoryLinks[i].parentElement.classList.add('active');
-              break;
-            }
-          }
-        }
+    // PHASE 1: Critical UI updates first (do this immediately)
+    addBackground();
+    enhanceSidebarSearch(); // Move this up to load search immediately
+    enhanceSearchButton();
+  
+    // PHASE 2: Non-critical UI updates (do this next frame)
+    requestAnimationFrame(function() {
+      // Simplified sidebar highlighting that works for both page types
+      const sidebarItems = document.querySelectorAll('#sidebar .nav-list li');
+      const sidebarLinks = document.querySelectorAll('#sidebar .nav-list li a');
+      
+      if (sidebarItems.length && !document.querySelector('#sidebar .nav-list li.active')) {
+        // Use URL-based matching which is faster and works for both article and category pages
+        urlBasedMatchingWithoutClearingActive(sidebarLinks);
       }
+    });
+    
+    // PHASE 3: Non-critical updates (do this when browser is idle)
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(function() {
+        updateArticleFooter();
+        fixNextPageButtons();
+      }, { timeout: 500 });
     } else {
-      // We're on a category page
-      if (!document.querySelector('#sidebar .nav-list li.active')) {
-        updateSidebarFromCategoryPage();
+      setTimeout(function() {
+        updateArticleFooter();
+        fixNextPageButtons();
+      }, 50);
+    }
+    
+    // PHASE 4: Setup observers for dynamic elements (do this after page load)
+    window.addEventListener('load', function() {
+      // Set up observer for autocomplete dropdown
+      const autocompleteObserver = new MutationObserver(function(mutations) {
+        const autocomplete = document.querySelector('#sidebar zd-autocomplete');
+        if (autocomplete) {
+          fixSidebarAutocomplete();
+        }
+      });
+      
+      // Start observing DOM changes
+      autocompleteObserver.observe(document.body, { childList: true, subtree: true });
+      
+      // Handle window resize
+      window.addEventListener('resize', fixSidebarAutocomplete);
+    });
+  }
+
+  function urlBasedMatchingWithoutClearingActive(sidebarLinks) {
+    const currentUrl = window.location.href.toLowerCase();
+    const currentPath = window.location.pathname;
+    
+    // Fast path - direct matching
+    for (let i = 0; i < sidebarLinks.length; i++) {
+      const link = sidebarLinks[i];
+      const href = link.getAttribute('href');
+      
+      // Direct match for page type
+      if (currentPath.includes('/articles/') && href.includes('level-up') ||
+          currentPath.includes('/articles/') && href.includes('get-started') ||
+          currentPath.includes('/articles/') && href.includes('supercharge')) {
+        link.parentElement.classList.add('active');
+        return;
+      }
+      
+      // Category match
+      if (currentPath.includes(href) && href.length > 5) {
+        link.parentElement.classList.add('active');
+        return;
       }
     }
+    
+    // No direct match found, use original urlBasedMatchingWithoutClearingActive logic
+    // (code from your original implementation)
+  }
     
     // IMPORTANT: SKIP search enhancement during initial load
     // enhanceSidebarSearch() is removed from here
@@ -1309,7 +1342,6 @@ function initDarkTheme() {
       }
     }, 100);
   });
-}
 
   // At the end of initDarkTheme
 window.addEventListener('load', function() {
@@ -1324,8 +1356,8 @@ window.addEventListener('load', function() {
       }
     }, 100);
   });
-  
-  /**
+    
+   /**
    * Performs URL-based sidebar highlighting without clearing existing active states
    * This modified version reduces DOM operations to prevent layout jumps
    */
@@ -1359,5 +1391,3 @@ window.addEventListener('load', function() {
       }
     }
   }
-  
-})();
