@@ -3444,10 +3444,12 @@ zd-autocomplete {
     font-family: "Adelle Sans" !important;
     margin-top: 0 !important;
     z-index: 1000 !important;
-    width: 100% !important; /* Changed from fixed width to 100% */
-    left: 0 !important; /* Ensure it aligns from the left edge */
-    right: 0 !important; /* Ensure it extends to the right edge */
-    position: absolute !important; /* Position it absolutely relative to form */
+    
+    /* These are the critical properties */
+    position: absolute !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
 }
 
 @media (max-width: 767px) {
