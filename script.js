@@ -1135,9 +1135,13 @@ function enhanceSearchButtons() {
           font-family: "Adelle Sans", sans-serif !important;
           font-size: 24px !important;
           line-height: 100% !important;
-          height: 68px !important; /* 64px content height + 4px for borders */
-          min-height: 68px !important;
-          max-height: 68px !important;
+          vertical-align: top !important; /* Align to the top */
+          margin-top: 0 !important; /* Ensure no top margin */
+          position: relative !important;
+          top: 0 !important; /* Ensure no top offset */
+          height: 66px !important; /* 64px content height + 2px for borders */
+          min-height: 66px !important;
+          max-height: 66px !important;
           padding: 0 32px !important;
           min-width: 150px !important;
           border-radius: 8px !important;
