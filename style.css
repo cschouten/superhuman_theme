@@ -3587,6 +3587,11 @@ zd-autocomplete-multibrand zd-autocomplete-breadcrumbs-multibrand {
 }
 
 /* Base button styling */
+form.search.search-full {
+    display: flex !important;
+    align-items: flex-start !important; /* Align children to top */
+  }
+  
 form.search.search-full input[type="submit"],
 form.search.search-full input[name="commit"] {
   /* Text styling */
