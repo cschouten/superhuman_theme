@@ -1128,26 +1128,31 @@ function enhanceSearchButtons() {
       const styleSheet = document.createElement('style');
       styleSheet.id = 'search-button-styles';
       styleSheet.textContent = `
-        /* Base button styles */
-        form.search.search-full input[type="submit"],
-        form.search.search-full input[name="commit"] {
+        /* Target button with highest specificity */
+        html body form.search.search-full input[type="submit"],
+        html body form.search.search-full input[name="commit"] {
+          display: block !important;
+          box-sizing: border-box !important;
+          -webkit-box-sizing: border-box !important;
+          -moz-box-sizing: border-box !important;
+          height: 64px !important; /* Force exact height */
+          min-height: 64px !important;
+          max-height: 64px !important;
+          line-height: 60px !important; /* Adjust line height to center text */
+          margin: 0 !important;
+          padding: 0 32px !important;
+          /* Rest of your styles */
           color: #ffffff !important;
           font-family: "Adelle Sans", sans-serif !important;
           font-size: 24px !important;
-          line-height: 100% !important;
-          height: 64px !important;
-          padding: 0 32px !important;
           min-width: 150px !important;
-          border-radius: 6px !important;
+          border-radius: 8px !important; /* Match input field */
+          border: 2px solid transparent !important;
           cursor: pointer !important;
           position: relative !important;
-          box-sizing: border-box !important;
-          
-          /* Preserve functionality while fixing appearance */
-          border: 2px solid transparent !important;
           outline: none !important;
           
-          /* Gradient background and border trick */
+          /* Gradient background */
           background-origin: border-box !important;
           background-clip: padding-box, border-box !important;
           background-image: 
@@ -1155,64 +1160,60 @@ function enhanceSearchButtons() {
             linear-gradient(273.81deg, #FA75F8, #9E6EE5),
             linear-gradient(to right, #FA75F8, #9E6EE5) !important;
           
-          /* Smooth transitions */
           transition: background-image 0.3s ease !important;
-          
-          /* Fix any browser styling issues */
           -webkit-appearance: none !important;
           appearance: none !important;
         }
         
-        /* Hover state - only darken the background */
-        form.search.search-full input[type="submit"]:hover,
-        form.search.search-full input[name="commit"]:hover {
+        /* Hover state */
+        html body form.search.search-full input[type="submit"]:hover,
+        html body form.search.search-full input[name="commit"]:hover {
           background-image: 
             linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), 
             linear-gradient(273.81deg, #FA75F8, #9E6EE5),
             linear-gradient(to right, #FA75F8, #9E6EE5) !important;
         }
         
-        /* Active/pressed state */
-        form.search.search-full input[type="submit"]:active,
-        form.search.search-full input[name="commit"]:active {
+        /* Active state */
+        html body form.search.search-full input[type="submit"]:active,
+        html body form.search.search-full input[name="commit"]:active {
           background-image: 
             linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), 
             linear-gradient(273.81deg, #FA75F8, #9E6EE5),
             linear-gradient(to right, #FA75F8, #9E6EE5) !important;
         }
         
-        /* Focus state */
-        form.search.search-full input[type="submit"]:focus,
-        form.search.search-full input[name="commit"]:focus {
-          box-shadow: 0 0 0 3px rgba(250, 117, 248, 0.3) !important;
-        }
-        
-        /* Responsive styles */
+        /* Media queries with same high specificity */
         @media (min-width: 768px) and (max-width: 1199px) {
-          form.search.search-full input[type="submit"],
-          form.search.search-full input[name="commit"] {
-            font-size: 20px !important;
+          html body form.search.search-full input[type="submit"],
+          html body form.search.search-full input[name="commit"] {
             height: 48px !important;
+            min-height: 48px !important;
+            max-height: 48px !important;
+            line-height: 44px !important;
+            font-size: 20px !important;
             padding: 0 16px !important;
-            border-radius: 3px !important;
+            border-radius: 4px !important;
             border-width: 1px !important;
           }
         }
         
         @media (max-width: 767px) {
-          form.search.search-full input[type="submit"],
-          form.search.search-full input[name="commit"] {
-            font-size: 18px !important;
+          html body form.search.search-full input[type="submit"],
+          html body form.search.search-full input[name="commit"] {
             height: 40px !important;
+            min-height: 40px !important;
+            max-height: 40px !important;
+            line-height: 36px !important;
+            font-size: 18px !important;
             padding: 0 16px !important;
-            border-radius: 3px !important;
+            border-radius: 4px !important;
             border-width: 1px !important;
             width: 100% !important;
           }
         }
       `;
       
-      // Add stylesheet to head
       document.head.appendChild(styleSheet);
     }
   }
