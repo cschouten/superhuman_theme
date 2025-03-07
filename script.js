@@ -1251,14 +1251,13 @@ function enhanceSearchButton() {
       // enhanceSidebarSearch() is removed from here
   
       // Enhance the search button with proper styling for the main search
-      
-    //   const searchButton = document.querySelector('form.search.search-full input[type="submit"], form.search.search-full input[name="commit"]');
-    //   if (searchButton && !searchButton.parentElement.classList.contains('search-button-wrapper')) {
-    //     const wrapper = document.createElement('div');
-    //     wrapper.className = 'search-button-wrapper';
-    //     searchButton.parentNode.insertBefore(wrapper, searchButton);
-    //     wrapper.appendChild(searchButton);
-    //   }
+      const searchButton = document.querySelector('form.search.search-full input[type="submit"], form.search.search-full input[name="commit"]');
+      if (searchButton && !searchButton.parentElement.classList.contains('search-button-wrapper')) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'search-button-wrapper';
+        searchButton.parentNode.insertBefore(wrapper, searchButton);
+        wrapper.appendChild(searchButton);
+      }
     });
     
     // Non-critical updates
@@ -1279,29 +1278,29 @@ function enhanceSearchButton() {
       console.log("Page fully loaded, now enhancing sidebar search");
       
       // Now it's safe to enhance the search
-      enhanceSidebarSearch();
+      // enhanceSidebarSearch();
       
       // Set up observer for autocomplete dropdown
-      const autocompleteObserver = new MutationObserver(function(mutations) {
-        const autocomplete = document.querySelector('#sidebar zd-autocomplete');
-        if (autocomplete) {
-          fixSidebarAutocomplete();
-        }
-      });
+    //   const autocompleteObserver = new MutationObserver(function(mutations) {
+    //     const autocomplete = document.querySelector('#sidebar zd-autocomplete');
+    //     if (autocomplete) {
+    //       fixSidebarAutocomplete();
+    //     }
+    //   });
       
-      // Start observing DOM changes but only after page is fully loaded
-      autocompleteObserver.observe(document.body, { childList: true, subtree: true });
+    //   // Start observing DOM changes but only after page is fully loaded
+    //   autocompleteObserver.observe(document.body, { childList: true, subtree: true });
       
-      // Handle window resize to reposition autocomplete dropdown
-      window.addEventListener('resize', fixSidebarAutocomplete);
+    //   // Handle window resize to reposition autocomplete dropdown
+    //   window.addEventListener('resize', fixSidebarAutocomplete);
       
-      // Add input event listener to sidebar search for autocomplete positioning
-      const searchInput = document.querySelector('#sidebar .search-query, #sidebar input[type="search"]');
-      if (searchInput) {
-        searchInput.addEventListener('input', function() {
-          setTimeout(fixSidebarAutocomplete, 100);
-        });
-      }
+    //   // Add input event listener to sidebar search for autocomplete positioning
+    //   const searchInput = document.querySelector('#sidebar .search-query, #sidebar input[type="search"]');
+    //   if (searchInput) {
+    //     searchInput.addEventListener('input', function() {
+    //       setTimeout(fixSidebarAutocomplete, 100);
+    //     });
+    //   }
       
       // Remove fixed width after everything is stable
       setTimeout(() => {
