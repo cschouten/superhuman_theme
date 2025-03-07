@@ -3591,38 +3591,43 @@ zd-autocomplete-multibrand zd-autocomplete-breadcrumbs-multibrand {
     }
 }
 
-/* CSS-only approach with precise gradient and border effects */
+/* Normal state - Zendesk Guide Search Button */
 form.search.search-full input[type="submit"],
 form.search.search-full input[name="commit"] {
+  /* Text styling */
   color: #ffffff !important;
   font-family: "Adelle Sans" !important;
   font-size: 24px !important;
   line-height: 100% !important;
+  text-shadow: none !important;
+  
+  /* Box model */
   height: 64px !important;
   padding: 0 32px !important;
   min-width: 150px !important;
-  cursor: pointer !important;
-  
-  /* Create the deeper purple background */
-  background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), linear-gradient(273.81deg, #FA75F8, #9E6EE5) !important;
-  
-  /* Remove standard border */
+  border-radius: 6px !important;
   border: none !important;
   
-  /* Add border radius for the button */
-  border-radius: 6px !important;
+  /* Positioning and behavior */
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
   
-  /* Add the gradient border using box-shadow */
-  box-shadow: 
-    0 0 0 2px #FA75F8, 
-    0 0 0 2px #9E6EE5, 
-    inset 0 0 0 0 transparent !important;
+  /* Background with gradient - matching Help Scout exactly */
+  background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), 
+              linear-gradient(273.81deg, #FA75F8, #9E6EE5) !important;
   
-  /* Use background-clip to help with the gradient border */
-  background-clip: padding-box !important;
+  /* Remove box-shadow that was creating additional border effect */
+  box-shadow: none !important;
   
-  /* Add transition for hover */
-  transition: background 1.0s ease, box-shadow 1.0s ease !important;
+  /* Ensure smooth transitions */
+  transition: opacity 0.3s ease, transform 0.2s ease !important;
+  
+  /* Fix any webkit appearance issues */
+  -webkit-appearance: none !important;
+  appearance: none !important;
 }
 
 /* Hover effect */
