@@ -681,44 +681,44 @@ function getElements(selector) {
   return selectorCache[selector];
 }
 
-// Main initialization function
-function initDarkTheme() {
-  // Make this function a no-op if it's called again
-  initDarkTheme = function() {};
+// // Main initialization function
+// function initDarkTheme() {
+//   // Make this function a no-op if it's called again
+//   initDarkTheme = function() {};
   
-  // Show background immediately
-  addBackground();
+//   // Show background immediately
+//   addBackground();
   
-  // Split tasks into critical and non-critical
-  const criticalTasks = () => {
-    // Prioritize sidebar navigation as it affects user experience immediately
-    const articleEl = document.getElementById('fullArticle');
+//   // Split tasks into critical and non-critical
+//   const criticalTasks = () => {
+//     // Prioritize sidebar navigation as it affects user experience immediately
+//     const articleEl = document.getElementById('fullArticle');
     
-    if (articleEl) {
-      // We're on an article page - use article data to highlight sidebar
-      updateSidebarFromArticle(articleEl);
-    } else {
-      // We're on a category page or another type of page
-      updateSidebarFromCategoryPage();
-    }
-  };
+//     if (articleEl) {
+//       // We're on an article page - use article data to highlight sidebar
+//       updateSidebarFromArticle(articleEl);
+//     } else {
+//       // We're on a category page or another type of page
+//       updateSidebarFromCategoryPage();
+//     }
+//   };
 
-  const nonCriticalTasks = () => {
-    // Less critical UI updates
-    updateArticleFooter();
-    fixNextPageButtons();
-  };
+//   const nonCriticalTasks = () => {
+//     // Less critical UI updates
+//     updateArticleFooter();
+//     fixNextPageButtons();
+//   };
 
-  // Execute critical tasks immediately
-  requestAnimationFrame(criticalTasks);
+//   // Execute critical tasks immediately
+//   requestAnimationFrame(criticalTasks);
 
-  // Defer non-critical tasks
-  if ('requestIdleCallback' in window) {
-    requestIdleCallback(nonCriticalTasks, { timeout: 500 });
-  } else {
-    setTimeout(nonCriticalTasks, 50);
-  }
-}
+//   // Defer non-critical tasks
+//   if ('requestIdleCallback' in window) {
+//     requestIdleCallback(nonCriticalTasks, { timeout: 500 });
+//   } else {
+//     setTimeout(nonCriticalTasks, 50);
+//   }
+// }
 
 // Reveal the background that's already in the HTML
 function addBackground() {
@@ -1218,7 +1218,6 @@ function enhanceSearchButton() {
   });
   
   // Update the initDarkTheme function to include button enhancement
-  // Update the initDarkTheme function to include button enhancement
   function initDarkTheme() {
     // Make this function a no-op if it's called again
     initDarkTheme = function() {};
@@ -1265,11 +1264,5 @@ function enhanceSearchButton() {
       }, 50);
     }
   }
-
-  // Initialize on DOMContentLoaded
-  document.addEventListener('DOMContentLoaded', function() {
-    // Initialize dark theme when DOM is ready
-    initDarkTheme();
-    }, { once: true });
   
 })();
