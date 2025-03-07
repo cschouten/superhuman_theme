@@ -4026,7 +4026,8 @@ form.search.search-full {
 .pagination .next, .pagination .last {
     margin-left: 5px;
 }
-  .custom-pagination {
+
+.custom-pagination {
     margin-top: 20px;
     margin-bottom: 20px;
     text-align: left;
@@ -4043,6 +4044,7 @@ form.search.search-full {
     text-decoration: none;
     padding: 0 12px;
     display: inline-block;
+    position: relative;
   }
   
   .custom-pagination a:hover {
@@ -4065,7 +4067,22 @@ form.search.search-full {
   }
   
   .custom-pagination span.current {
-    font-weight: bold; /* Make current page number bold */
+    font-weight: bold;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .custom-pagination span.current::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 28px;
+    height: 28px;
+    border: 1px solid rgba(249, 145, 249, 0.5);
+    border-radius: 50%;
+    z-index: -1;
   }
   
   .custom-pagination .separator {
