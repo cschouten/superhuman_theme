@@ -890,72 +890,58 @@ function highlightMenuItem(items, menuMap, targetText) {
 }
 
 // Optimized sidebar update for article pages
+// Simplify the updateSidebarFromArticle function
 function updateSidebarFromArticle(articleEl) {
-  // If articleEl is not provided, use cached or get it
-  articleEl = articleEl || document.getElementById('fullArticle');
-  
-  // Exit early if article element doesn't exist
-  if (!articleEl) return;
-  
-  // Get section data
-  const sectionId = articleEl.getAttribute('data-section-id');
-  const sectionName = articleEl.getAttribute('data-section-name');
-  
-  // Get sidebar items once
-  const sidebarItems = getElements('#sidebar .nav-list li');
-  const sidebarLinks = getElements('#sidebar .nav-list li a');
-  
-  // Exit early if no sidebar
-  if (!sidebarItems.length) return;
-  
-  // Create category map for direct matching
-  const categoryMap = {
-    "Billing": "Billing",
-    "Account": "Account Setup",
-    "Support": "Support",
-    "Features": "Features",
-    "Feature": "Features",
-    "Integrations": "Integrations",
-    "Integration": "Integrations",
-    "Use Cases": "Use Cases",
-    "Use Case": "Use Cases",
-    "Get Started": "Get Started",
-    "Level Up": "Level Up",
-    "Supercharge Your Team": "Supercharge Your Team"
-  };
-  
-  // Build menu map once
-  const menuMap = buildMenuMap(sidebarLinks);
-  
-  // Try section name matching if available
-  if (sectionName) {
-    // 1. Try exact match first
-    if (categoryMap[sectionName] && highlightMenuItem(sidebarItems, menuMap, categoryMap[sectionName])) {
-      return;
-    }
+    // If item is already highlighted, do nothing
+    if (document.querySelector('#sidebar .nav-list li.active')) return;
     
-    // 2. Try partial match
-    for (const [pattern, category] of Object.entries(categoryMap)) {
-      if (sectionName.includes(pattern) && highlightMenuItem(sidebarItems, menuMap, category)) {
-        return;
-      }
-    }
+    // Get section data - use direct element access for speed
+    const sectionName = articleEl.getAttribute('data-section-name');
     
-    // 3. Case-insensitive keyword check
-    const lowerSectionName = sectionName.toLowerCase();
-    for (const keyword of ["billing", "account", "support", "feature", "integration", "use case"]) {
-      if (lowerSectionName.includes(keyword)) {
-        const mappedCategory = categoryMap[keyword.charAt(0).toUpperCase() + keyword.slice(1)];
-        if (mappedCategory && highlightMenuItem(sidebarItems, menuMap, mappedCategory)) {
+    // Create direct mapping object for speed
+    const categoryMap = {
+      "Billing": "Billing",
+      "Account": "Account Setup",
+      "Support": "Support",
+      "Features": "Features",
+      "Integrations": "Integrations",
+      "Use Cases": "Use Cases",
+      "Get Started": "Get Started",
+      "Level Up": "Level Up",
+      "Supercharge Your Team": "Supercharge Your Team"
+    };
+    
+    // Use fast DOM methods
+    const links = document.querySelectorAll('#sidebar .nav-list li a');
+    
+    // Try direct match first (fastest)
+    if (sectionName && categoryMap[sectionName]) {
+      const targetText = categoryMap[sectionName];
+      for (let i = 0; i < links.length; i++) {
+        if (links[i].textContent.trim() === targetText) {
+          links[i].parentElement.classList.add('active');
           return;
         }
       }
     }
+    
+    // If no match, fall back to URL-based matching
+    const currentPath = window.location.pathname;
+    let bestMatch = null;
+    let bestMatchLength = 0;
+    
+    for (let i = 0; i < links.length; i++) {
+      const href = links[i].getAttribute('href');
+      if (currentPath === href || (currentPath.indexOf(href) === 0 && href.length > bestMatchLength)) {
+        bestMatch = links[i];
+        bestMatchLength = href.length;
+      }
+    }
+    
+    if (bestMatch) {
+      bestMatch.parentElement.classList.add('active');
+    }
   }
-  
-  // If no match found by content, try URL-based matching
-  urlBasedMatching(sidebarItems, sidebarLinks);
-}
 
 // Optimized sidebar update for category pages
 function updateSidebarFromCategoryPage() {
@@ -1233,66 +1219,57 @@ function enhanceSearchButton() {
   
   // Update the initDarkTheme function to include button enhancement
   // Update the initDarkTheme function to include button enhancement
-function initDarkTheme() {
+  function initDarkTheme() {
     // Make this function a no-op if it's called again
     initDarkTheme = function() {};
     
-    // Show background immediately
-    addBackground();
+    // IMPORTANT: Run sidebar highlighting SYNCHRONOUSLY before any other tasks
+    const articleEl = document.getElementById('fullArticle');
+    if (articleEl) {
+      updateSidebarFromArticle(articleEl);
+    } else {
+      updateSidebarFromCategoryPage();
+    }
     
-    // Split tasks into critical and non-critical
-    const criticalTasks = () => {
-      // Prioritize sidebar navigation as it affects user experience immediately
-      const articleEl = document.getElementById('fullArticle');
-      
-      if (articleEl) {
-        // We're on an article page - use article data to highlight sidebar
-        updateSidebarFromArticle(articleEl);
-      } else {
-        // We're on a category page or another type of page
-        updateSidebarFromCategoryPage();
-      }
-      
-      // Apply button styling right away (it's lightweight CSS-only)
+    // AFTER highlighting is complete, handle background and other tasks
+    // using requestAnimationFrame to ensure they happen in next paint cycle
+    requestAnimationFrame(() => {
+      addBackground();
       enhanceSearchButton();
       enhanceSidebarSearch();
       
       // Start observing for autocomplete dropdown
       autocompleteObserver.observe(document.body, { childList: true, subtree: true });
       
-      // Add event listeners for autocomplete size fixing
+      // Add event listeners
       window.addEventListener('resize', fixSidebarAutocomplete);
       
-      // Add input event listener for search
       const searchInput = document.querySelector('#sidebar .search-query, #sidebar input[type="search"]');
       if (searchInput) {
         searchInput.addEventListener('input', function() {
           setTimeout(fixSidebarAutocomplete, 100);
         });
       }
-    };
-  
-    const nonCriticalTasks = () => {
-      // Less critical UI updates
-      updateArticleFooter();
-      fixNextPageButtons();
-    };
-  
-    // Execute critical tasks immediately
-    requestAnimationFrame(criticalTasks);
-  
-    // Defer non-critical tasks
+    });
+    
+    // Defer truly non-critical tasks
     if ('requestIdleCallback' in window) {
-      requestIdleCallback(nonCriticalTasks, { timeout: 500 });
+      requestIdleCallback(() => {
+        updateArticleFooter();
+        fixNextPageButtons();
+      }, { timeout: 500 });
     } else {
-      setTimeout(nonCriticalTasks, 50);
+      setTimeout(() => {
+        updateArticleFooter();
+        fixNextPageButtons();
+      }, 50);
     }
   }
 
-// Initialize on DOMContentLoaded
-document.addEventListener('DOMContentLoaded', function() {
-  // Initialize dark theme when DOM is ready
-  initDarkTheme();
-});
+  // Initialize on DOMContentLoaded
+  document.addEventListener('DOMContentLoaded', function() {
+    // Initialize dark theme when DOM is ready
+    initDarkTheme();
+    }, { once: true });
   
-  })();
+})();
