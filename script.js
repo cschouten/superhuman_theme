@@ -1396,58 +1396,30 @@ window.addEventListener('load', function() {
     }
   }
 
- /**
- * Zero-flicker sidebar selection function that eliminates layout shifts
- * - Uses DOM manipulation techniques instead of CSS
+  /**
+ * Optimized function to update sidebar selection with minimal layout shifts 
  */
 function updateSidebarSelection(targetLink) {
     if (!targetLink) return;
     
-    const sidebar = document.querySelector('#sidebar');
-    if (!sidebar) return;
-    
-    // Create a screenshot/clone of the sidebar in its current state
-    const sidebarRect = sidebar.getBoundingClientRect();
-    const placeholder = document.createElement('div');
-    placeholder.style.position = 'fixed';
-    placeholder.style.left = `${sidebarRect.left}px`;
-    placeholder.style.top = `${sidebarRect.top}px`;
-    placeholder.style.width = `${sidebarRect.width}px`;
-    placeholder.style.height = `${sidebarRect.height}px`;
-    placeholder.style.zIndex = '999';
-    placeholder.style.background = getComputedStyle(sidebar).backgroundColor || 'transparent';
-    
-    // Clone the content - simplified version just for visual stability
-    placeholder.innerHTML = sidebar.innerHTML;
-    document.body.appendChild(placeholder);
-    
     // Get all menu items at once
     const sidebarItems = document.querySelectorAll('#sidebar .nav-list li');
+    
+    // Only proceed if we need to change something
     const targetLi = targetLink.closest('li');
+    if (!targetLi || targetLi.classList.contains('active')) return;
     
-    if (!targetLi) {
-      document.body.removeChild(placeholder);
-      return;
-    }
-    
-    // Make DOM changes behind the placeholder
+    // Single pass operation - remove all active classes
     sidebarItems.forEach(item => {
-      item.classList.remove('active');
+      if (item.classList.contains('active')) {
+        item.classList.remove('active');
+      }
     });
     
-    targetLi.classList.add('active');
-    
-    // Fade out the placeholder and remove it
-    setTimeout(() => {
-      placeholder.style.transition = 'opacity 150ms ease';
-      placeholder.style.opacity = '0';
-      
-      setTimeout(() => {
-        if (document.body.contains(placeholder)) {
-          document.body.removeChild(placeholder);
-        }
-      }, 150);
-    }, 50);
+    // Add class in a separate operation to force browser to batch changes
+    requestAnimationFrame(() => {
+      targetLi.classList.add('active');
+    });
   }
   
 })();
