@@ -2753,10 +2753,11 @@ a > * {
     display: block;
     text-shadow: none
 }
-/* 
+
 #sidebar {
     width: calc((100% - 352px) / 12 * 3 + 64px);
-  } */
+  }
+  
   @media (max-width: 767px) {
     #sidebar {
       width: unset;
