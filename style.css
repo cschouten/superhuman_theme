@@ -4223,6 +4223,12 @@ form.search.search-full {
     font-size: 16px !important;
     padding-bottom: 4px !important;
     font-family: "Adelle Sans" !important;
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    display: block !important;
+    line-height: 1.4 !important;
+    max-width: 100% !important;
 }
 
 /* Hide breadcrumbs in multibrand results */
