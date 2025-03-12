@@ -2001,7 +2001,7 @@ footer p {
     float: right
 }
 
-.row-fluid [class*=span],.uneditable-input[class*=span],[class*=span] {
+/* .row-fluid [class*=span],.uneditable-input[class*=span],[class*=span] {
     float: none;
     display: block;
     width: 100%;
@@ -2009,7 +2009,7 @@ footer p {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box
-}
+} */
 
 .row-fluid .span12,.span12 {
     width: 100%;
