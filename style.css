@@ -2321,9 +2321,9 @@ a > * {
     padding-top: 8px;
   }
 }
-#main-content .contentWrapper #fullArticle .admin-edit {
+/* #main-content .contentWrapper #fullArticle .admin-edit {
   text-shadow: none;
-}
+} */
 #main-content .contentWrapper #fullArticle strong {
   color: #ffffff;
 }
@@ -2835,11 +2835,11 @@ a > * {
     margin: 0 30px .5em 0
 }
 
-#fullArticle .admin-edit {
+/* #fullArticle .admin-edit {
     color: #333;
     display: inline-block;
     margin-bottom: 22px
-}
+} */
 
 #fullArticle .printArticle {
     position: absolute;
@@ -3425,8 +3425,8 @@ zd-autocomplete {
     font-family: "Adelle Sans" !important;
     margin-top: 0 !important; /* Changed from 8px to 0 to make it touch the search bar */
     z-index: 1000 !important;
-    width: 528px !important;
-    max-width: calc(100vw - 30px) !important;
+    /* width: 528px !important;
+    max-width: calc(100vw - 30px) !important; */
     overflow-x: hidden !important;
     box-sizing: border-box !important;
 }
