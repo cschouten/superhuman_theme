@@ -1781,8 +1781,6 @@ footer p {
 .row-fluid {
     width: 100%;
     *zoom:1
-    /* display: flex;
-    min-height: 100%; */
 }
 
 .row-fluid:after,.row-fluid:before {
@@ -2003,17 +2001,26 @@ footer p {
     float: right
 }
 
-/* Handle responsive layouts */
-/* @media (max-width: 767px) {
-  .row-fluid {
-    flex-direction: column;
-  }
-  
-  #sidebar {
+.row-fluid [class*=span],.uneditable-input[class*=span],[class*=span] {
+    float: none;
+    display: block;
     width: 100%;
-    margin-bottom: 20px;
-  }
-} */
+    margin-left: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box
+}
+
+.row-fluid .span12,.span12 {
+    width: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box
+}
+
+.row-fluid [class*=offset]:first-child {
+    margin-left: 0
+}
 
 /* Remove underlines from all links in all states */
 a,
