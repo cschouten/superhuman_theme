@@ -3750,6 +3750,13 @@ zd-autocomplete-multibrand zd-autocomplete-breadcrumbs-multibrand {
     display: none !important;
 }
 
+@media screen and (min-width: 375px) {
+    #sidebar zd-autocomplete, 
+    .sidebar-search zd-autocomplete {
+      min-width: initial !important;
+    }
+  }
+  
 /* No results message */
 .no-results {
     font-family: "Adelle Sans" !important;
