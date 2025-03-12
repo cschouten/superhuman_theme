@@ -1402,24 +1402,23 @@ window.addEventListener('load', function() {
 function updateSidebarSelection(targetLink) {
     if (!targetLink) return;
     
-    // Get all menu items at once
-    const sidebarItems = document.querySelectorAll('#sidebar .nav-list li');
-    
     // Only proceed if we need to change something
     const targetLi = targetLink.closest('li');
     if (!targetLi || targetLi.classList.contains('active')) return;
     
-    // Single pass operation - remove all active classes
-    sidebarItems.forEach(item => {
-      if (item.classList.contains('active')) {
-        item.classList.remove('active');
-      }
-    });
+    // Find currently active item first
+    const currentActive = document.querySelector('#sidebar .nav-list li.active');
     
-    // Add class in a separate operation to force browser to batch changes
-    requestAnimationFrame(() => {
+    // If there's no active item or it's the same as target, just add active class
+    if (!currentActive || currentActive === targetLi) {
       targetLi.classList.add('active');
-    });
+      return;
+    }
+    
+    // Do a direct swap - remove and add in the same tick
+    // This prevents multiple reflows which cause the flickering
+    currentActive.classList.remove('active');
+    targetLi.classList.add('active');
   }
   
 })();
