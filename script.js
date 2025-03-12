@@ -1208,19 +1208,19 @@ function initDarkTheme() {
     // PHASE 2: Schedule sidebar highlighting for the next animation frame
     // ------------------------------------------------------------------
     requestAnimationFrame(function() {
-      // Determine if we're on an article page or category page
-      const articleElement = document.getElementById('fullArticle');
-      
-      // Apply the appropriate sidebar highlighting based on page type
-      if (articleElement) {
-        // We're on an article page, highlight the corresponding sidebar item
-        // but only if no sidebar item is already highlighted
-        if (!document.querySelector('#sidebar .nav-list li.active')) {
-          const sectionName = articleElement.getAttribute('data-section-name');
-          const categoryLinks = document.querySelectorAll('#sidebar .nav-list li a');
-          
-          // Map section names to sidebar menu text
-          const categoryMap = {
+        // Determine if we're on an article page or category page
+        const articleElement = document.getElementById('fullArticle');
+        const sidebar = document.querySelector('#sidebar');
+        
+        if (sidebar) {
+        // Temporarily set a fixed width to prevent layout shifts
+        const currentWidth = sidebar.offsetWidth;
+        sidebar.style.width = currentWidth + 'px';
+        
+        if (articleElement) {
+            // On article pages, use the data-section-name for matching
+            const sectionName = articleElement.getAttribute('data-section-name');
+            const categoryMap = {
             "Billing": "Billing",
             "Account": "Account Setup",
             "Support": "Support",
@@ -1230,37 +1230,57 @@ function initDarkTheme() {
             "Get Started": "Get Started",
             "Level Up": "Level Up",
             "Supercharge Your Team": "Supercharge Your Team"
-          };
-          
-          // Try to find and highlight the matching sidebar item
-          if (sectionName && categoryMap[sectionName]) {
+            };
+            
+            if (sectionName && categoryMap[sectionName]) {
             const targetText = categoryMap[sectionName];
-            let found = false;
+            const links = document.querySelectorAll('#sidebar .nav-list li a');
+            let matchedLink = null;
             
-            for (let i = 0; i < categoryLinks.length; i++) {
-              if (categoryLinks[i].textContent.trim() === targetText) {
-                // Only add the active class if it's not already active
-                if (!categoryLinks[i].parentElement.classList.contains('active')) {
-                  categoryLinks[i].parentElement.classList.add('active');
-                }
-                found = true;
+            for (let i = 0; i < links.length; i++) {
+                if (links[i].textContent.trim() === targetText) {
+                matchedLink = links[i];
                 break;
-              }
+                }
             }
             
-            // If no match was found by text, try URL-based matching
-            if (!found) {
-              urlBasedMatchingWithoutClearingActive(categoryLinks);
+            if (matchedLink) {
+                updateSidebarSelection(matchedLink);
+            } else {
+                // No direct match, restore sidebar width
+                setTimeout(() => {
+                sidebar.style.width = '';
+                }, 100);
             }
-          }
+            } else {
+            // No section name or mapping, restore sidebar width
+            setTimeout(() => {
+                sidebar.style.width = '';
+            }, 100);
+            }
+        } else {
+            // On category pages, use the URL for matching
+            const currentPath = window.location.pathname;
+            const links = document.querySelectorAll('#sidebar .nav-list li a');
+            let matchedLink = null;
+            
+            for (let i = 0; i < links.length; i++) {
+            if (links[i].getAttribute('href') === currentPath) {
+                matchedLink = links[i];
+                break;
+            }
+            }
+            
+            if (matchedLink) {
+            updateSidebarSelection(matchedLink);
+                } else {
+                // No direct match, restore sidebar width
+                setTimeout(() => {
+                    sidebar.style.width = '';
+                }, 100);
+                }
+            }
         }
-      } else {
-        // We're on a category page, handle sidebar highlighting for category pages
-        // Only proceed if no sidebar item is already highlighted
-        if (!document.querySelector('#sidebar .nav-list li.active')) {
-          updateSidebarFromCategoryPage();
-        }
-      }
       
       // PHASE 3: Enhance search UI components
       // ------------------------------------
@@ -1374,6 +1394,32 @@ window.addEventListener('load', function() {
         bestMatch.link.parentElement.classList.add('active');
       }
     }
+  }
+
+  /**
+ * Optimized function to update sidebar selection with minimal layout shifts 
+ */
+function updateSidebarSelection(targetLink) {
+    if (!targetLink) return;
+    
+    // Get all menu items at once
+    const sidebarItems = document.querySelectorAll('#sidebar .nav-list li');
+    
+    // Only proceed if we need to change something
+    const targetLi = targetLink.closest('li');
+    if (!targetLi || targetLi.classList.contains('active')) return;
+    
+    // Single pass operation - remove all active classes
+    sidebarItems.forEach(item => {
+      if (item.classList.contains('active')) {
+        item.classList.remove('active');
+      }
+    });
+    
+    // Add class in a separate operation to force browser to batch changes
+    requestAnimationFrame(() => {
+      targetLi.classList.add('active');
+    });
   }
   
 })();
