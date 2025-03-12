@@ -1779,10 +1779,10 @@ footer p {
 }
 
 .row-fluid {
-    /* width: 100%;
-    *zoom:1 */
-    display: flex;
-    min-height: 100%;
+    width: 100%;
+    *zoom:1
+    /* display: flex;
+    min-height: 100%; */
 }
 
 .row-fluid:after,.row-fluid:before {
@@ -2004,16 +2004,16 @@ footer p {
 }
 
 /* Handle responsive layouts */
-@media (max-width: 767px) {
-    .row-fluid {
-      flex-direction: column;
-    }
-    
-    #sidebar {
-      width: 100%;
-      margin-bottom: 20px;
-    }
+/* @media (max-width: 767px) {
+  .row-fluid {
+    flex-direction: column;
   }
+  
+  #sidebar {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+} */
 
 /* Remove underlines from all links in all states */
 a,
