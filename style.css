@@ -2103,7 +2103,7 @@ footer p {
 .row-fluid [class*=span],.uneditable-input[class*=span],[class*=span] {
     float: none;
     display: block;
-    width: 100%;
+    /* width: 100%; */
     margin-left: 0;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -2757,7 +2757,7 @@ a > * {
 #sidebar {
     width: calc((100% - 352px) / 12 * 3 + 64px);
   }
-  
+
   @media (max-width: 767px) {
     #sidebar {
       width: unset;
