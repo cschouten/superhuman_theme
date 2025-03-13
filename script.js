@@ -681,15 +681,6 @@ function getElements(selector) {
   return selectorCache[selector];
 }
 
-// Reveal the background that's already in the HTML
-// function addBackground() {
-//   const background = document.querySelector('.background');
-//   if (background) {
-//     // Force a reflow before adding the class to ensure smooth transition
-//     background.getBoundingClientRect();
-//     background.classList.add('visible');
-//   }
-// }
 
 // Optimized article footer update
 function updateArticleFooter() {
@@ -783,66 +774,56 @@ function fixNextPageButtons() {
   requestAnimationFrame(processBatch);
 }
 
-  function enhanceSidebarSearch() {
+function enhanceSidebarSearch() {
     // Target the Zendesk search component in the sidebar
     const searchForm = document.querySelector('#sidebar form.sidebar-search');
     
-    if (searchForm) {
-      // Basic classes should already be applied by inline script
-      // but we add them again in case that failed
-      searchForm.id = 'searchBar';
-      searchForm.classList.add('sm');
+    if (searchForm && !searchForm.dataset.enhanced) {
+      // Hide during changes
+      searchForm.style.opacity = '0';
       
-      // Remove ALL original buttons and controls
-      const buttonsToRemove = searchForm.querySelectorAll('button, input[type="submit"], .search-button, .search-button-wrapper, .search-controls, .search-submit-wrapper');
-      buttonsToRemove.forEach(button => button.remove());
+      // Create all new elements in a document fragment (off-DOM)
+      const fragment = document.createDocumentFragment();
       
-      // Handle the search input
+      // Create the new search button 
+      const newButton = document.createElement('button');
+      newButton.type = 'submit';
+      newButton.innerHTML = '<span class="sr-only">Toggle Search</span><i class="icon-search"></i>';
+      
+      // Create the dropdown container
+      const resultsContainer = document.createElement('div');
+      resultsContainer.id = 'serp-dd';
+      resultsContainer.className = 'sb';
+      resultsContainer.style.display = 'none';
+      resultsContainer.innerHTML = '<ul class="result"></ul>';
+      
+      // Prepare the search input
       const searchInput = searchForm.querySelector('input[type="search"]');
       if (searchInput) {
-        searchInput.classList.add('search-query');
+        searchInput.className = 'search-query';
         searchInput.placeholder = 'Search';
         searchInput.setAttribute('aria-label', 'Search');
       }
       
-      // Create new spyglass button
-      const newButton = document.createElement('button');
-      newButton.type = 'submit';
+      // Perform a single operation to remove all elements at once
+      searchForm.querySelectorAll('button:not(.clear-button), input[type="submit"], .search-button, .search-button-wrapper, .search-controls, .search-submit-wrapper, .search-results-column, .search-box-separator').forEach(el => {
+        el.remove();
+      });
       
-      // Add screen reader text
-      const srOnly = document.createElement('span');
-      srOnly.className = 'sr-only';
-      srOnly.textContent = 'Toggle Search';
-      newButton.appendChild(srOnly);
+      // Set classes and ID
+      searchForm.id = 'searchBar';
+      searchForm.classList.add('sm');
+      searchForm.dataset.enhanced = 'true';
       
-      // Add search icon
-      const icon = document.createElement('i');
-      icon.className = 'icon-search';
-      newButton.appendChild(icon);
+      // Add all new elements in one batch
+      fragment.appendChild(newButton);
+      fragment.appendChild(resultsContainer);
+      searchForm.appendChild(fragment);
       
-      // Append the new button
-      searchForm.appendChild(newButton);
-      
-      // Add the dropdown container
-      if (!searchForm.querySelector('#serp-dd')) {
-        const resultsContainer = document.createElement('div');
-        resultsContainer.id = 'serp-dd';
-        resultsContainer.className = 'sb';
-        resultsContainer.style.display = 'none';
-        
-        const resultsList = document.createElement('ul');
-        resultsList.className = 'result';
-        
-        resultsContainer.appendChild(resultsList);
-        searchForm.appendChild(resultsContainer);
-      }
-      
-      // Remove any extra Zendesk elements
-      const extraElements = searchForm.querySelectorAll('.search-results-column, .search-box-separator');
-      extraElements.forEach(el => el.remove());
-      
-      // Now that everything is set up, make the search visible
-      searchForm.style.opacity = '1';
+      // Use requestAnimationFrame to ensure browser has processed the changes before showing
+      requestAnimationFrame(() => {
+        searchForm.style.opacity = '1';
+      });
     }
   }
 
@@ -894,7 +875,7 @@ function initDarkTheme() {
       }
       
       // Enhance the sidebar search functionality
-      // enhanceSidebarSearch();
+        enhanceSidebarSearch();
       
       // Set up observer for autocomplete dropdown to fix its positioning
       const autocompleteObserver = new MutationObserver(function(mutations) {
