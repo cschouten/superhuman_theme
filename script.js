@@ -1154,32 +1154,32 @@ function enhanceSearchButton() {
     
   }
 
-  function fixSidebarAutocomplete() {
-    const sidebarForm = document.querySelector('#sidebar form.search-full, #sidebar #searchBar.sm');
-    const autocomplete = document.querySelector('#sidebar zd-autocomplete');
+//   function fixSidebarAutocomplete() {
+//     const sidebarForm = document.querySelector('#sidebar form.search-full, #sidebar #searchBar.sm');
+//     const autocomplete = document.querySelector('#sidebar zd-autocomplete');
     
-    if (sidebarForm && autocomplete) {
-      // Get the width of the search form
-      const formWidth = sidebarForm.offsetWidth;
+//     if (sidebarForm && autocomplete) {
+//       // Get the width of the search form
+//       const formWidth = sidebarForm.offsetWidth;
       
-      // Set width directly
-      autocomplete.style.width = formWidth + 'px';
-      autocomplete.style.maxWidth = formWidth + 'px';
+//       // Set width directly
+//       autocomplete.style.width = formWidth + 'px';
+//       autocomplete.style.maxWidth = formWidth + 'px';
       
-      // Ensure correct positioning
-      autocomplete.style.top = '42px';
-      autocomplete.style.left = '0';
-      autocomplete.style.right = 'auto';
-    }
-  }
+//       // Ensure correct positioning
+//       autocomplete.style.top = '42px';
+//       autocomplete.style.left = '0';
+//       autocomplete.style.right = 'auto';
+//     }
+//   }
   
   // Create the observer outside any function so it's globally available
-  const autocompleteObserver = new MutationObserver(function(mutations) {
-    const autocomplete = document.querySelector('#sidebar zd-autocomplete');
-    if (autocomplete) {
-      fixSidebarAutocomplete();
-    }
-  });
+//   const autocompleteObserver = new MutationObserver(function(mutations) {
+//     const autocomplete = document.querySelector('#sidebar zd-autocomplete');
+//     if (autocomplete) {
+//       fixSidebarAutocomplete();
+//     }
+//   });
   
   /**
  * Initializes the dark theme and handles various UI enhancements
@@ -1348,77 +1348,77 @@ function initDarkTheme() {
   }
 
   // At the end of initDarkTheme
-window.addEventListener('load', function() {
-    // Now it's safe to enhance the search since page has fully loaded
-    enhanceSidebarSearch();
+// window.addEventListener('load', function() {
+//     // Now it's safe to enhance the search since page has fully loaded
+//     enhanceSidebarSearch();
     
-    // Remove fixed width after everything is stable
-    setTimeout(() => {
-      const sidebar = document.querySelector('#sidebar');
-      if (sidebar) {
-        sidebar.style.width = '';
-      }
-    }, 100);
-  });
+//     // Remove fixed width after everything is stable
+//     setTimeout(() => {
+//       const sidebar = document.querySelector('#sidebar');
+//       if (sidebar) {
+//         sidebar.style.width = '';
+//       }
+//     }, 100);
+//   });
   
   /**
    * Performs URL-based sidebar highlighting without clearing existing active states
    * This modified version reduces DOM operations to prevent layout jumps
    */
-  function urlBasedMatchingWithoutClearingActive(sidebarLinks) {
-    const currentUrl = window.location.href.toLowerCase();
-    let bestMatch = { link: null, quality: 0 };
+//   function urlBasedMatchingWithoutClearingActive(sidebarLinks) {
+//     const currentUrl = window.location.href.toLowerCase();
+//     let bestMatch = { link: null, quality: 0 };
     
-    // Check each sidebar link for potential URL match
-    for (let i = 0; i < sidebarLinks.length; i++) {
-      const link = sidebarLinks[i];
-      const href = (link.getAttribute('href') || '').toLowerCase();
-      let matchQuality = 0;
+//     // Check each sidebar link for potential URL match
+//     for (let i = 0; i < sidebarLinks.length; i++) {
+//       const link = sidebarLinks[i];
+//       const href = (link.getAttribute('href') || '').toLowerCase();
+//       let matchQuality = 0;
       
-      // Determine match quality based on URL similarity
-      if (currentUrl === href || currentUrl.endsWith(href)) {
-        matchQuality = 100; // Exact match
-      } else if (href.length > 10 && currentUrl.includes(href)) {
-        matchQuality = 80 + (href.length / currentUrl.length) * 10; // Partial match
-      }
+//       // Determine match quality based on URL similarity
+//       if (currentUrl === href || currentUrl.endsWith(href)) {
+//         matchQuality = 100; // Exact match
+//       } else if (href.length > 10 && currentUrl.includes(href)) {
+//         matchQuality = 80 + (href.length / currentUrl.length) * 10; // Partial match
+//       }
       
-      // Keep track of the best match
-      if (matchQuality > bestMatch.quality) {
-        bestMatch = { link, quality: matchQuality };
-      }
-    }
+//       // Keep track of the best match
+//       if (matchQuality > bestMatch.quality) {
+//         bestMatch = { link, quality: matchQuality };
+//       }
+//     }
     
-    // Apply the best match if found without clearing existing active states
-    if (bestMatch.link && bestMatch.quality > 0) {
-      if (!bestMatch.link.parentElement.classList.contains('active')) {
-        bestMatch.link.parentElement.classList.add('active');
-      }
-    }
-  }
+//     // Apply the best match if found without clearing existing active states
+//     if (bestMatch.link && bestMatch.quality > 0) {
+//       if (!bestMatch.link.parentElement.classList.contains('active')) {
+//         bestMatch.link.parentElement.classList.add('active');
+//       }
+//     }
+//   }
 
   /**
  * Optimized function to update sidebar selection with minimal layout shifts 
  */
-function updateSidebarSelection(targetLink) {
-    if (!targetLink) return;
+// function updateSidebarSelection(targetLink) {
+//     if (!targetLink) return;
     
-    // Only proceed if we need to change something
-    const targetLi = targetLink.closest('li');
-    if (!targetLi || targetLi.classList.contains('active')) return;
+//     // Only proceed if we need to change something
+//     const targetLi = targetLink.closest('li');
+//     if (!targetLi || targetLi.classList.contains('active')) return;
     
-    // Find currently active item first
-    const currentActive = document.querySelector('#sidebar .nav-list li.active');
+//     // Find currently active item first
+//     const currentActive = document.querySelector('#sidebar .nav-list li.active');
     
-    // If there's no active item or it's the same as target, just add active class
-    if (!currentActive || currentActive === targetLi) {
-      targetLi.classList.add('active');
-      return;
-    }
+//     // If there's no active item or it's the same as target, just add active class
+//     if (!currentActive || currentActive === targetLi) {
+//       targetLi.classList.add('active');
+//       return;
+//     }
     
-    // Do a direct swap - remove and add in the same tick
-    // This prevents multiple reflows which cause the flickering
-    currentActive.classList.remove('active');
-    targetLi.classList.add('active');
-  }
+//     // Do a direct swap - remove and add in the same tick
+//     // This prevents multiple reflows which cause the flickering
+//     currentActive.classList.remove('active');
+//     targetLi.classList.add('active');
+//   }
   
 })();
