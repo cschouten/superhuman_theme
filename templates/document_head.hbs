@@ -28,6 +28,13 @@
 
   renderFlashNotifications(settings, closeLabel);
 </script>
+<script>
+  (function() {
+    var style = document.createElement('style');
+    style.textContent = '#sidebar form.sidebar-search { visibility: hidden; }';
+    document.head.appendChild(style);
+  })();
+</script>
 <style>
     body .background {
       position: fixed;
