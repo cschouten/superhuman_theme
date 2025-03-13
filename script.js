@@ -922,109 +922,109 @@ function initDarkTheme() {
   }
 
   // Add this to your script.js file
-function swapSearchBar() {
+// function swapSearchBar() {
 
-  console.log('Swap function triggered');
+//   console.log('Swap function triggered');
   
-  // Find the original search form
-  const originalSearchForm = document.querySelector('#sidebar form.sidebar-search');
-  console.log('Original search found:', !!originalSearchForm);
+//   // Find the original search form
+//   const originalSearchForm = document.querySelector('#sidebar form.sidebar-search');
+//   console.log('Original search found:', !!originalSearchForm);
   
-  if (!originalSearchForm) return;
+//   if (!originalSearchForm) return;
 
-    // Create your custom search form
-    const customSearch = document.createElement('div');
-    customSearch.innerHTML = `
-      <form role="search" class="search search-full sidebar-search sm" id="searchBar" data-instant="true" autocomplete="off" action="/hc/en-us/search" method="get">
-        <input type="search" name="query" id="sidebar-query" class="search-query" placeholder="Search" autocomplete="off" aria-label="Search">
-        <button type="submit">
-          <span class="sr-only">Toggle Search</span>
-          <i class="icon-search"></i>
-        </button>
-        <div id="serp-dd" class="sb" style="display: none;">
-          <ul class="result"></ul>
-        </div>
-      </form>
-    `;
+//     // Create your custom search form
+//     const customSearch = document.createElement('div');
+//     customSearch.innerHTML = `
+//       <form role="search" class="search search-full sidebar-search sm" id="searchBar" data-instant="true" autocomplete="off" action="/hc/en-us/search" method="get">
+//         <input type="search" name="query" id="sidebar-query" class="search-query" placeholder="Search" autocomplete="off" aria-label="Search">
+//         <button type="submit">
+//           <span class="sr-only">Toggle Search</span>
+//           <i class="icon-search"></i>
+//         </button>
+//         <div id="serp-dd" class="sb" style="display: none;">
+//           <ul class="result"></ul>
+//         </div>
+//       </form>
+//     `;
     
-    // Get the actual form element
-    const newSearchForm = customSearch.firstElementChild;
+//     // Get the actual form element
+//     const newSearchForm = customSearch.firstElementChild;
     
-    // Find the original search form
-    const originalSearch = document.querySelector('#sidebar form.sidebar-search');
-    if (!originalSearch) return;
+//     // Find the original search form
+//     const originalSearch = document.querySelector('#sidebar form.sidebar-search');
+//     if (!originalSearch) return;
     
-    // Copy any hidden inputs and other necessary elements from the original form
-    originalSearch.querySelectorAll('input[type="hidden"]').forEach(input => {
-      const clone = input.cloneNode(true);
-      newSearchForm.appendChild(clone);
-    });
+//     // Copy any hidden inputs and other necessary elements from the original form
+//     originalSearch.querySelectorAll('input[type="hidden"]').forEach(input => {
+//       const clone = input.cloneNode(true);
+//       newSearchForm.appendChild(clone);
+//     });
     
-    // Copy any data attributes from the original form
-    Array.from(originalSearch.attributes)
-      .filter(attr => attr.name.startsWith('data-'))
-      .forEach(attr => {
-        newSearchForm.setAttribute(attr.name, attr.value);
-      });
+//     // Copy any data attributes from the original form
+//     Array.from(originalSearch.attributes)
+//       .filter(attr => attr.name.startsWith('data-'))
+//       .forEach(attr => {
+//         newSearchForm.setAttribute(attr.name, attr.value);
+//       });
     
-    // Copy the action URL to ensure it goes to the right place
-    newSearchForm.action = originalSearch.action || '/hc/en-us/search';
+//     // Copy the action URL to ensure it goes to the right place
+//     newSearchForm.action = originalSearch.action || '/hc/en-us/search';
     
-    // Prevent empty submissions
-    newSearchForm.addEventListener('submit', function(event) {
-      const searchInput = this.querySelector('input[type="search"]');
-      if (!searchInput || !searchInput.value.trim()) {
-        event.preventDefault();
-      }
-    });
-    // Before replacing, log some info
-    console.log('About to replace search form');
-    console.log('Original parent:', originalSearch.parentNode);
+//     // Prevent empty submissions
+//     newSearchForm.addEventListener('submit', function(event) {
+//       const searchInput = this.querySelector('input[type="search"]');
+//       if (!searchInput || !searchInput.value.trim()) {
+//         event.preventDefault();
+//       }
+//     });
+//     // Before replacing, log some info
+//     console.log('About to replace search form');
+//     console.log('Original parent:', originalSearch.parentNode);
 
-    // Replace the original search with our custom version
-    originalSearch.parentNode.replaceChild(newSearchForm, originalSearch);
-  }
+//     // Replace the original search with our custom version
+//     originalSearch.parentNode.replaceChild(newSearchForm, originalSearch);
+//   }
   
-  // Execute the swap when Zendesk has finished its initial processing
-  // Use a MutationObserver to detect when Zendesk has finished initializing the search
-  document.addEventListener('DOMContentLoaded', function() {
-    // First, add a style to hide the search form until we're ready
-    const style = document.createElement('style');
-    style.textContent = '#sidebar form.sidebar-search { visibility: hidden; }';
-    document.head.appendChild(style);
+//   // Execute the swap when Zendesk has finished its initial processing
+//   // Use a MutationObserver to detect when Zendesk has finished initializing the search
+//   document.addEventListener('DOMContentLoaded', function() {
+//     // First, add a style to hide the search form until we're ready
+//     const style = document.createElement('style');
+//     style.textContent = '#sidebar form.sidebar-search { visibility: hidden; }';
+//     document.head.appendChild(style);
     
-    // Create a mutation observer to watch for Zendesk autocomplete elements
-    const observer = new MutationObserver(function(mutations) {
-      for (const mutation of mutations) {
-        if (mutation.type === 'childList') {
-          for (const node of mutation.addedNodes) {
-            if (node.nodeName === 'ZD-AUTOCOMPLETE' || 
-                (node.nodeType === 1 && node.querySelector('zd-autocomplete'))) {
-              // Zendesk has initialized the search, now swap it
-              swapSearchBar();
-              // Disconnect the observer since we're done
-              observer.disconnect();
-              // Remove the hiding style
-              style.remove();
-              return;
-            }
-          }
-        }
-      }
-    });
+//     // Create a mutation observer to watch for Zendesk autocomplete elements
+//     const observer = new MutationObserver(function(mutations) {
+//       for (const mutation of mutations) {
+//         if (mutation.type === 'childList') {
+//           for (const node of mutation.addedNodes) {
+//             if (node.nodeName === 'ZD-AUTOCOMPLETE' || 
+//                 (node.nodeType === 1 && node.querySelector('zd-autocomplete'))) {
+//               // Zendesk has initialized the search, now swap it
+//               swapSearchBar();
+//               // Disconnect the observer since we're done
+//               observer.disconnect();
+//               // Remove the hiding style
+//               style.remove();
+//               return;
+//             }
+//           }
+//         }
+//       }
+//     });
     
-    // Start observing
-    observer.observe(document.body, { childList: true, subtree: true });
+//     // Start observing
+//     observer.observe(document.body, { childList: true, subtree: true });
     
-    // Failsafe: If Zendesk never initializes (or we miss it), swap after a timeout
-    setTimeout(function() {
-      if (document.querySelector('#sidebar form.sidebar-search') && 
-          !document.querySelector('#searchBar')) {
-        swapSearchBar();
-        observer.disconnect();
-        style.remove();
-      }
-    }, 2000);
-  });
+//     // Failsafe: If Zendesk never initializes (or we miss it), swap after a timeout
+//     setTimeout(function() {
+//       if (document.querySelector('#sidebar form.sidebar-search') && 
+//           !document.querySelector('#searchBar')) {
+//         swapSearchBar();
+//         observer.disconnect();
+//         style.remove();
+//       }
+//     }, 2000);
+//   });
   
 })();
