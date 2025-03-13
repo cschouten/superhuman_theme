@@ -672,7 +672,7 @@
       }
     });
   
-    // Cache for DOM selectors to avoid repeated queries
+// Cache for DOM selectors to avoid repeated queries
 const selectorCache = {};
 function getElements(selector) {
   if (!selectorCache[selector]) {
@@ -682,14 +682,14 @@ function getElements(selector) {
 }
 
 // Reveal the background that's already in the HTML
-function addBackground() {
-  const background = document.querySelector('.background');
-  if (background) {
-    // Force a reflow before adding the class to ensure smooth transition
-    background.getBoundingClientRect();
-    background.classList.add('visible');
-  }
-}
+// function addBackground() {
+//   const background = document.querySelector('.background');
+//   if (background) {
+//     // Force a reflow before adding the class to ensure smooth transition
+//     background.getBoundingClientRect();
+//     background.classList.add('visible');
+//   }
+// }
 
 // Optimized article footer update
 function updateArticleFooter() {
@@ -844,7 +844,6 @@ function fixNextPageButtons() {
       // Now that everything is set up, make the search visible
       searchForm.style.opacity = '1';
     }
-    
   }
 
 /**
@@ -895,7 +894,7 @@ function initDarkTheme() {
       }
       
       // Enhance the sidebar search functionality
-      enhanceSidebarSearch();
+      // enhanceSidebarSearch();
       
       // Set up observer for autocomplete dropdown to fix its positioning
       const autocompleteObserver = new MutationObserver(function(mutations) {
