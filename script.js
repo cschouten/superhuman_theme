@@ -889,7 +889,7 @@ function initDarkTheme() {
       autocompleteObserver.observe(document.body, { childList: true, subtree: true });
       
       // Handle window resize to reposition autocomplete dropdown
-      window.addEventListener('resize', fixSidebarAutocomplete);
+      // window.addEventListener('resize', fixSidebarAutocomplete);
       
       // Add input event listener to sidebar search for autocomplete positioning
       const searchInput = document.querySelector('#sidebar .search-query, #sidebar input[type="search"]');
