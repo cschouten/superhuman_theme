@@ -942,17 +942,17 @@ function initDarkTheme() {
   }
 
   // At the end of initDarkTheme
-window.addEventListener('load', function() {
-    // Now it's safe to enhance the search since page has fully loaded
-    enhanceSidebarSearch();
+// window.addEventListener('load', function() {
+//     // Now it's safe to enhance the search since page has fully loaded
+//     enhanceSidebarSearch();
     
-    // Remove fixed width after everything is stable
-    setTimeout(() => {
-      const sidebar = document.querySelector('#sidebar');
-      if (sidebar) {
-        sidebar.style.width = '';
-      }
-    }, 100);
-  });
+//     // Remove fixed width after everything is stable
+//     setTimeout(() => {
+//       const sidebar = document.querySelector('#sidebar');
+//       if (sidebar) {
+//         sidebar.style.width = '';
+//       }
+//     }, 100);
+//   });
   
 })();
