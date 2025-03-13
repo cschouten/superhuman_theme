@@ -24,8 +24,8 @@
     </section>
 
     <aside id="sidebar" class="span3">
-        {{!-- {{search instant=settings.instant_search class='search search-full sidebar-search' submit=true}} --}}
-        <form role="search" class="search search-full sidebar-search sm" id="searchBar" data-instant="true" autocomplete="off" action="/hc/en-us/search" method="get">
+        {{search instant=settings.instant_search class='search search-full sidebar-search sm' submit=true}}
+        {{!-- <form role="search" class="search search-full sidebar-search sm" id="searchBar" data-instant="true" autocomplete="off" action="/hc/en-us/search" method="get">
             <input type="search" name="query" id="sidebar-query" class="search-query" placeholder="Search" autocomplete="off" aria-label="Search">
             <button type="submit">
                 <span class="sr-only">Toggle Search</span>
@@ -34,7 +34,7 @@
             <div id="serp-dd" class="sb" style="display: none;">
                 <ul class="result"></ul>
             </div>
-        </form>
+        </form> --}}
         <h3>Categories</h3>
         <ul class="nav nav-list">
             {{! Get Started }}
