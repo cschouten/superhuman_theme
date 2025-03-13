@@ -875,7 +875,7 @@ function initDarkTheme() {
       }
       
       // Enhance the sidebar search functionality
-        enhanceSidebarSearch();
+    // enhanceSidebarSearch();
       
       // Set up observer for autocomplete dropdown to fix its positioning
       const autocompleteObserver = new MutationObserver(function(mutations) {
