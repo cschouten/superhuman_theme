@@ -874,79 +874,7 @@ function initDarkTheme() {
     // PHASE 2: Schedule sidebar highlighting for the next animation frame
     // ------------------------------------------------------------------
     requestAnimationFrame(function() {
-        // Determine if we're on an article page or category page
-        // const articleElement = document.getElementById('fullArticle');
-        // const sidebar = document.querySelector('#sidebar');
         
-        // if (sidebar) {
-        // // Temporarily set a fixed width to prevent layout shifts
-        // const currentWidth = sidebar.offsetWidth;
-        // sidebar.style.width = currentWidth + 'px';
-        
-        // if (articleElement) {
-        //     // On article pages, use the data-section-name for matching
-        //     const sectionName = articleElement.getAttribute('data-section-name');
-        //     const categoryMap = {
-        //     "Billing": "Billing",
-        //     "Account": "Account Setup",
-        //     "Support": "Support",
-        //     "Features": "Features",
-        //     "Integrations": "Integrations",
-        //     "Use Cases": "Use Cases",
-        //     "Get Started": "Get Started",
-        //     "Level Up": "Level Up",
-        //     "Supercharge Your Team": "Supercharge Your Team"
-        //     };
-            
-        //     if (sectionName && categoryMap[sectionName]) {
-        //     const targetText = categoryMap[sectionName];
-        //     const links = document.querySelectorAll('#sidebar .nav-list li a');
-        //     let matchedLink = null;
-            
-        //     for (let i = 0; i < links.length; i++) {
-        //         if (links[i].textContent.trim() === targetText) {
-        //         matchedLink = links[i];
-        //         break;
-        //         }
-        //     }
-            
-        //     if (matchedLink) {
-        //         updateSidebarSelection(matchedLink);
-        //     } else {
-        //         // No direct match, restore sidebar width
-        //         setTimeout(() => {
-        //         sidebar.style.width = '';
-        //         }, 100);
-        //     }
-        //     } else {
-        //     // No section name or mapping, restore sidebar width
-        //     setTimeout(() => {
-        //         sidebar.style.width = '';
-        //     }, 100);
-        //     }
-        // } else {
-        //     // On category pages, use the URL for matching
-        //     const currentPath = window.location.pathname;
-        //     const links = document.querySelectorAll('#sidebar .nav-list li a');
-        //     let matchedLink = null;
-            
-        //     for (let i = 0; i < links.length; i++) {
-        //     if (links[i].getAttribute('href') === currentPath) {
-        //         matchedLink = links[i];
-        //         break;
-        //     }
-        //     }
-            
-        //     if (matchedLink) {
-        //     updateSidebarSelection(matchedLink);
-        //         } else {
-        //         // No direct match, restore sidebar width
-        //         setTimeout(() => {
-        //             sidebar.style.width = '';
-        //         }, 100);
-        //         }
-        //     }
-        // }
       
       // PHASE 3: Enhance search UI components
       // ------------------------------------
