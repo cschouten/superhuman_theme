@@ -923,6 +923,15 @@ function initDarkTheme() {
 
   // Add this to your script.js file
 function swapSearchBar() {
+
+  console.log('Swap function triggered');
+  
+  // Find the original search form
+  const originalSearchForm = document.querySelector('#sidebar form.sidebar-search');
+  console.log('Original search found:', !!originalSearchForm);
+  
+  if (!originalSearchForm) return;
+
     // Create your custom search form
     const customSearch = document.createElement('div');
     customSearch.innerHTML = `
@@ -968,7 +977,10 @@ function swapSearchBar() {
         event.preventDefault();
       }
     });
-    
+    // Before replacing, log some info
+    console.log('About to replace search form');
+    console.log('Original parent:', originalSearch.parentNode);
+
     // Replace the original search with our custom version
     originalSearch.parentNode.replaceChild(newSearchForm, originalSearch);
   }
