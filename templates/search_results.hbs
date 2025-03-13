@@ -11,7 +11,8 @@
                     <h1>{{t 'results' query=query count=results_count}}</h1>
                     <p class="descrip">{{
                         #if
-                        results}}Found {{results_count}} results for "{{query}}"{{
+                        results}}Found {{results_count}} results for "{{query}}"{{else}}No results, but we can help!
+                        "{{query}}"{{
                         /if
                         }}</p>
                 </hgroup>
@@ -34,9 +35,9 @@
                 </ul>
                 {{else}}
                 <div class="no-results">
-                    {{!-- <div class="headline">
+                    <div class="headline">
                         {{t 'no_results_unified_start_new_search'}}
-                    </div> --}}
+                    </div>
                     {{!-- <div class="action-prompt">
                         {{t 'no_results_unified_enter_keywords'}}
                     </div> --}}
