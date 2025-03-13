@@ -11,7 +11,7 @@
                     <h1>{{t 'results' query=query count=results_count}}</h1>
                     <p class="descrip">{{
                         #if
-                        results}}Found {{results_count}} results for "{{query}}"{{else}}Alas, We Don't Have That (Yet!){{
+                        results}}Found {{results_count}} results for "{{query}}"{{else}}Alas, We Don't Have One That (Yet!){{
                         /if
                         }}</p>
                 </hgroup>
@@ -36,9 +36,7 @@
                 <div class="no-results">
                     <div class="headline">
                         <p>We don't have any articles matching those terms right now.</p>
-                    </div>
-                    <div class="action-prompt">
-                        <p>Reach out to us at hello@superhuman.com and we'll get you the help you need.</p>
+                        <p>Reach out to us at <a href="mailto:hello@superhuman.com"></a>hello@superhuman.com</a> and we'll get you the help you need.</p>
                     </div>
                 </div>
                 {{
