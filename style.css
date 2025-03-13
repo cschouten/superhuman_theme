@@ -4078,20 +4078,18 @@ form.search.search-full {
 }
 
 /* Search box border styling */
-#sidebar form.search-full input[type="search"],
+/* #sidebar form.search-full input[type="search"],
 #sidebar #searchBar.sm .search-query {
   border: 1px solid rgba(255, 255, 255, 0.2);
   outline: none;
   background: rgba(255, 255, 255, 0.05);
   border-radius: 4px;
   transition: border-color 0.3s ease;
-}
+} */
 
 #sidebar form.search-full input[type="search"]:focus,
 #sidebar #searchBar.sm .search-query:focus {
-  border-color: #ffffff;
-  outline: none;
-  box-shadow: none;
+  outline: 1px solid white !important;
 }
 
 /* Make sure the search box takes full width */
