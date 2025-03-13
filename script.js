@@ -691,248 +691,268 @@ function addBackground() {
   }
 }
 
-// Optimize article footer update
+// Optimized article footer update
 function updateArticleFooter() {
-    const articleFoot = document.querySelector('.articleFoot');
-    if (!articleFoot || articleFoot.querySelector('.feedbackDiv')) {
-      return;
-    }
-    
-    // Create elements once and append in a single operation
-    const fragment = document.createDocumentFragment();
-    
-    const feedbackDiv = document.createElement('div');
-    feedbackDiv.innerText = 'Have feedback? ';
-    feedbackDiv.className = 'feedbackDiv';
-    
-    const feedbackLink = document.createElement('a');
-    feedbackLink.className = 'feedbackLink';
-    feedbackLink.innerText = 'Let us know!';
-    feedbackLink.href = 'mailto:hello@superhuman.com?subject=Help%20Center%20Feedback';
-    
-    feedbackDiv.appendChild(feedbackLink);
-    fragment.appendChild(feedbackDiv);
-    
-    // Format date in the time element
-    const timeElement = articleFoot.querySelector('time.lu');
-    if (timeElement) {
-      const timestamp = timeElement.textContent.replace('Last updated on ', '');
-      const date = new Date(timestamp);
-      if (!isNaN(date)) {
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        timeElement.textContent = 'Last updated on ' + date.toLocaleDateString('en-US', options);
-      }
-    }
-    
-    // Add to DOM in a single operation
-    articleFoot.insertBefore(fragment, articleFoot.firstChild);
-    
-    // Move article ratings to the end if they exist
-    const articleRatings = document.querySelector('.articleRatings');
-    if (articleRatings && articleRatings.parentNode !== articleFoot) {
-      articleFoot.appendChild(articleRatings);
+  const articleFoot = document.querySelector('.articleFoot');
+  if (!articleFoot || articleFoot.querySelector('.feedbackDiv')) {
+    // Exit early if no footer or already processed
+    return;
+  }
+  
+  // Create elements once and append in a single operation
+  const fragment = document.createDocumentFragment();
+  
+  const feedbackDiv = document.createElement('div');
+  feedbackDiv.innerText = 'Have feedback? ';
+  feedbackDiv.className = 'feedbackDiv';
+  
+  const feedbackLink = document.createElement('a');
+  feedbackLink.className = 'feedbackLink';
+  feedbackLink.innerText = 'Let us know!';
+  feedbackLink.href = 'mailto:hello@superhuman.com?subject=Help%20Center%20Feedback';
+  
+  feedbackDiv.appendChild(feedbackLink);
+  fragment.appendChild(feedbackDiv);
+  
+  // Format date in the time element
+  const timeElement = articleFoot.querySelector('time.lu');
+  if (timeElement) {
+    const timestamp = timeElement.textContent.replace('Last updated on ', '');
+    const date = new Date(timestamp);
+    if (!isNaN(date)) {
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      timeElement.textContent = 'Last updated on ' + date.toLocaleDateString('en-US', options);
     }
   }
+  
+  // Add to DOM in a single operation
+  articleFoot.insertBefore(fragment, articleFoot.firstChild);
+  
+  // Move article ratings to the end if they exist
+  const articleRatings = document.querySelector('.articleRatings');
+  if (articleRatings && articleRatings.parentNode !== articleFoot) {
+    articleFoot.appendChild(articleRatings);
+  }
+}
 
 // Optimize next page button fix with batched processing
 function fixNextPageButtons() {
-    const nextPageButtons = document.querySelectorAll('.nextPageButton');
-    if (!nextPageButtons.length) return;
-    
-    const batchSize = 5;
-    let index = 0;
-    
-    function processBatch() {
-      const endIndex = Math.min(index + batchSize, nextPageButtons.length);
-      
-      for (let i = index; i < endIndex; i++) {
-        const button = nextPageButtons[i];
-        if (button.dataset.processed) continue;
-        
-        const currentHTML = button.innerHTML;
-        const textContent = button.textContent.trim();
-        
-        if (
-          (currentHTML.includes('&nbsp;') && currentHTML.includes('Up Next')) ||
-          (textContent.startsWith('Up Next') && !currentHTML.includes('<p>Up Next</p>')) ||
-          /Up Next\s*<a/.test(currentHTML)
-        ) {
-          const linkMatches = currentHTML.match(/<a[^>]*>([^<]*)<\/a>/g);
-          const links = linkMatches ? linkMatches.join('') : '';
-          
-          button.innerHTML = `<p>Up Next</p>${links}`;
-        }
-        
-        button.dataset.processed = 'true';
-      }
-      
-      index = endIndex;
-      
-      if (index < nextPageButtons.length) {
-        requestAnimationFrame(processBatch);
-      }
-    }
-    
-    requestAnimationFrame(processBatch);
-  }
-
-  // Enhanced sidebar search function
-function enhanceSidebarSearch() {
-  // Target the Zendesk search component in the sidebar
-  const searchForm = document.querySelector('#sidebar form.sidebar-search');
+  // Use more specific selector to reduce search space
+  const nextPageButtons = document.querySelectorAll('.nextPageButton');
+  if (!nextPageButtons.length) return;
   
-  if (searchForm && !searchForm.dataset.enhanced) {
-    // Mark as being processed to prevent duplicate operations
-    searchForm.dataset.enhanced = 'true';
+  // Process in batches for better performance
+  const batchSize = 5;
+  let index = 0;
+  
+  function processBatch() {
+    const endIndex = Math.min(index + batchSize, nextPageButtons.length);
     
-    // Hide the form until modifications are complete
-    const originalOpacity = searchForm.style.opacity;
-    searchForm.style.opacity = '0';
-    
-    // Set IDs and classes in one batch
-    searchForm.id = 'searchBar';
-    searchForm.classList.add('sm');
-    
-    // Create a document fragment to hold all new elements
-    const fragment = document.createDocumentFragment();
-    
-    // Handle the search input
-    const searchInput = searchForm.querySelector('input[type="search"]');
-    if (searchInput) {
-      searchInput.classList.add('search-query');
-      searchInput.placeholder = 'Search';
-      searchInput.setAttribute('aria-label', 'Search');
+    for (let i = index; i < endIndex; i++) {
+      const button = nextPageButtons[i];
+      // Skip if already processed
+      if (button.dataset.processed) continue;
+      
+      const currentHTML = button.innerHTML;
+      const textContent = button.textContent.trim();
+      
+      if (
+        (currentHTML.includes('&nbsp;') && currentHTML.includes('Up Next')) ||
+        (textContent.startsWith('Up Next') && !currentHTML.includes('<p>Up Next</p>')) ||
+        /Up Next\s*<a/.test(currentHTML)
+      ) {
+        const linkMatches = currentHTML.match(/<a[^>]*>([^<]*)<\/a>/g);
+        const links = linkMatches ? linkMatches.join('') : '';
+        
+        button.innerHTML = `<p>Up Next</p>${links}`;
+      }
+      
+      // Mark as processed
+      button.dataset.processed = 'true';
     }
     
-    // Create new spyglass button
-    const newButton = document.createElement('button');
-    newButton.type = 'submit';
+    index = endIndex;
     
-    // Add screen reader text
-    const srOnly = document.createElement('span');
-    srOnly.className = 'sr-only';
-    srOnly.textContent = 'Toggle Search';
-    newButton.appendChild(srOnly);
-    
-    // Add search icon
-    const icon = document.createElement('i');
-    icon.className = 'icon-search';
-    newButton.appendChild(icon);
-    
-    // Add the dropdown container
-    const resultsContainer = document.createElement('div');
-    resultsContainer.id = 'serp-dd';
-    resultsContainer.className = 'sb';
-    resultsContainer.style.display = 'none';
-    
-    const resultsList = document.createElement('ul');
-    resultsList.className = 'result';
-    
-    resultsContainer.appendChild(resultsList);
-    
-    // Add all new elements to the fragment
-    fragment.appendChild(newButton);
-    fragment.appendChild(resultsContainer);
-    
-    // Perform all removals in a batch
-    const elementsToRemove = Array.from(searchForm.querySelectorAll(
-      'button:not(.clear-button), input[type="submit"], .search-button, .search-button-wrapper, ' +
-      '.search-controls, .search-submit-wrapper, .search-results-column, .search-box-separator'
-    ));
-    
-    elementsToRemove.forEach(el => el.remove());
-    
-    // Add the fragment to the form (all DOM operations in one batch)
-    searchForm.appendChild(fragment);
-    
-    // Show the form after modifications are complete (using requestAnimationFrame to ensure browser has processed changes)
-    requestAnimationFrame(() => {
-      searchForm.style.opacity = originalOpacity || '1';
-    });
+    // Continue processing if there are more items
+    if (index < nextPageButtons.length) {
+      requestAnimationFrame(processBatch);
+    }
   }
+  
+  // Start processing
+  requestAnimationFrame(processBatch);
 }
+
+  function enhanceSidebarSearch() {
+    // Target the Zendesk search component in the sidebar
+    const searchForm = document.querySelector('#sidebar form.sidebar-search');
+    
+    if (searchForm) {
+      // Basic classes should already be applied by inline script
+      // but we add them again in case that failed
+      searchForm.id = 'searchBar';
+      searchForm.classList.add('sm');
+      
+      // Remove ALL original buttons and controls
+      const buttonsToRemove = searchForm.querySelectorAll('button, input[type="submit"], .search-button, .search-button-wrapper, .search-controls, .search-submit-wrapper');
+      buttonsToRemove.forEach(button => button.remove());
+      
+      // Handle the search input
+      const searchInput = searchForm.querySelector('input[type="search"]');
+      if (searchInput) {
+        searchInput.classList.add('search-query');
+        searchInput.placeholder = 'Search';
+        searchInput.setAttribute('aria-label', 'Search');
+      }
+      
+      // Create new spyglass button
+      const newButton = document.createElement('button');
+      newButton.type = 'submit';
+      
+      // Add screen reader text
+      const srOnly = document.createElement('span');
+      srOnly.className = 'sr-only';
+      srOnly.textContent = 'Toggle Search';
+      newButton.appendChild(srOnly);
+      
+      // Add search icon
+      const icon = document.createElement('i');
+      icon.className = 'icon-search';
+      newButton.appendChild(icon);
+      
+      // Append the new button
+      searchForm.appendChild(newButton);
+      
+      // Add the dropdown container
+      if (!searchForm.querySelector('#serp-dd')) {
+        const resultsContainer = document.createElement('div');
+        resultsContainer.id = 'serp-dd';
+        resultsContainer.className = 'sb';
+        resultsContainer.style.display = 'none';
+        
+        const resultsList = document.createElement('ul');
+        resultsList.className = 'result';
+        
+        resultsContainer.appendChild(resultsList);
+        searchForm.appendChild(resultsContainer);
+      }
+      
+      // Remove any extra Zendesk elements
+      const extraElements = searchForm.querySelectorAll('.search-results-column, .search-box-separator');
+      extraElements.forEach(el => el.remove());
+      
+      // Now that everything is set up, make the search visible
+      searchForm.style.opacity = '1';
+    }
+    
+  }
 
 /**
-* Initialize Dark Theme - optimized for performance
-*/
+ * Initializes the dark theme and handles various UI enhancements
+ * This function runs once and makes itself a no-op on subsequent calls
+ */
 function initDarkTheme() {
- // Make function a no-op after first execution
- initDarkTheme = function() { 
-   console.log("Dark theme already initialized");
- };
-
- // CRITICAL UPDATES: Handle immediately
- // ----------------------------------
- 
- // Add inline style to hide sidebar search until we enhance it
- const styleElement = document.createElement('style');
- styleElement.textContent = `
-   #sidebar form.sidebar-search { 
-     opacity: 0; 
-     transition: opacity 0.3s ease;
-   }
- `;
- document.head.appendChild(styleElement);
- 
- // Show background that's already in the HTML
- const backgroundElement = document.querySelector('.background');
- if (backgroundElement) {
-   backgroundElement.classList.add('visible');
- }
-
- // PHASE 1: Handle sidebar search preprocessing before DOM is fully loaded
- // ----------------------------------------------------------------------
- const preEnhanceSidebarSearch = function() {
-   const searchForm = document.querySelector('#sidebar form.sidebar-search');
-   if (searchForm && !searchForm.dataset.preenhanced) {
-     searchForm.dataset.preenhanced = 'true';
-     searchForm.id = 'searchBar';
-     searchForm.classList.add('sm');
-     
-     // Pre-add required classes to search input
-     const searchInput = searchForm.querySelector('input[type="search"]');
-     if (searchInput) {
-       searchInput.classList.add('search-query');
-     }
-   }
- };
- 
- // Try to pre-enhance the sidebar search once the DOM is ready
- if (document.readyState === 'interactive' || document.readyState === 'complete') {
-   preEnhanceSidebarSearch();
- } else {
-   document.addEventListener('DOMContentLoaded', preEnhanceSidebarSearch);
- }
-
- // PHASE 2: Handle complete sidebar search enhancement after load
- // -------------------------------------------------------------
- window.addEventListener('load', function() {
-   // Remove the inline style that hides the search
-   styleElement.remove();
-   
-   // Now it's safe to fully enhance the search
-   enhanceSidebarSearch();
-   
-   // Schedule non-critical UI updates
-   if ('requestIdleCallback' in window) {
-     requestIdleCallback(function() {
-       updateArticleFooter();
-       fixNextPageButtons();
-     }, { timeout: 500 });
-   } else {
-     setTimeout(function() {
-       updateArticleFooter();
-       fixNextPageButtons();
-     }, 50);
-   }
- });
-}
-
-// Call initDarkTheme when the page starts loading
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initDarkTheme);
-  } else {
-    initDarkTheme();
+    // Prevent this function from running multiple times
+    // by redefining it as an empty function after first execution
+    initDarkTheme = function() {
+      // Do nothing on subsequent calls
+      console.log("Dark theme already initialized");
+    };
+  
+    // PHASE 1: Handle critical UI updates first
+    // ----------------------------------------
+    
+    // Show the background element that's already in the HTML
+    const backgroundElement = document.querySelector('.background');
+    if (backgroundElement) {
+      // Force a layout recalculation before adding the visible class
+      // This ensures a smooth transition effect
+      backgroundElement.getBoundingClientRect();
+      backgroundElement.classList.add('visible');
+    }
+    
+    // PHASE 2: Schedule sidebar highlighting for the next animation frame
+    // ------------------------------------------------------------------
+    requestAnimationFrame(function() {
+        
+      
+      // PHASE 3: Enhance search UI components
+      // ------------------------------------
+      
+      // Enhance the search button with proper styling
+      const searchButton = document.querySelector('form.search.search-full input[type="submit"], form.search.search-full input[name="commit"]');
+      
+      if (searchButton && !searchButton.parentElement.classList.contains('search-button-wrapper')) {
+        // Create a wrapper for better styling and positioning
+        const wrapper = document.createElement('div');
+        wrapper.className = 'search-button-wrapper';
+        
+        // Insert wrapper before the button
+        searchButton.parentNode.insertBefore(wrapper, searchButton);
+        
+        // Move the button into the wrapper
+        wrapper.appendChild(searchButton);
+      }
+      
+      // Enhance the sidebar search functionality
+      enhanceSidebarSearch();
+      
+      // Set up observer for autocomplete dropdown to fix its positioning
+      const autocompleteObserver = new MutationObserver(function(mutations) {
+        const autocomplete = document.querySelector('#sidebar zd-autocomplete');
+        if (autocomplete) {
+          fixSidebarAutocomplete();
+        }
+      });
+      
+      // Start observing DOM changes to detect autocomplete appearance
+      autocompleteObserver.observe(document.body, { childList: true, subtree: true });
+      
+      // Handle window resize to reposition autocomplete dropdown
+      window.addEventListener('resize', fixSidebarAutocomplete);
+      
+      // Add input event listener to sidebar search for autocomplete positioning
+      const searchInput = document.querySelector('#sidebar .search-query, #sidebar input[type="search"]');
+      if (searchInput) {
+        searchInput.addEventListener('input', function() {
+          // Use setTimeout to ensure the autocomplete has time to appear
+          setTimeout(fixSidebarAutocomplete, 100);
+        });
+      }
+    });
+    
+    // PHASE 4: Schedule non-critical UI updates for idle time
+    // -----------------------------------------------------
+    if ('requestIdleCallback' in window) {
+      // Use requestIdleCallback if available for non-critical tasks
+      requestIdleCallback(function() {
+        // Update article footer with feedback link and formatted date
+        updateArticleFooter();
+        
+        // Fix formatting of "next page" buttons
+        fixNextPageButtons();
+      }, { timeout: 500 }); // Ensure it runs within 500ms even if the browser remains busy
+    } else {
+      // Fallback to setTimeout for browsers that don't support requestIdleCallback
+      setTimeout(function() {
+        updateArticleFooter();
+        fixNextPageButtons();
+      }, 50);
+    }
   }
+
+  // At the end of initDarkTheme
+window.addEventListener('load', function() {
+    // Now it's safe to enhance the search since page has fully loaded
+    enhanceSidebarSearch();
+    
+    // Remove fixed width after everything is stable
+    setTimeout(() => {
+      const sidebar = document.querySelector('#sidebar');
+      if (sidebar) {
+        sidebar.style.width = '';
+      }
+    }, 100);
+  });
   
 })();
