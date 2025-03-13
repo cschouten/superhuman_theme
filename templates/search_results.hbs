@@ -11,8 +11,7 @@
                     <h1>{{t 'results' query=query count=results_count}}</h1>
                     <p class="descrip">{{
                         #if
-                        results}}Found {{results_count}} results for "{{query}}"{{else}}No results, but we can help!
-                        "{{query}}"{{
+                        results}}Found {{results_count}} results for "{{query}}"{{else}}Alas, We Don't Have That (Yet!){{
                         /if
                         }}</p>
                 </hgroup>
@@ -36,7 +35,9 @@
                 {{else}}
                 <div class="no-results">
                     <div class="headline">
-                        {{t 'no_results_unified_start_new_search'}}
+                        <p>We don't have any articles matching those terms right now.</p>
+                        <p>Reach out to us and we'll get you the help you need.</p>
+                        {{!-- {{t 'no_results_unified_start_new_search'}} --}}
                     </div>
                     {{!-- <div class="action-prompt">
                         {{t 'no_results_unified_enter_keywords'}}
