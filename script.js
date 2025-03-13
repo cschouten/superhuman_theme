@@ -784,294 +784,294 @@ function fixNextPageButtons() {
 }
 
 // Extract clean text from a link, removing any icon text
-function getCleanLinkText(link) {
-  // Try to get direct text nodes first
-  let linkText = "";
-  let node = link.firstChild;
+// function getCleanLinkText(link) {
+//   // Try to get direct text nodes first
+//   let linkText = "";
+//   let node = link.firstChild;
   
-  while (node) {
-    if (node.nodeType === 3) { // Text node
-      linkText += node.nodeType === 3 ? node.textContent.trim() : '';
-    }
-    node = node.nextSibling;
-  }
+//   while (node) {
+//     if (node.nodeType === 3) { // Text node
+//       linkText += node.nodeType === 3 ? node.textContent.trim() : '';
+//     }
+//     node = node.nextSibling;
+//   }
   
-  // Fallback to full text and strip icon if needed
-  if (!linkText) {
-    linkText = link.textContent.trim();
-    // Remove icon text if present
-    const iconIndex = linkText.indexOf('icon-');
-    if (iconIndex !== -1) {
-      linkText = linkText.substring(0, iconIndex).trim();
-    }
-  }
+//   // Fallback to full text and strip icon if needed
+//   if (!linkText) {
+//     linkText = link.textContent.trim();
+//     // Remove icon text if present
+//     const iconIndex = linkText.indexOf('icon-');
+//     if (iconIndex !== -1) {
+//       linkText = linkText.substring(0, iconIndex).trim();
+//     }
+//   }
   
-  return linkText;
-}
+//   return linkText;
+// }
 
 // Build menu map efficiently for faster lookups
-function buildMenuMap(links) {
-  const map = {};
+// function buildMenuMap(links) {
+//   const map = {};
   
-  for (let i = 0; i < links.length; i++) {
-    const link = links[i];
-    const text = getCleanLinkText(link);
-    map[text.toLowerCase()] = link;
-  }
+//   for (let i = 0; i < links.length; i++) {
+//     const link = links[i];
+//     const text = getCleanLinkText(link);
+//     map[text.toLowerCase()] = link;
+//   }
   
-  return map;
-}
+//   return map;
+// }
 
 // Efficiently highlight menu item by text
-function highlightMenuItem(items, menuMap, targetText) {
-  if (!targetText) return false;
+// function highlightMenuItem(items, menuMap, targetText) {
+//   if (!targetText) return false;
   
-  // Case-insensitive lookup
-  const targetKey = targetText.toLowerCase();
-  const matchedLink = menuMap[targetKey];
+//   // Case-insensitive lookup
+//   const targetKey = targetText.toLowerCase();
+//   const matchedLink = menuMap[targetKey];
   
-  if (matchedLink) {
-    // First check if already active to avoid unnecessary DOM updates
-    const parent = matchedLink.parentElement;
-    if (parent.classList.contains('active')) {
-      return true;
-    }
+//   if (matchedLink) {
+//     // First check if already active to avoid unnecessary DOM updates
+//     const parent = matchedLink.parentElement;
+//     if (parent.classList.contains('active')) {
+//       return true;
+//     }
     
-    // Remove active class from all items
-    for (let i = 0; i < items.length; i++) {
-      items[i].classList.remove('active');
-    }
+//     // Remove active class from all items
+//     for (let i = 0; i < items.length; i++) {
+//       items[i].classList.remove('active');
+//     }
     
-    // Add active to the matched element
-    parent.classList.add('active');
-    return true;
-  }
+//     // Add active to the matched element
+//     parent.classList.add('active');
+//     return true;
+//   }
   
-  return false;
-}
+//   return false;
+// }
 
 // Optimized sidebar update for article pages
 // Simplify the updateSidebarFromArticle function
-function updateSidebarFromArticle(articleEl) {
-    // Get current active element
-    const currentActive = document.querySelector('#sidebar .nav-list li.active');
+// function updateSidebarFromArticle(articleEl) {
+//     // Get current active element
+//     const currentActive = document.querySelector('#sidebar .nav-list li.active');
     
-    // Get section data
-    const sectionName = articleEl.getAttribute('data-section-name');
+//     // Get section data
+//     const sectionName = articleEl.getAttribute('data-section-name');
     
-    // Create direct mapping object for speed
-    const categoryMap = {
-      "Billing": "Billing",
-      "Account": "Account Setup",
-      "Support": "Support",
-      "Features": "Features",
-      "Integrations": "Integrations",
-      "Use Cases": "Use Cases",
-      "Get Started": "Get Started",
-      "Level Up": "Level Up",
-      "Supercharge Your Team": "Supercharge Your Team"
-    };
+//     // Create direct mapping object for speed
+//     const categoryMap = {
+//       "Billing": "Billing",
+//       "Account": "Account Setup",
+//       "Support": "Support",
+//       "Features": "Features",
+//       "Integrations": "Integrations",
+//       "Use Cases": "Use Cases",
+//       "Get Started": "Get Started",
+//       "Level Up": "Level Up",
+//       "Supercharge Your Team": "Supercharge Your Team"
+//     };
     
-    // Try direct match
-    if (sectionName && categoryMap[sectionName]) {
-        const targetText = categoryMap[sectionName];
-        const links = document.querySelectorAll('#sidebar .nav-list li a');
+//     // Try direct match
+//     if (sectionName && categoryMap[sectionName]) {
+//         const targetText = categoryMap[sectionName];
+//         const links = document.querySelectorAll('#sidebar .nav-list li a');
         
-        for (let i = 0; i < links.length; i++) {
-          if (links[i].textContent.trim() === targetText) {
-            // Only make changes if needed
-            if (currentActive !== links[i].parentElement) {
-              if (currentActive) currentActive.classList.remove('active');
-              links[i].parentElement.classList.add('active');
-            }
-            return;
-          }
-        }
-    }
+//         for (let i = 0; i < links.length; i++) {
+//           if (links[i].textContent.trim() === targetText) {
+//             // Only make changes if needed
+//             if (currentActive !== links[i].parentElement) {
+//               if (currentActive) currentActive.classList.remove('active');
+//               links[i].parentElement.classList.add('active');
+//             }
+//             return;
+//           }
+//         }
+//     }
     
-    // If no match, fall back to URL-based matching
-    const currentPath = window.location.pathname;
-    let bestMatch = null;
-    let bestMatchLength = 0;
+//     // If no match, fall back to URL-based matching
+//     const currentPath = window.location.pathname;
+//     let bestMatch = null;
+//     let bestMatchLength = 0;
     
-    for (let i = 0; i < links.length; i++) {
-      const href = links[i].getAttribute('href');
-      if (currentPath === href || (currentPath.indexOf(href) === 0 && href.length > bestMatchLength)) {
-        bestMatch = links[i];
-        bestMatchLength = href.length;
-      }
-    }
+//     for (let i = 0; i < links.length; i++) {
+//       const href = links[i].getAttribute('href');
+//       if (currentPath === href || (currentPath.indexOf(href) === 0 && href.length > bestMatchLength)) {
+//         bestMatch = links[i];
+//         bestMatchLength = href.length;
+//       }
+//     }
     
-    if (bestMatch) {
-      bestMatch.parentElement.classList.add('active');
-    }
-  }
+//     if (bestMatch) {
+//       bestMatch.parentElement.classList.add('active');
+//     }
+//   }
 
 // Optimized sidebar update for category pages
-function updateSidebarFromCategoryPage() {
-  // Get sidebar elements once
-  const sidebarItems = getElements('#sidebar .nav-list li');
-  const sidebarLinks = getElements('#sidebar .nav-list li a');
+// function updateSidebarFromCategoryPage() {
+//   // Get sidebar elements once
+//   const sidebarItems = getElements('#sidebar .nav-list li');
+//   const sidebarLinks = getElements('#sidebar .nav-list li a');
   
-  // Exit early if no sidebar
-  if (!sidebarItems.length) return;
+//   // Exit early if no sidebar
+//   if (!sidebarItems.length) return;
   
-  // Method 1: Use URL for category ID (highest specificity)
-  const currentUrl = window.location.href;
-  const categoryIdMatch = currentUrl.match(/\/categories\/(\d+)/);
+//   // Method 1: Use URL for category ID (highest specificity)
+//   const currentUrl = window.location.href;
+//   const categoryIdMatch = currentUrl.match(/\/categories\/(\d+)/);
   
-  if (categoryIdMatch && categoryIdMatch[1]) {
-    const categoryId = categoryIdMatch[1];
-    const idSelector = `/categories/${categoryId}`;
+//   if (categoryIdMatch && categoryIdMatch[1]) {
+//     const categoryId = categoryIdMatch[1];
+//     const idSelector = `/categories/${categoryId}`;
     
-    // Check links for matching category ID
-    for (let i = 0; i < sidebarLinks.length; i++) {
-      const link = sidebarLinks[i];
-      const href = link.getAttribute('href');
-      if (href && href.includes(idSelector)) {
-        // Clear any existing active classes
-        sidebarItems.forEach(item => item.classList.remove('active'));
-        link.parentElement.classList.add('active');
-        return;
-      }
-    }
-  }
+//     // Check links for matching category ID
+//     for (let i = 0; i < sidebarLinks.length; i++) {
+//       const link = sidebarLinks[i];
+//       const href = link.getAttribute('href');
+//       if (href && href.includes(idSelector)) {
+//         // Clear any existing active classes
+//         sidebarItems.forEach(item => item.classList.remove('active'));
+//         link.parentElement.classList.add('active');
+//         return;
+//       }
+//     }
+//   }
   
-  // Method 2: Use page heading
-  const pageHeading = document.querySelector('h1, .page-header h1');
-  if (pageHeading) {
-    const headingText = pageHeading.textContent.trim();
-    const menuMap = buildMenuMap(sidebarLinks);
+//   // Method 2: Use page heading
+//   const pageHeading = document.querySelector('h1, .page-header h1');
+//   if (pageHeading) {
+//     const headingText = pageHeading.textContent.trim();
+//     const menuMap = buildMenuMap(sidebarLinks);
     
-    // Try exact match with heading text
-    if (highlightMenuItem(sidebarItems, menuMap, headingText)) {
-      return;
-    }
+//     // Try exact match with heading text
+//     if (highlightMenuItem(sidebarItems, menuMap, headingText)) {
+//       return;
+//     }
     
-    // Try known categories
-    const knownCategories = [
-      "Integrations", "Account Setup", "Billing", 
-      "Support", "Features", "Use Cases"
-    ];
+//     // Try known categories
+//     const knownCategories = [
+//       "Integrations", "Account Setup", "Billing", 
+//       "Support", "Features", "Use Cases"
+//     ];
     
-    for (let i = 0; i < knownCategories.length; i++) {
-      const category = knownCategories[i];
-      if (headingText.includes(category) && highlightMenuItem(sidebarItems, menuMap, category)) {
-        return;
-      }
-    }
-  }
+//     for (let i = 0; i < knownCategories.length; i++) {
+//       const category = knownCategories[i];
+//       if (headingText.includes(category) && highlightMenuItem(sidebarItems, menuMap, category)) {
+//         return;
+//       }
+//     }
+//   }
   
-  // Method 3: URL-based matching as fallback
-  urlBasedMatching(sidebarItems, sidebarLinks);
-}
+//   // Method 3: URL-based matching as fallback
+// //   urlBasedMatching(sidebarItems, sidebarLinks);
+// }
 
 // Optimized URL-based matching with faster pattern matching
-function urlBasedMatching(sidebarItems, sidebarLinks) {
-  const currentUrl = window.location.href.toLowerCase();
+// function urlBasedMatching(sidebarItems, sidebarLinks) {
+//   const currentUrl = window.location.href.toLowerCase();
   
-  // Fast pattern matching
-  const urlPatterns = [
-    ['billing', 'Billing'],
-    ['account', 'Account Setup'],
-    ['support', 'Support'],
-    ['feature', 'Features'],
-    ['integration', 'Integrations'],
-    ['use-case', 'Use Cases'],
-    ['get-started', 'Get Started'],
-    ['level-up', 'Level Up'],
-    ['supercharge', 'Supercharge Your Team']
-  ];
+//   // Fast pattern matching
+//   const urlPatterns = [
+//     ['billing', 'Billing'],
+//     ['account', 'Account Setup'],
+//     ['support', 'Support'],
+//     ['feature', 'Features'],
+//     ['integration', 'Integrations'],
+//     ['use-case', 'Use Cases'],
+//     ['get-started', 'Get Started'],
+//     ['level-up', 'Level Up'],
+//     ['supercharge', 'Supercharge Your Team']
+//   ];
   
-  // Clear active state once
-  let needsClearActive = true;
+//   // Clear active state once
+//   let needsClearActive = true;
   
-  // Check for category ID in URL first (most specific)
-  const categoryMatch = currentUrl.match(/\/categories\/(\d+)/);
-  if (categoryMatch && categoryMatch[1]) {
-    const categoryId = `/categories/${categoryMatch[1]}`;
+//   // Check for category ID in URL first (most specific)
+//   const categoryMatch = currentUrl.match(/\/categories\/(\d+)/);
+//   if (categoryMatch && categoryMatch[1]) {
+//     const categoryId = `/categories/${categoryMatch[1]}`;
     
-    for (let i = 0; i < sidebarLinks.length; i++) {
-      const link = sidebarLinks[i];
-      const href = (link.getAttribute('href') || '').toLowerCase();
+//     for (let i = 0; i < sidebarLinks.length; i++) {
+//       const link = sidebarLinks[i];
+//       const href = (link.getAttribute('href') || '').toLowerCase();
       
-      if (href.includes(categoryId)) {
-        if (needsClearActive) {
-          for (let j = 0; j < sidebarItems.length; j++) {
-            sidebarItems[j].classList.remove('active');
-          }
-          needsClearActive = false;
-        }
-        link.parentElement.classList.add('active');
-        return;
-      }
-    }
-  }
+//       if (href.includes(categoryId)) {
+//         if (needsClearActive) {
+//           for (let j = 0; j < sidebarItems.length; j++) {
+//             sidebarItems[j].classList.remove('active');
+//           }
+//           needsClearActive = false;
+//         }
+//         link.parentElement.classList.add('active');
+//         return;
+//       }
+//     }
+//   }
   
-  // Try URL pattern matching
-  for (let i = 0; i < urlPatterns.length; i++) {
-    const [pattern, menuText] = urlPatterns[i];
+//   // Try URL pattern matching
+//   for (let i = 0; i < urlPatterns.length; i++) {
+//     const [pattern, menuText] = urlPatterns[i];
     
-    if (currentUrl.includes(pattern)) {
-      // Search for matching menu item
-      for (let j = 0; j < sidebarLinks.length; j++) {
-        const link = sidebarLinks[j];
-        const linkText = getCleanLinkText(link);
+//     if (currentUrl.includes(pattern)) {
+//       // Search for matching menu item
+//       for (let j = 0; j < sidebarLinks.length; j++) {
+//         const link = sidebarLinks[j];
+//         const linkText = getCleanLinkText(link);
         
-        if (linkText.toLowerCase() === menuText.toLowerCase()) {
-          if (needsClearActive) {
-            for (let k = 0; k < sidebarItems.length; k++) {
-              sidebarItems[k].classList.remove('active');
-            }
-            needsClearActive = false;
-          }
-          link.parentElement.classList.add('active');
-          return;
-        }
-      }
-    }
-  }
+//         if (linkText.toLowerCase() === menuText.toLowerCase()) {
+//           if (needsClearActive) {
+//             for (let k = 0; k < sidebarItems.length; k++) {
+//               sidebarItems[k].classList.remove('active');
+//             }
+//             needsClearActive = false;
+//           }
+//           link.parentElement.classList.add('active');
+//           return;
+//         }
+//       }
+//     }
+//   }
   
-  // Last resort: Check for partial URL matches
-  // Create a match quality map to find the best match
-  let bestMatch = { link: null, quality: 0 };
+//   // Last resort: Check for partial URL matches
+//   // Create a match quality map to find the best match
+//   let bestMatch = { link: null, quality: 0 };
   
-  for (let i = 0; i < sidebarLinks.length; i++) {
-    const link = sidebarLinks[i];
-    const href = (link.getAttribute('href') || '').toLowerCase();
-    let matchQuality = 0;
+//   for (let i = 0; i < sidebarLinks.length; i++) {
+//     const link = sidebarLinks[i];
+//     const href = (link.getAttribute('href') || '').toLowerCase();
+//     let matchQuality = 0;
     
-    // Exact match (highest priority)
-    if (currentUrl === href || currentUrl.endsWith(href)) {
-      matchQuality = 100;
-    } 
-    // Article ID match
-    else if (href.includes('/articles/') && currentUrl.includes('/articles/')) {
-      const articleId = href.split('/articles/')[1];
-      if (currentUrl.includes(articleId)) {
-        matchQuality = 90;
-      }
-    }
-    // Significant partial match
-    else if (href.length > 10 && currentUrl.includes(href)) {
-      matchQuality = 80 + (href.length / currentUrl.length) * 10;
-    }
+//     // Exact match (highest priority)
+//     if (currentUrl === href || currentUrl.endsWith(href)) {
+//       matchQuality = 100;
+//     } 
+//     // Article ID match
+//     else if (href.includes('/articles/') && currentUrl.includes('/articles/')) {
+//       const articleId = href.split('/articles/')[1];
+//       if (currentUrl.includes(articleId)) {
+//         matchQuality = 90;
+//       }
+//     }
+//     // Significant partial match
+//     else if (href.length > 10 && currentUrl.includes(href)) {
+//       matchQuality = 80 + (href.length / currentUrl.length) * 10;
+//     }
     
-    if (matchQuality > bestMatch.quality) {
-      bestMatch = { link, quality: matchQuality };
-    }
-  }
+//     if (matchQuality > bestMatch.quality) {
+//       bestMatch = { link, quality: matchQuality };
+//     }
+//   }
   
-  // Apply the best match if found
-  if (bestMatch.link && bestMatch.quality > 0) {
-    if (needsClearActive) {
-      for (let i = 0; i < sidebarItems.length; i++) {
-        sidebarItems[i].classList.remove('active');
-      }
-    }
-    bestMatch.link.parentElement.classList.add('active');
-  }
-}
+//   // Apply the best match if found
+//   if (bestMatch.link && bestMatch.quality > 0) {
+//     if (needsClearActive) {
+//       for (let i = 0; i < sidebarItems.length; i++) {
+//         sidebarItems[i].classList.remove('active');
+//       }
+//     }
+//     bestMatch.link.parentElement.classList.add('active');
+//   }
+// }
 
 function enhanceSearchButton() {
     // Find the submit button
