@@ -3761,7 +3761,7 @@ zd-autocomplete-multibrand zd-autocomplete-breadcrumbs-multibrand {
     font-family: "Adelle Sans" !important;
     font-size: 16px !important;
     line-height: 24px !important;
-    padding: 16px 24px !important;
+    /* padding: 16px 24px !important; */
     color: rgba(255, 255, 255, 0.7) !important;
 }
 
@@ -4224,6 +4224,7 @@ form.search.search-full {
     padding-bottom: 4px !important;
     font-family: "Adelle Sans" !important;
     white-space: normal !important;
+    text-wrap: auto !important;
 }
 
 /* Hide breadcrumbs in multibrand results */
