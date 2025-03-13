@@ -49,7 +49,7 @@
             </div>
         </section>
 
-        <aside id="sidebar" class="span3">
+        {{!-- <aside id="sidebar" class="span3">
             {{search instant=settings.instant_search class='search search-full sidebar-search' submit=true}}
             <h3>Categories</h3>
             <ul class="nav nav-list">
@@ -62,6 +62,56 @@
                 <li><a href="/hc/en-us/categories/38445131555603">Features<i class="icon-arrow"></i></a></li>
                 <li><a href="/hc/en-us/categories/38445115561875">Integrations<i class="icon-arrow"></i></a></li>
                 <li><a href="/hc/en-us/categories/38445124666771">Use Cases<i class="icon-arrow"></i></a></li>
+            </ul>
+        </aside> --}}
+        <aside id="sidebar" class="span3">
+            {{search instant=settings.instant_search class='search search-full sidebar-search' submit=true}}
+            <h3>Categories</h3>
+            <ul class="nav nav-list">
+                {{! Get Started }}
+                <li{{#is section.name "Get Started"}} class="active"{{/is}}>
+                <a href="/hc/en-us/articles/38448760193939">Get Started<i class="icon-arrow"></i></a>
+                </li>
+                
+                {{! Level Up }}
+                <li{{#is section.name "Level Up"}} class="active"{{/is}}>
+                <a href="/hc/en-us/articles/38450004008595">Level Up<i class="icon-arrow"></i></a>
+                </li>
+                
+                {{! Supercharge Your Team }}
+                <li{{#is section.name "Supercharge Your Team"}} class="active"{{/is}}>
+                <a href="/hc/en-us/articles/38450322526995">Supercharge Your Team<i class="icon-arrow"></i></a>
+                </li>
+                
+                {{! Account Setup }}
+                <li{{#is section.name "Account Setup"}} class="active"{{/is}}>
+                <a href="/hc/en-us/categories/38445089824531">Account Setup<i class="icon-arrow"></i></a>
+                </li>
+                
+                {{! Billing }}
+                <li{{#is section.name "Billing"}} class="active"{{/is}}>
+                <a href="/hc/en-us/categories/38445127077651">Billing<i class="icon-arrow"></i></a>
+                </li>
+                
+                {{! Support }}
+                <li{{#is section.name "Support"}} class="active"{{/is}}>
+                <a href="/hc/en-us/categories/38445149992467">Support<i class="icon-arrow"></i></a>
+                </li>
+                
+                {{! Features }}
+                <li{{#is section.name "Features"}} class="active"{{/is}}>
+                <a href="/hc/en-us/categories/38445131555603">Features<i class="icon-arrow"></i></a>
+                </li>
+                
+                {{! Integrations }}
+                <li{{#is section.name "Integrations"}} class="active"{{/is}}>
+                <a href="/hc/en-us/categories/38445115561875">Integrations<i class="icon-arrow"></i></a>
+                </li>
+                
+                {{! Use Cases }}
+                <li{{#is section.name "Use Cases"}} class="active"{{/is}}>
+                <a href="/hc/en-us/categories/38445124666771">Use Cases<i class="icon-arrow"></i></a>
+                </li>
             </ul>
         </aside>
     </div>
