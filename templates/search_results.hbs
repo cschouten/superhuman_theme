@@ -33,12 +33,6 @@
                     }}
                 </ul>
                 {{else}}
-                {{!-- <div class="no-results">
-                    <div class="headline">
-                        <p>We don't have any articles matching those terms right now.</p>
-                        <p>Reach out to us at <a href="mailto:hello@superhuman.com">hello@superhuman.com</a> and we'll get you the help you need.</p>
-                    </div>
-                </div> --}}
                 {{
                 /if
                 }}
@@ -49,7 +43,17 @@
         </section>
 
         <aside id="sidebar" class="span3">
-      {{search instant=settings.instant_search class='search search-full sidebar-search' submit=true}}
+          <form role="search" class="search search-full sidebar-search sm" id="searchBar" data-instant="true" autocomplete="off" action="/hc/en-us/search" method="get">
+            <input type="search" name="query" id="sidebar-query" class="search-query" placeholder="Search" autocomplete="off" aria-label="Search">
+            <button type="submit">
+                <span class="sr-only">Toggle Search</span>
+                <i class="icon-search"></i>
+            </button>
+            <div id="serp-dd" class="sb" style="display: none;">
+                <ul class="result"></ul>
+            </div>
+        </form>
+      {{!-- {{search instant=settings.instant_search class='search search-full sidebar-search' submit=true}} --}}
     </aside>
     </div>
 </section>
