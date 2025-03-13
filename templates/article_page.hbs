@@ -43,72 +43,48 @@
         {{search instant=settings.instant_search class='search search-full sidebar-search' submit=true}}
         <h3>Categories</h3>
         <ul class="nav nav-list">
-            {{! Get Started - Highlight if current article is in this section }}
-            <li{{#if (or 
-                    (is section.name "Get Started") 
-                    (contains article.section_articles "38448760193939"))}} class="active"{{/if}}>
+            {{! Get Started }}
+            <li{{#is section.name "Get Started"}} class="active"{{/is}}>
             <a href="/hc/en-us/articles/38448760193939">Get Started<i class="icon-arrow"></i></a>
             </li>
             
-            {{! Level Up - Highlight if current article is in this section }}
-            <li{{#if (or 
-                    (is section.name "Level Up") 
-                    (contains article.section_articles "38450004008595"))}} class="active"{{/if}}>
+            {{! Level Up }}
+            <li{{#is section.name "Level Up"}} class="active"{{/is}}>
             <a href="/hc/en-us/articles/38450004008595">Level Up<i class="icon-arrow"></i></a>
             </li>
             
-            {{! Supercharge Your Team - Highlight if current article is in this section }}
-            <li{{#if (or 
-                    (is section.name "Supercharge Your Team")
-                    (is article.section.name "Supercharge Your Team"))}} class="active"{{/if}}>
+            {{! Supercharge Your Team }}
+            <li{{#is section.name "Supercharge Your Team"}} class="active"{{/is}}>
             <a href="/hc/en-us/articles/38450322526995">Supercharge Your Team<i class="icon-arrow"></i></a>
             </li>
             
-            {{! Account Setup - Category link }}
-            <li{{#if (or 
-                    (is section.name "Account Setup")
-                    (is article.section.name "Account Setup")
-                    (is category.name "Account Setup"))}} class="active"{{/if}}>
+            {{! Account Setup }}
+            <li{{#is section.name "Account Setup"}} class="active"{{/is}}>
             <a href="/hc/en-us/categories/38445089824531">Account Setup<i class="icon-arrow"></i></a>
             </li>
             
-            {{! Billing - Category link }}
-            <li{{#if (or 
-                    (is section.name "Billing")
-                    (is article.section.name "Billing")
-                    (is category.name "Billing"))}} class="active"{{/if}}>
+            {{! Billing }}
+            <li{{#is section.name "Billing"}} class="active"{{/is}}>
             <a href="/hc/en-us/categories/38445127077651">Billing<i class="icon-arrow"></i></a>
             </li>
             
-            {{! Support - Category link }}
-            <li{{#if (or 
-                    (is section.name "Support")
-                    (is article.section.name "Support")
-                    (is category.name "Support"))}} class="active"{{/if}}>
+            {{! Support }}
+            <li{{#is section.name "Support"}} class="active"{{/is}}>
             <a href="/hc/en-us/categories/38445149992467">Support<i class="icon-arrow"></i></a>
             </li>
             
-            {{! Features - Category link }}
-            <li{{#if (or 
-                    (is section.name "Features")
-                    (is article.section.name "Features")
-                    (is category.name "Features"))}} class="active"{{/if}}>
+            {{! Features }}
+            <li{{#is section.name "Features"}} class="active"{{/is}}>
             <a href="/hc/en-us/categories/38445131555603">Features<i class="icon-arrow"></i></a>
             </li>
             
-            {{! Integrations - Category link }}
-            <li{{#if (or 
-                    (is section.name "Integrations")
-                    (is article.section.name "Integrations")
-                    (is category.name "Integrations"))}} class="active"{{/if}}>
+            {{! Integrations }}
+            <li{{#is section.name "Integrations"}} class="active"{{/is}}>
             <a href="/hc/en-us/categories/38445115561875">Integrations<i class="icon-arrow"></i></a>
             </li>
             
-            {{! Use Cases - Category link }}
-            <li{{#if (or 
-                    (is section.name "Use Cases")
-                    (is article.section.name "Use Cases")
-                    (is category.name "Use Cases"))}} class="active"{{/if}}>
+            {{! Use Cases }}
+            <li{{#is section.name "Use Cases"}} class="active"{{/is}}>
             <a href="/hc/en-us/categories/38445124666771">Use Cases<i class="icon-arrow"></i></a>
             </li>
         </ul>
