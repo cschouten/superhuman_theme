@@ -4078,14 +4078,14 @@ form.search.search-full {
 }
 
 /* Search box border styling */
-#sidebar form.search-full input[type="search"],
+/* #sidebar form.search-full input[type="search"],
 #sidebar #searchBar.sm .search-query {
   border: 1px solid rgba(255, 255, 255, 0.2);
   outline: none;
   background: rgba(255, 255, 255, 0.05);
   border-radius: 4px;
   transition: border-color 0.3s ease;
-}
+} */
 
 #sidebar form.search-full input[type="search"]:focus,
 #sidebar #searchBar.sm .search-query:focus {
@@ -4099,7 +4099,7 @@ form.search.search-full {
   width: 100% !important;
   display: block !important;
   border-radius: 4px !important;
-  overflow: hidden !important;
+  /* overflow: hidden !important; */
 }
 
 /* Ensure no other buttons are visible */
@@ -4125,6 +4125,7 @@ form.search.search-full.sidebar-search input[type="search"] {
     border-radius: 4px;
     padding-left: 24px;
     border-radius: 4px;
+    width: 100%;
 }
 
 /* Sidebar Zendesk Autocomplete Styling - Custom Overrides */
