@@ -3945,19 +3945,23 @@ form.search.search-full {
     }
   }
 
-  /* Hide search buttons initially */
-#docsSearch form.search.search-full input[type="submit"],
-#docsSearch form.search.search-full input[name="commit"],
-form.search.search-full.sidebar-search.sm input[type="submit"],
-form.search.search-full.sidebar-search.sm input[name="commit"] {
+/* Hide initially */
+form.search.search-full input[type="submit"],
+form.search.search-full input[name="commit"] {
   visibility: hidden !important;
 }
 
-/* Show only search buttons when properly wrapped */
-.search-button-wrapper input[type="submit"],
-.search-button-wrapper input[name="commit"],
-.search-button-wrapper-sidebar input[type="submit"],
-.search-button-wrapper-sidebar input[name="commit"] {
+/* Show when wrapped - make sure these selectors match exactly what's in your DOM */
+div.search-button-wrapper input[type="submit"],
+div.search-button-wrapper input[name="commit"],
+div.search-button-wrapper-sidebar input[type="submit"],
+div.search-button-wrapper-sidebar input[name="commit"] {
+  visibility: visible !important;
+}
+
+/* Alternative approach using the form class */
+form.search.search-full.search-wrapped input[type="submit"],
+form.search.search-full.search-wrapped input[name="commit"] {
   visibility: visible !important;
 }
 

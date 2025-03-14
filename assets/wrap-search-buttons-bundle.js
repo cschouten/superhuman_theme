@@ -19,6 +19,11 @@
         wrapper.className = 'search-button-wrapper';
         homeSearchButton.parentNode.insertBefore(wrapper, homeSearchButton);
         wrapper.appendChild(homeSearchButton);
+
+        // Add a class to the form to indicate wrapping is complete
+        const form = homeSearchButton.closest('form.search.search-full');
+        if (form) form.classList.add('search-wrapped');
+
         wrapped++;
       }
       
@@ -29,6 +34,11 @@
         wrapper.className = 'search-button-wrapper-sidebar';
         sidebarButton.parentNode.insertBefore(wrapper, sidebarButton);
         wrapper.appendChild(sidebarButton);
+
+        // Add a class to the form to indicate wrapping is complete
+        const form = homeSearchButton.closest('form.search.search-full');
+        if (form) form.classList.add('search-wrapped');
+        
         wrapped++;
       }
       
