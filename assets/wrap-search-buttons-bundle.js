@@ -26,6 +26,9 @@
         wrapper.className = 'search-button-wrapper';
         homeSearchButton.parentNode.insertBefore(wrapper, homeSearchButton);
         wrapper.appendChild(homeSearchButton);
+
+        // Add this line to directly make the button visible
+        homeSearchButton.style.visibility = 'visible';
         
         console.log('Home search button wrapped');
         wrapped++;
@@ -38,6 +41,9 @@
         wrapper.className = 'search-button-wrapper-sidebar';
         sidebarButton.parentNode.insertBefore(wrapper, sidebarButton);
         wrapper.appendChild(sidebarButton);
+
+        // Add this line to directly make the button visible
+        sidebarButton.style.visibility = 'visible';
         
         console.log('Sidebar search button wrapped');
         wrapped++;
