@@ -1,4 +1,13 @@
 (function() {
+    // Check if we've already wrapped buttons in this session
+    const wrappedKey = 'search-buttons-wrapped';
+    const sessionWrapped = sessionStorage.getItem(wrappedKey);
+    
+    // If we've already wrapped buttons in this session, exit early
+    if (sessionWrapped === 'true') {
+      return;
+    }
+    
     // Function to wrap both the home page and sidebar search buttons
     function wrapSearchButtons() {
       let wrapped = 0;
@@ -23,37 +32,41 @@
         wrapped++;
       }
       
-      return wrapped === 2; // Return true when both buttons are wrapped
+      // If we managed to wrap both buttons, mark as done
+      if (wrapped === 2) {
+        try {
+          // Remember that we've wrapped buttons in this session
+          sessionStorage.setItem(wrappedKey, 'true');
+        } catch (e) {
+          // Handle any storage errors silently
+          console.error('Could not save wrapped state:', e);
+        }
+        return true;
+      }
+      
+      return false;
     }
     
-    // Try immediately first
+    // Try immediately
     if (wrapSearchButtons()) {
-      return; // Exit early if both buttons wrapped successfully
+      return;
     }
     
-    // If not all buttons were wrapped, set up observers and fallbacks
-    
-    // Use requestAnimationFrame for better timing
-    requestAnimationFrame(wrapSearchButtons);
-    
-    // Set up mutation observer to watch for DOM changes
+    // Set up observers and fallbacks if needed
     const observer = new MutationObserver(() => {
       if (wrapSearchButtons()) {
-        observer.disconnect(); // Stop observing once both buttons are wrapped
+        observer.disconnect();
       }
     });
     
-    // Start observing the document
     observer.observe(document.body, { childList: true, subtree: true });
     
-    // Try again on DOMContentLoaded
     document.addEventListener('DOMContentLoaded', () => {
       if (wrapSearchButtons()) {
         observer.disconnect();
       }
     });
     
-    // Final fallback with timeout
     setTimeout(() => {
       wrapSearchButtons();
       observer.disconnect();
