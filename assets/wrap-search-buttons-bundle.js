@@ -27,8 +27,9 @@
         homeSearchButton.parentNode.insertBefore(wrapper, homeSearchButton);
         wrapper.appendChild(homeSearchButton);
 
-        // Add this line to directly make the button visible
-        homeSearchButton.style.visibility = 'visible';
+        // Add a class to the form to indicate wrapping is complete
+        const form = homeSearchButton.closest('form.search.search-full');
+        if (form) form.classList.add('search-wrapped');
         
         console.log('Home search button wrapped');
         wrapped++;
@@ -42,8 +43,9 @@
         sidebarButton.parentNode.insertBefore(wrapper, sidebarButton);
         wrapper.appendChild(sidebarButton);
 
-        // Add this line to directly make the button visible
-        sidebarButton.style.visibility = 'visible';
+        // Add a class to the form to indicate wrapping is complete
+        const form = homeSearchButton.closest('form.search.search-full');
+        if (form) form.classList.add('search-wrapped');
         
         console.log('Sidebar search button wrapped');
         wrapped++;
