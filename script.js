@@ -831,7 +831,7 @@ function fixNextPageButtons() {
  * Initializes the dark theme and handles various UI enhancements
  * This function runs once and makes itself a no-op on subsequent calls
  */
-  function initDarkTheme() {
+function initDarkTheme() {
     // Prevent this function from running multiple times
     // by redefining it as an empty function after first execution
     initDarkTheme = function() {
@@ -851,35 +851,40 @@ function fixNextPageButtons() {
       backgroundElement.classList.add('visible');
     }
     
-    // Enhance the search button with proper styling - moved from Phase 3 to prevent flickering
-    const allSearchButtons = document.querySelectorAll('form.search.search-full input[type="submit"], form.search.search-full input[name="commit"]');
-    allSearchButtons.forEach(searchButton => {
-      if (!searchButton.parentElement.classList.contains('search-button-wrapper') && 
-          !searchButton.parentElement.classList.contains('search-button-wrapper-sidebar')) {
-          
-        // Create a wrapper for better styling and positioning
-        const wrapper = document.createElement('div');
-        
-        // Check if this button is inside a sidebar search form
-        const isSidebarSearch = searchButton.closest('form.search.search-full.sidebar-search.sm') !== null;
-        
-        // Set appropriate class name based on form type
-        wrapper.className = isSidebarSearch ? 'search-button-wrapper-sidebar' : 'search-button-wrapper';
-        
-        // Insert wrapper before the button
-        searchButton.parentNode.insertBefore(wrapper, searchButton);
-        
-        // Move the button into the wrapper
-        wrapper.appendChild(searchButton);
-      }
-    });
-    
     // PHASE 2: Schedule sidebar highlighting for the next animation frame
     // ------------------------------------------------------------------
     requestAnimationFrame(function() {
+        
       
       // PHASE 3: Enhance search UI components
       // ------------------------------------
+      
+      // Enhance the search button with proper styling
+    const allSearchButtons = document.querySelectorAll('form.search.search-full input[type="submit"], form.search.search-full input[name="commit"]');
+
+    allSearchButtons.forEach(searchButton => {
+        if (!searchButton.parentElement.classList.contains('search-button-wrapper') && 
+            !searchButton.parentElement.classList.contains('search-button-wrapper-sidebar')) {
+            
+            // Create a wrapper for better styling and positioning
+            const wrapper = document.createElement('div');
+            
+            // Check if this button is inside a sidebar search form
+            const isSidebarSearch = searchButton.closest('form.search.search-full.sidebar-search.sm') !== null;
+            
+            // Set appropriate class name based on form type
+            wrapper.className = isSidebarSearch ? 'search-button-wrapper-sidebar' : 'search-button-wrapper';
+            
+            // Insert wrapper before the button
+            searchButton.parentNode.insertBefore(wrapper, searchButton);
+            
+            // Move the button into the wrapper
+            wrapper.appendChild(searchButton);
+        }
+    });
+      
+      // Enhance the sidebar search functionality
+    // enhanceSidebarSearch();
       
       // Set up observer for autocomplete dropdown to fix its positioning
       const autocompleteObserver = new MutationObserver(function(mutations) {
@@ -891,6 +896,9 @@ function fixNextPageButtons() {
       
       // Start observing DOM changes to detect autocomplete appearance
       autocompleteObserver.observe(document.body, { childList: true, subtree: true });
+      
+      // Handle window resize to reposition autocomplete dropdown
+      // window.addEventListener('resize', fixSidebarAutocomplete);
       
       // Add input event listener to sidebar search for autocomplete positioning
       const searchInput = document.querySelector('#sidebar .search-query, #sidebar input[type="search"]');
