@@ -1,75 +1,63 @@
-// Immediately execute and export
 (function() {
-    // Use a more performant selector approach
+    // Function to wrap both the home page and sidebar search buttons
     function wrapSearchButtons() {
-      // Directly target sidebar search buttons first - most specific case
-      const sidebarButtons = document.querySelectorAll('form.search.search-full.sidebar-search.sm input[type="submit"], form.search.search-full.sidebar-search.sm input[name="commit"]');
+      let wrapped = 0;
       
-      for (const button of sidebarButtons) {
-        if (!button.parentElement.classList.contains('search-button-wrapper-sidebar')) {
-          const wrapper = document.createElement('div');
-          wrapper.className = 'search-button-wrapper-sidebar';
-          button.parentNode.insertBefore(wrapper, button);
-          wrapper.appendChild(button);
-        }
+      // 1. Home page search button
+      const homeSearchButton = document.querySelector('#docsSearch form.search.search-full input[type="submit"], #docsSearch form.search.search-full input[name="commit"]');
+      if (homeSearchButton && !homeSearchButton.parentElement.classList.contains('search-button-wrapper')) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'search-button-wrapper';
+        homeSearchButton.parentNode.insertBefore(wrapper, homeSearchButton);
+        wrapper.appendChild(homeSearchButton);
+        wrapped++;
       }
       
-      // Handle non-sidebar buttons separately
-      const regularButtons = document.querySelectorAll('form.search.search-full:not(.sidebar-search) input[type="submit"], form.search.search-full:not(.sidebar-search) input[name="commit"]');
-      
-      for (const button of regularButtons) {
-        if (!button.parentElement.classList.contains('search-button-wrapper')) {
-          const wrapper = document.createElement('div');
-          wrapper.className = 'search-button-wrapper';
-          button.parentNode.insertBefore(wrapper, button);
-          wrapper.appendChild(button);
-        }
+      // 2. Sidebar search button
+      const sidebarButton = document.querySelector('form.search.search-full.sidebar-search.sm input[type="submit"], form.search.search-full.sidebar-search.sm input[name="commit"]');
+      if (sidebarButton && !sidebarButton.parentElement.classList.contains('search-button-wrapper-sidebar')) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'search-button-wrapper-sidebar';
+        sidebarButton.parentNode.insertBefore(wrapper, sidebarButton);
+        wrapper.appendChild(sidebarButton);
+        wrapped++;
       }
       
-      return sidebarButtons.length > 0 || regularButtons.length > 0;
+      return wrapped === 2; // Return true when both buttons are wrapped
     }
     
-    // Try immediately on script load (highest priority)
+    // Try immediately first
     if (wrapSearchButtons()) {
-      return; // Success on first try, exit early
+      return; // Exit early if both buttons wrapped successfully
     }
     
-    // If buttons aren't available yet, set up more aggressive strategies
+    // If not all buttons were wrapped, set up observers and fallbacks
     
-    // 1. Create an optimized observer 
-    const observer = new MutationObserver((mutations) => {
-      // Only look at added nodes for performance
-      for (const mutation of mutations) {
-        if (mutation.addedNodes.length) {
-          if (wrapSearchButtons()) {
-            observer.disconnect();
-            return;
-          }
-        }
+    // Use requestAnimationFrame for better timing
+    requestAnimationFrame(wrapSearchButtons);
+    
+    // Set up mutation observer to watch for DOM changes
+    const observer = new MutationObserver(() => {
+      if (wrapSearchButtons()) {
+        observer.disconnect(); // Stop observing once both buttons are wrapped
       }
     });
     
-    // Start with more targeted observation
-    const sidebar = document.getElementById('sidebar');
-    if (sidebar) {
-      // If sidebar exists, just observe it (more efficient)
-      observer.observe(sidebar, { childList: true, subtree: true });
-    } else {
-      // Fallback to observing the body
-      observer.observe(document.body, { childList: true, subtree: true });
-    }
+    // Start observing the document
+    observer.observe(document.body, { childList: true, subtree: true });
     
-    // 2. Set a single timeout as fallback (simplifies the approach)
+    // Try again on DOMContentLoaded
+    document.addEventListener('DOMContentLoaded', () => {
+      if (wrapSearchButtons()) {
+        observer.disconnect();
+      }
+    });
+    
+    // Final fallback with timeout
     setTimeout(() => {
       wrapSearchButtons();
       observer.disconnect();
-    }, 100);
-    
-    // 3. Also try on DOMContentLoaded
-    document.addEventListener('DOMContentLoaded', () => {
-      wrapSearchButtons();
-      observer.disconnect();
-    });
+    }, 200);
   })();
   
   export default {};
