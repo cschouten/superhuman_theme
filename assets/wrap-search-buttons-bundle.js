@@ -24,7 +24,7 @@
         wrapper.className = 'search-button-wrapper';
         homeSearchButton.parentNode.insertBefore(wrapper, homeSearchButton);
         wrapper.appendChild(homeSearchButton);
-
+        
         console.log('Home search button wrapped');
         
         // Calculate time taken
