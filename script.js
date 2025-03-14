@@ -852,27 +852,27 @@ function fixNextPageButtons() {
     }
     
     // Enhance the search button with proper styling - moved from Phase 3 to prevent flickering
-    const allSearchButtons = document.querySelectorAll('form.search.search-full input[type="submit"], form.search.search-full input[name="commit"]');
-    allSearchButtons.forEach(searchButton => {
-      if (!searchButton.parentElement.classList.contains('search-button-wrapper') && 
-          !searchButton.parentElement.classList.contains('search-button-wrapper-sidebar')) {
+    // const allSearchButtons = document.querySelectorAll('form.search.search-full input[type="submit"], form.search.search-full input[name="commit"]');
+    // allSearchButtons.forEach(searchButton => {
+    //   if (!searchButton.parentElement.classList.contains('search-button-wrapper') && 
+    //       !searchButton.parentElement.classList.contains('search-button-wrapper-sidebar')) {
           
-        // Create a wrapper for better styling and positioning
-        const wrapper = document.createElement('div');
+    //     // Create a wrapper for better styling and positioning
+    //     const wrapper = document.createElement('div');
         
-        // Check if this button is inside a sidebar search form
-        const isSidebarSearch = searchButton.closest('form.search.search-full.sidebar-search.sm') !== null;
+    //     // Check if this button is inside a sidebar search form
+    //     const isSidebarSearch = searchButton.closest('form.search.search-full.sidebar-search.sm') !== null;
         
-        // Set appropriate class name based on form type
-        wrapper.className = isSidebarSearch ? 'search-button-wrapper-sidebar' : 'search-button-wrapper';
+    //     // Set appropriate class name based on form type
+    //     wrapper.className = isSidebarSearch ? 'search-button-wrapper-sidebar' : 'search-button-wrapper';
         
-        // Insert wrapper before the button
-        searchButton.parentNode.insertBefore(wrapper, searchButton);
+    //     // Insert wrapper before the button
+    //     searchButton.parentNode.insertBefore(wrapper, searchButton);
         
-        // Move the button into the wrapper
-        wrapper.appendChild(searchButton);
-      }
-    });
+    //     // Move the button into the wrapper
+    //     wrapper.appendChild(searchButton);
+    //   }
+    // });
     
     // PHASE 2: Schedule sidebar highlighting for the next animation frame
     // ------------------------------------------------------------------
