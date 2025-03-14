@@ -22,15 +22,15 @@
 }
 </script>
 <script type="module">
+  import "wrap-search-buttons";
+</script>
+<script type="module">
   import { renderFlashNotifications } from "flash-notifications";
   
   const settings = {{json settings}};
   const closeLabel = {{json (t 'close')}}
 
   renderFlashNotifications(settings, closeLabel);
-</script>
-<script type="module">
-  import "wrap-search-buttons";
 </script>
 <style>
     body .background {
