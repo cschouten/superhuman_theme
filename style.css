@@ -3825,6 +3825,9 @@ form.search.search-full {
   /* Search button base styling */
   form.search.search-full input[type="submit"],
   form.search.search-full input[name="commit"] {
+    /* Anti-flicker - hide initially */
+    visibility: hidden;
+
     color: #ffffff !important;
     font-family: "Adelle Sans", sans-serif !important;
     font-size: 24px !important;
@@ -3847,6 +3850,14 @@ form.search.search-full {
     appearance: none !important;
   }
   
+/* Show buttons only after they're properly wrapped */
+.search-button-wrapper input[type="submit"],
+.search-button-wrapper input[name="commit"],
+.search-button-wrapper-sidebar input[type="submit"],
+.search-button-wrapper-sidebar input[name="commit"] {
+  visibility: visible;
+}
+
   /* Wrapper styling for pseudo-elements */
   .search-button-wrapper {
     position: relative !important;
