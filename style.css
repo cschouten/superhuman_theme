@@ -4117,7 +4117,7 @@ form.search.search-full {
     background: transparent;
     border: none;
     color: rgba(255, 255, 255, 0.7);
-    padding: 0 10px;
+    /* padding: 0 10px; */
   }
 
   @media (max-width: 767px) {
@@ -4181,7 +4181,7 @@ form.search.search-full {
     display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
-    width: 40px !important; /* Set explicit width */
+    width: 16px !important; /* Set explicit width */
     height: 40px !important; /* Set explicit height */
     position: absolute !important;
     right: 12px !important;
