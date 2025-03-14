@@ -3945,7 +3945,23 @@ form.search.search-full {
     }
   }
 
-  /* Sidebar search styling to match the dark theme with spyglass */
+  /* Hide search buttons initially */
+#docsSearch form.search.search-full input[type="submit"],
+#docsSearch form.search.search-full input[name="commit"],
+form.search.search-full.sidebar-search.sm input[type="submit"],
+form.search.search-full.sidebar-search.sm input[name="commit"] {
+  visibility: hidden !important;
+}
+
+/* Show only search buttons when properly wrapped */
+.search-button-wrapper input[type="submit"],
+.search-button-wrapper input[name="commit"],
+.search-button-wrapper-sidebar input[type="submit"],
+.search-button-wrapper-sidebar input[name="commit"] {
+  visibility: visible !important;
+}
+
+/* Sidebar search styling to match the dark theme with spyglass */
 #sidebar #searchBar.sm {
     width: 100%;
     padding: 0;
