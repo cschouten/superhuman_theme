@@ -110,7 +110,7 @@
       console.log(`Search button wrapper finished in ${finalTime.toFixed(2)}ms total.`);
       
       observer.disconnect();
-    }, 200);
+    }, 50);
   })();
   
   export default {};
