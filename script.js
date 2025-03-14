@@ -774,59 +774,6 @@ function fixNextPageButtons() {
   requestAnimationFrame(processBatch);
 }
 
-// function enhanceSidebarSearch() {
-//     // Target the Zendesk search component in the sidebar
-//     const searchForm = document.querySelector('#sidebar form.sidebar-search');
-    
-//     if (searchForm && !searchForm.dataset.enhanced) {
-//       // Hide during changes
-//       searchForm.style.opacity = '0';
-      
-//       // Create all new elements in a document fragment (off-DOM)
-//       const fragment = document.createDocumentFragment();
-      
-//       // Create the new search button 
-//       const newButton = document.createElement('button');
-//       newButton.type = 'submit';
-//       newButton.innerHTML = '<span class="sr-only">Toggle Search</span><i class="icon-search"></i>';
-      
-//       // Create the dropdown container
-//       const resultsContainer = document.createElement('div');
-//       resultsContainer.id = 'serp-dd';
-//       resultsContainer.className = 'sb';
-//       resultsContainer.style.display = 'none';
-//       resultsContainer.innerHTML = '<ul class="result"></ul>';
-      
-//       // Prepare the search input
-//       const searchInput = searchForm.querySelector('input[type="search"]');
-//       if (searchInput) {
-//         searchInput.className = 'search-query';
-//         searchInput.placeholder = 'Search';
-//         searchInput.setAttribute('aria-label', 'Search');
-//       }
-      
-//       // Perform a single operation to remove all elements at once
-//       searchForm.querySelectorAll('button:not(.clear-button), input[type="submit"], .search-button, .search-button-wrapper, .search-controls, .search-submit-wrapper, .search-results-column, .search-box-separator').forEach(el => {
-//         el.remove();
-//       });
-      
-//       // Set classes and ID
-//       searchForm.id = 'searchBar';
-//       searchForm.classList.add('sm');
-//       searchForm.dataset.enhanced = 'true';
-      
-//       // Add all new elements in one batch
-//       fragment.appendChild(newButton);
-//       fragment.appendChild(resultsContainer);
-//       searchForm.appendChild(fragment);
-      
-//       // Use requestAnimationFrame to ensure browser has processed the changes before showing
-//       requestAnimationFrame(() => {
-//         searchForm.style.opacity = '1';
-//       });
-//     }
-//   }
-
 /**
  * Initializes the dark theme and handles various UI enhancements
  * This function runs once and makes itself a no-op on subsequent calls
@@ -850,29 +797,6 @@ function fixNextPageButtons() {
       backgroundElement.getBoundingClientRect();
       backgroundElement.classList.add('visible');
     }
-    
-    // Enhance the search button with proper styling - moved from Phase 3 to prevent flickering
-    // const allSearchButtons = document.querySelectorAll('form.search.search-full input[type="submit"], form.search.search-full input[name="commit"]');
-    // allSearchButtons.forEach(searchButton => {
-    //   if (!searchButton.parentElement.classList.contains('search-button-wrapper') && 
-    //       !searchButton.parentElement.classList.contains('search-button-wrapper-sidebar')) {
-          
-    //     // Create a wrapper for better styling and positioning
-    //     const wrapper = document.createElement('div');
-        
-    //     // Check if this button is inside a sidebar search form
-    //     const isSidebarSearch = searchButton.closest('form.search.search-full.sidebar-search.sm') !== null;
-        
-    //     // Set appropriate class name based on form type
-    //     wrapper.className = isSidebarSearch ? 'search-button-wrapper-sidebar' : 'search-button-wrapper';
-        
-    //     // Insert wrapper before the button
-    //     searchButton.parentNode.insertBefore(wrapper, searchButton);
-        
-    //     // Move the button into the wrapper
-    //     wrapper.appendChild(searchButton);
-    //   }
-    // });
     
     // PHASE 2: Schedule sidebar highlighting for the next animation frame
     // ------------------------------------------------------------------
