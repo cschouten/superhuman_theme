@@ -51,7 +51,7 @@
     setTimeout(() => {
       wrapSearchButtons();
       observer.disconnect();
-    }, 100);
+    }, 50);
   })();
   
   export default {};
