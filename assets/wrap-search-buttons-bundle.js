@@ -24,8 +24,12 @@
         wrapper.className = 'search-button-wrapper';
         homeSearchButton.parentNode.insertBefore(wrapper, homeSearchButton);
         wrapper.appendChild(homeSearchButton);
-        
+
         console.log('Home search button wrapped');
+
+        // Add a class to the form to indicate wrapping is complete
+        const form = homeSearchButton.closest('form.search.search-full');
+        if (form) form.classList.add('search-wrapped');
         
         // Calculate time taken
         const attemptEndTime = performance.now();
@@ -53,6 +57,10 @@
         wrapper.appendChild(sidebarButton);
         
         console.log('Sidebar search button wrapped');
+
+        // Add a class to the form to indicate wrapping is complete
+        const form = homeSearchButton.closest('form.search.search-full');
+        if (form) form.classList.add('search-wrapped');
         
         // Calculate time taken
         const attemptEndTime = performance.now();
