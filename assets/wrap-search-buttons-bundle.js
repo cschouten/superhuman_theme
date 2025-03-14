@@ -1,116 +1,116 @@
 (function() {
-    // Check if we've already wrapped buttons in this session
-    const wrappedKey = 'search-buttons-wrapped';
-    const sessionWrapped = sessionStorage.getItem(wrappedKey);
+  // Check if we've already wrapped buttons in this session
+  const wrappedKey = 'search-buttons-wrapped';
+  const sessionWrapped = sessionStorage.getItem(wrappedKey);
+  
+  // Start the overall timer
+  const startTime = performance.now();
+  
+  // If we've already wrapped buttons in this session, exit early
+  if (sessionWrapped === 'true') {
+    console.log('Search buttons already wrapped in this session. Skipping.');
+    return;
+  }
+  
+  // Function to wrap whichever search button is present on the page
+  function wrapSearchButtons() {
+    // Start timer for this specific attempt
+    const attemptStartTime = performance.now();
     
-    // Start the overall timer
-    const startTime = performance.now();
-    
-    // If we've already wrapped buttons in this session, exit early
-    if (sessionWrapped === 'true') {
-      console.log('Search buttons already wrapped in this session. Skipping.');
-      return;
-    }
-    
-    // Function to wrap both the home page and sidebar search buttons
-    function wrapSearchButtons() {
-      // Start timer for this specific attempt
-      const attemptStartTime = performance.now();
+    // Check for home page search button
+    const homeSearchButton = document.querySelector('#docsSearch form.search.search-full input[type="submit"], #docsSearch form.search.search-full input[name="commit"]');
+    if (homeSearchButton && !homeSearchButton.parentElement.classList.contains('search-button-wrapper')) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'search-button-wrapper';
+      homeSearchButton.parentNode.insertBefore(wrapper, homeSearchButton);
+      wrapper.appendChild(homeSearchButton);
       
-      let wrapped = 0;
+      console.log('Home search button wrapped');
       
-      // 1. Home page search button
-      const homeSearchButton = document.querySelector('#docsSearch form.search.search-full input[type="submit"], #docsSearch form.search.search-full input[name="commit"]');
-      if (homeSearchButton && !homeSearchButton.parentElement.classList.contains('search-button-wrapper')) {
-        const wrapper = document.createElement('div');
-        wrapper.className = 'search-button-wrapper';
-        homeSearchButton.parentNode.insertBefore(wrapper, homeSearchButton);
-        wrapper.appendChild(homeSearchButton);
-
-        // Add a class to the form to indicate wrapping is complete
-        const form = homeSearchButton.closest('form.search.search-full');
-        if (form) form.classList.add('search-wrapped');
-        
-        console.log('Home search button wrapped');
-        wrapped++;
-      }
-      
-      // 2. Sidebar search button
-      const sidebarButton = document.querySelector('form.search.search-full.sidebar-search.sm input[type="submit"], form.search.search-full.sidebar-search.sm input[name="commit"]');
-      if (sidebarButton && !sidebarButton.parentElement.classList.contains('search-button-wrapper-sidebar')) {
-        const wrapper = document.createElement('div');
-        wrapper.className = 'search-button-wrapper-sidebar';
-        sidebarButton.parentNode.insertBefore(wrapper, sidebarButton);
-        wrapper.appendChild(sidebarButton);
-
-        // Add a class to the form to indicate wrapping is complete
-        const form = homeSearchButton.closest('form.search.search-full');
-        if (form) form.classList.add('search-wrapped');
-        
-        console.log('Sidebar search button wrapped');
-        wrapped++;
-      }
-      
-      // Calculate time taken for this attempt
+      // Calculate time taken
       const attemptEndTime = performance.now();
       const attemptDuration = attemptEndTime - attemptStartTime;
-      console.log(`Wrapping attempt completed in ${attemptDuration.toFixed(2)}ms. Wrapped ${wrapped} button(s).`);
+      console.log(`Wrapping completed in ${attemptDuration.toFixed(2)}ms.`);
       
-      // If we managed to wrap both buttons, mark as done
-      if (wrapped === 2) {
-        try {
-          // Remember that we've wrapped buttons in this session
-          sessionStorage.setItem(wrappedKey, 'true');
-          
-          // Calculate total time from script start
-          const totalTime = attemptEndTime - startTime;
-          console.log(`✅ All search buttons wrapped successfully in ${totalTime.toFixed(2)}ms total time.`);
-        } catch (e) {
-          console.error('Could not save wrapped state:', e);
-        }
-        return true;
+      // Mark as done
+      try {
+        sessionStorage.setItem(wrappedKey, 'true');
+        const totalTime = attemptEndTime - startTime;
+        console.log(`✅ Search button wrapped successfully in ${totalTime.toFixed(2)}ms total time.`);
+      } catch (e) {
+        console.error('Could not save wrapped state:', e);
       }
       
-      return false;
+      return true;
     }
     
-    // Try immediately
-    console.log('🔍 Starting search button wrapper...');
-    if (wrapSearchButtons()) {
-      return;
+    // Check for sidebar search button
+    const sidebarButton = document.querySelector('form.search.search-full.sidebar-search.sm input[type="submit"], form.search.search-full.sidebar-search.sm input[name="commit"]');
+    if (sidebarButton && !sidebarButton.parentElement.classList.contains('search-button-wrapper-sidebar')) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'search-button-wrapper-sidebar';
+      sidebarButton.parentNode.insertBefore(wrapper, sidebarButton);
+      wrapper.appendChild(sidebarButton);
+      
+      console.log('Sidebar search button wrapped');
+      
+      // Calculate time taken
+      const attemptEndTime = performance.now();
+      const attemptDuration = attemptEndTime - attemptStartTime;
+      console.log(`Wrapping completed in ${attemptDuration.toFixed(2)}ms.`);
+      
+      // Mark as done
+      try {
+        sessionStorage.setItem(wrappedKey, 'true');
+        const totalTime = attemptEndTime - startTime;
+        console.log(`✅ Search button wrapped successfully in ${totalTime.toFixed(2)}ms total time.`);
+      } catch (e) {
+        console.error('Could not save wrapped state:', e);
+      }
+      
+      return true;
     }
     
-    // Set up observers and fallbacks if needed
-    console.log('Not all buttons wrapped on first try. Setting up observers...');
-    
-    const observer = new MutationObserver(() => {
-      console.log('DOM mutation detected, trying to wrap buttons again...');
-      if (wrapSearchButtons()) {
-        console.log('All buttons wrapped after DOM mutation. Disconnecting observer.');
-        observer.disconnect();
-      }
-    });
-    
-    observer.observe(document.body, { childList: true, subtree: true });
-    
-    document.addEventListener('DOMContentLoaded', () => {
-      console.log('DOMContentLoaded fired, trying to wrap buttons again...');
-      if (wrapSearchButtons()) {
-        console.log('All buttons wrapped on DOMContentLoaded. Disconnecting observer.');
-        observer.disconnect();
-      }
-    });
-    
-    setTimeout(() => {
-      console.log('Timeout reached, trying one last time to wrap buttons...');
-      wrapSearchButtons();
-      
-      // Calculate final time regardless of success
-      const finalTime = performance.now() - startTime;
-      console.log(`Search button wrapper finished in ${finalTime.toFixed(2)}ms total.`);
-      
-      observer.disconnect();
-    }, 50);
-  })();
+    // If we get here, no buttons were found or they were already wrapped
+    console.log('No unwrapped search buttons found on this page.');
+    return false;
+  }
   
-  export default {};
+  // Try immediately
+  console.log('🔍 Starting search button wrapper...');
+  if (wrapSearchButtons()) {
+    return; // Exit early if successful
+  }
+  
+  // Set up a shorter-lived observer
+  console.log('No buttons wrapped on first try. Setting up observer...');
+  
+  const observer = new MutationObserver(() => {
+    if (wrapSearchButtons()) {
+      observer.disconnect();
+    }
+  });
+  
+  // Start observing
+  observer.observe(document.body, { childList: true, subtree: true });
+  
+  // Try on DOMContentLoaded
+  document.addEventListener('DOMContentLoaded', () => {
+    if (wrapSearchButtons()) {
+      observer.disconnect();
+    }
+  });
+  
+  // Final attempt with much shorter timeout
+  setTimeout(() => {
+    wrapSearchButtons();
+    
+    // Calculate final time
+    const finalTime = performance.now() - startTime;
+    console.log(`Search button wrapper finished in ${finalTime.toFixed(2)}ms total.`);
+    
+    observer.disconnect();
+  }, 50); // Reduced timeout to 50ms
+})();
+
+export default {};
