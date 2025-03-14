@@ -4109,23 +4109,28 @@ form.search.search-full {
 }
 
 /* Sidebar Search Button */
-/* .search-button-wrapper-sidebar {
+.search-button-wrapper-sidebar {
     height: 40px;
     position: absolute;
     top: 0;
-    right: 0;
+    right: 12px;
     background: transparent;
     border: none;
     color: rgba(255, 255, 255, 0.7);
     padding: 0 10px;
-  } */
+  }
 
-  /* Style the wrapper to be positioned where you want the button to appear */
-.search-button-wrapper-sidebar {
-    position: relative;
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
+  @media (max-width: 767px) {
+    /* Mobile view */
+    .search-button-wrapper-sidebar {
+      top: auto; /* Reset the top property */
+      bottom: 0; /* Or adjust as needed to align with the mobile search bar */
+    }
+    
+    /* You might also need to adjust the parent container */
+    form.search.search-full.sidebar-search.sm {
+      position: relative; /* Ensure the absolute positioning works correctly */
+    }
   }
   
   /* Position the actual submit button to cover the entire wrapper */
