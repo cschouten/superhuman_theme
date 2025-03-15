@@ -6,24 +6,26 @@
 <section id="contentArea" class="container-fluid">
     <div class="row-fluid">
         <section id="main-content" class="span9">
-            <h1>{{t 'Oops!'}}</h1>
+            <div class="contentWrapper">
+                <h1>Oops!</h1>
 
-            {{#is error 'unauthorized'}}
-                <h2>{{link 'sign_in'}}</h2>
-            {{/is}}
+                {{#is error 'unauthorized'}}
+                    <h2>{{link 'sign_in'}}</h2>
+                {{/is}}
 
-            {{#is error 'forbidden'}}
-                <h2>{{t 'not_authorized'}}</h2>
-            {{/is}}
+                {{#is error 'forbidden'}}
+                    <h2>{{t 'not_authorized'}}</h2>
+                {{/is}}
 
-            {{#is error 'not_found'}}
-                <h2>{{t 'nonexistent_page'}}</h2>
-                <p>{{t 'mistyped_address_or_moved_page'}}</p>
-            {{/is}}
+                {{#is error 'not_found'}}
+                    <h2>{{t 'nonexistent_page'}}</h2>
+                    <p>{{t 'mistyped_address_or_moved_page'}}</p>
+                {{/is}}
 
-            {{#link 'help_center'}}
-                {{t 'back_to_homepage'}}
-            {{/link}}
+                {{#link 'help_center'}}
+                    {{t 'back_to_homepage'}}
+                {{/link}}
+            </div>
         </section>
     </div>
 </section>
