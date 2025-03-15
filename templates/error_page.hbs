@@ -18,13 +18,13 @@
                 {{/is}}
 
                 {{#is error 'not_found'}}
-                    <h2>{{t 'nonexistent_page'}}</h2>
-                    <p>{{t 'mistyped_address_or_moved_page'}}</p>
+                    <h2>The page you were looking for doesn't exist.</h2>
+                    <p>You may have mistyped the address or the page may have moved.</p>
                 {{/is}}
 
-                {{#link 'help_center'}}
-                    {{t 'back_to_homepage'}}
-                {{/link}}
+                <a title="Home" href="/hc/en-us">
+                    Take me back to the home page.
+                </a>
             </div>
         </section>
     </div>
