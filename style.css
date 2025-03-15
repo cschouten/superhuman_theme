@@ -2693,6 +2693,25 @@ a > * {
   -webkit-text-fill-color: transparent;
 }
 
+/* Base style for the homepage link */
+a[title="Home"] {
+    background: linear-gradient(273.81deg, #F991F9, #B38BEB);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-decoration: none;
+  }
+  
+  /* Hover, focus, and active states for the homepage link */
+  a[title="Home"]:hover, 
+  a[title="Home"]:focus, 
+  a[title="Home"]:active {
+    background: linear-gradient(273.81deg, #FCBAFC, #CFB7F3);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
 #searchBar {
     text-align: center;
     margin-bottom: 0;
