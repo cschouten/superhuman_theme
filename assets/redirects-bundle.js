@@ -85,7 +85,7 @@ const redirectMap = {
     
     if (zendeskId) {
       // Build the new Zendesk URL
-      const zendeskUrl = `https://superhuman.zendesk.com/hc/en-us/articles/${zendeskId}`;
+      const zendeskUrl = `https://help.superhuman.com/hc/en-us/articles/${zendeskId}`;
       
       // Redirect to the Zendesk article
       window.location.href = zendeskUrl;
