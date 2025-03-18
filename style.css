@@ -3671,6 +3671,7 @@ zd-autocomplete {
     z-index: 1000 !important;
     overflow-x: hidden !important;
     box-sizing: border-box !important;
+    top: 354px !important;
 }
 
 @media (max-width: 767px) {
@@ -3760,11 +3761,15 @@ zd-autocomplete-multibrand[aria-selected=true] {
 
 /* Title in multibrand results */
 zd-autocomplete-multibrand zd-autocomplete-title-multibrand {
-    color: #ffffff !important;
+    color: rgba(255, 255, 255, 0.7) !important;
     font-size: 16px !important;
     padding-bottom: 4px !important;
     font-family: "Adelle Sans" !important;
     text-wrap: auto !important;
+}
+
+zd-autocomplete-multibrand zd-autocomplete-title-multibrand:hover {
+    color: #ffffff !important;
 }
 
 /* Hide breadcrumbs in multibrand results */
@@ -4384,11 +4389,15 @@ form.search.search-full.sidebar-search input[type="search"] {
 
 /* Title in multibrand results */
 #sidebar zd-autocomplete-multibrand zd-autocomplete-title-multibrand {
-    color: #ffffff !important;
+    color: rgba(255, 255, 255, 0.7) !important;
     font-size: 16px !important;
     padding-bottom: 4px !important;
     font-family: "Adelle Sans" !important;
     white-space: normal !important;
+}
+
+#sidebar zd-autocomplete-multibrand zd-autocomplete-title-multibrand:hover {
+    color: #ffffff !important;
 }
 
 /* Hide breadcrumbs in multibrand results */
