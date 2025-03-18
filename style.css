@@ -3671,7 +3671,6 @@ zd-autocomplete {
     z-index: 1000 !important;
     overflow-x: hidden !important;
     box-sizing: border-box !important;
-    top: 354px !important;
 }
 
 @media (max-width: 767px) {
