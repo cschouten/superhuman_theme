@@ -74,9 +74,57 @@ const redirectMap = {
   };
   
   /**
-   * Handles the redirection from Help Scout articles to Zendesk articles
-   */
-  function handleHelpScoutRedirect() {
+ * Creates and shows the test banner for redirection
+ */
+function showTestRedirectBanner(currentPath, zendeskId) {
+    // Build the new Zendesk URL
+    const zendeskUrl = `https://help.superhuman.com/hc/en-us/articles/${zendeskId}`;
+    
+    // Create banner element
+    const banner = document.createElement('div');
+    banner.style.position = 'fixed';
+    banner.style.top = '0';
+    banner.style.left = '0';
+    banner.style.width = '100%';
+    banner.style.padding = '15px';
+    banner.style.backgroundColor = '#f8d7da';
+    banner.style.borderBottom = '1px solid #f5c6cb';
+    banner.style.color = '#721c24';
+    banner.style.zIndex = '9999';
+    banner.style.display = 'flex';
+    banner.style.justifyContent = 'space-between';
+    banner.style.alignItems = 'center';
+    
+    // Banner content
+    banner.innerHTML = `
+        <div>
+            <strong>Redirect Test:</strong> 
+            This Help Scout URL (${currentPath}) would redirect to 
+            <a href="${zendeskUrl}" target="_blank">${zendeskUrl}</a>
+        </div>
+        <div>
+            <button id="testRedirectBtn" style="margin-right: 10px;">Test Redirect</button>
+            <button id="closeTestBannerBtn">Close</button>
+        </div>
+    `;
+    
+    // Add to body
+    document.body.prepend(banner);
+    
+    // Add event listeners
+    document.getElementById('testRedirectBtn').addEventListener('click', function() {
+        window.location.href = zendeskUrl;
+    });
+    
+    document.getElementById('closeTestBannerBtn').addEventListener('click', function() {
+        banner.style.display = 'none';
+    });
+}
+
+/**
+ * Handles the testing of Help Scout to Zendesk redirects
+ */
+function testHelpScoutRedirect() {
     // Get the current path
     const currentPath = window.location.pathname;
     
@@ -84,30 +132,106 @@ const redirectMap = {
     const zendeskId = redirectMap[currentPath];
     
     if (zendeskId) {
-      // Build the new Zendesk URL
-      const zendeskUrl = `https://help.superhuman.com/hc/en-us/articles/${zendeskId}`;
-      
-      // Redirect to the Zendesk article
-      window.location.href = zendeskUrl;
+        // Show test banner instead of redirecting
+        showTestRedirectBanner(currentPath, zendeskId);
     }
-  }
-  
-  /**
-   * Initialize the redirect handler when the page loads
-   */
-  function initRedirects() {
+}
+
+/**
+ * Enable test mode with URL parameter
+ */
+function checkForTestMode() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.has('test_redirects');
+}
+
+/**
+ * Initialize the redirect handler when the page loads
+ */
+function initRedirects() {
     // Get the current hostname
     const hostname = window.location.hostname;
     
-    // Only run redirects on help.superhuman.com
-    if (hostname === 'help.superhuman.com') {
-      handleHelpScoutRedirect();
+    // Only run on help.superhuman.com
+    if (hostname === 'superhuman.zendesk.com' || hostname === 'help.superhuman.com') {
+        // Check if we're in test mode
+        if (checkForTestMode()) {
+            // Run in test mode
+            testHelpScoutRedirect();
+        } else {
+            // Normal mode - comment this out during testing
+            // handleHelpScoutRedirect();
+        }
     }
-  }
-  
-  // Run the initialization when the DOM is ready
-  if (document.readyState === 'loading') {
+}
+
+// Function to validate all redirects (for admin use)
+function validateAllRedirects() {
+    const results = document.createElement('div');
+    results.style.fontFamily = 'monospace';
+    results.style.whiteSpace = 'pre';
+    results.style.padding = '20px';
+    
+    let resultsText = "REDIRECT VALIDATION RESULTS:\n\n";
+    let errorCount = 0;
+    
+    // Check each redirect mapping
+    for (const [helpScoutPath, zendeskId] of Object.entries(redirectMap)) {
+        const zendeskUrl = `https://help.superhuman.com/hc/en-us/articles/${zendeskId}`;
+        
+        // You can't actually validate the existence here without backend API calls
+        // but you can at least check the format is correct
+        if (!zendeskId.match(/^\d+$/)) {
+            resultsText += `❌ ERROR: ${helpScoutPath} → Invalid Zendesk ID format: ${zendeskId}\n`;
+            errorCount++;
+        } else {
+            resultsText += `✓ OK: ${helpScoutPath} → ${zendeskUrl}\n`;
+        }
+    }
+    
+    resultsText += `\nValidation complete: ${Object.keys(redirectMap).length} redirects checked, ${errorCount} errors found.`;
+    results.textContent = resultsText;
+    
+    // Create a modal to display results
+    const modal = document.createElement('div');
+    modal.style.position = 'fixed';
+    modal.style.top = '0';
+    modal.style.left = '0';
+    modal.style.width = '100%';
+    modal.style.height = '100%';
+    modal.style.backgroundColor = 'rgba(0,0,0,0.7)';
+    modal.style.zIndex = '10000';
+    modal.style.display = 'flex';
+    modal.style.justifyContent = 'center';
+    modal.style.alignItems = 'center';
+    
+    const modalContent = document.createElement('div');
+    modalContent.style.backgroundColor = 'white';
+    modalContent.style.padding = '20px';
+    modalContent.style.borderRadius = '5px';
+    modalContent.style.maxWidth = '90%';
+    modalContent.style.maxHeight = '90%';
+    modalContent.style.overflow = 'auto';
+    
+    const closeBtn = document.createElement('button');
+    closeBtn.textContent = 'Close';
+    closeBtn.style.marginTop = '20px';
+    closeBtn.addEventListener('click', () => {
+        document.body.removeChild(modal);
+    });
+    
+    modalContent.appendChild(results);
+    modalContent.appendChild(closeBtn);
+    modal.appendChild(modalContent);
+    document.body.appendChild(modal);
+}
+
+// Add a global function that can be called from the console for testing
+window.validateHelpScoutRedirects = validateAllRedirects;
+
+// Run the initialization when the DOM is ready
+if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initRedirects);
-  } else {
+} else {
     initRedirects();
-  }
+}
