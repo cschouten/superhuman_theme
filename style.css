@@ -851,11 +851,11 @@ body .background {
     width: 100%;
     height: 100%;
     z-index: -1;
-    opacity: 0; /* Start hidden */
+    opacity: 0;
   }
 
 body .background.visible {
-    opacity: 1; /* Will be visible when class is added */
+    opacity: 1;
 }
 body .background .blue {
   width: 1845px;
@@ -1069,7 +1069,7 @@ footer p {
   border-radius: 6px;
   flex: 0.4;
   position: relative;
-  top: 0 !important; /* Adding this to override the default button styles */
+  top: 0 !important;
   padding: 0;
   border: none;
   text-shadow: none;
@@ -1300,7 +1300,7 @@ footer p {
   text-align: center;
   display: inline-block;
   width: 29%;
-  cursor: pointer; /* taking styles from help scout */
+  cursor: pointer;
   transition: background .15s;
   vertical-align: top;
   position: relative;
@@ -1313,11 +1313,7 @@ footer p {
   padding: 32px;
   font-family: "Adelle Sans";
 }
-/* @media (min-width: 768px) and (max-width: 1199px) {
-  #contentArea .category-list .category {
-    flex: 0 0 calc(50% - 16px);
-  }
-} */
+
 #contentArea .category-list .category::before {
   content: "";
   position: absolute;
@@ -2103,7 +2099,6 @@ footer p {
 .row-fluid [class*=span],.uneditable-input[class*=span],[class*=span] {
     float: none;
     display: block;
-    /* width: 100%; */
     margin-left: 0;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -2544,9 +2539,7 @@ a > * {
     padding-top: 8px;
   }
 }
-/* #main-content .contentWrapper #fullArticle .admin-edit {
-  text-shadow: none;
-} */
+
 #main-content .contentWrapper #fullArticle strong {
   color: #ffffff;
 }
@@ -2938,7 +2931,7 @@ a[title="Home"] {
 
 #sidebar form {
     position: relative;
-    margin: 0 0 40px 0;
+    margin: 0 0 30px 0;
 }
 
 #sidebar form .search-query {
@@ -3077,12 +3070,6 @@ a[title="Home"] {
 #fullArticle .title {
     margin: 0 30px .5em 0
 }
-
-/* #fullArticle .admin-edit {
-    color: #333;
-    display: inline-block;
-    margin-bottom: 22px
-} */
 
 #fullArticle .printArticle {
     position: absolute;
@@ -3585,7 +3572,7 @@ a[title="Home"] {
 
 /* Search icon styling */
 .search-icon {
-  display: none; /* Hide Zendesk's default search icon */
+  display: none;
 }
 
 /* Hide clear button by default */
@@ -3667,7 +3654,7 @@ zd-autocomplete {
     border-radius: 8px !important;
     box-shadow: none !important;
     font-family: "Adelle Sans" !important;
-    margin-top: 0 !important; /* Changed from 8px to 0 to make it touch the search bar */
+    margin-top: 0 !important;
     z-index: 1000 !important;
     overflow-x: hidden !important;
     box-sizing: border-box !important;
@@ -3675,9 +3662,9 @@ zd-autocomplete {
 
 @media (max-width: 767px) {
     zd-autocomplete {
-        left: 50% !important; /* Center horizontally */
-        transform: translateX(-50%) !important; /* Center adjustment */
-        width: calc(100vw - 30px) !important; /* Full viewport width minus margins */
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        width: calc(100vw - 30px) !important;
         max-width: 100% !important;
     }
 }
@@ -3743,7 +3730,7 @@ zd-autocomplete-multibrand {
     font-family: "Adelle Sans" !important;
     font-size: 16px !important;
     line-height: 24px !important;
-    border-bottom: none !important; /* Removed the border to eliminate lines between results */
+    border-bottom: none !important;
     color: rgba(255, 255, 255, 0.7) !important;
     padding: 16px 24px !important;
 }
@@ -3787,7 +3774,6 @@ zd-autocomplete-multibrand zd-autocomplete-breadcrumbs-multibrand {
     font-family: "Adelle Sans" !important;
     font-size: 16px !important;
     line-height: 24px !important;
-    /* padding: 16px 24px !important; */
     color: rgba(255, 255, 255, 0.7) !important;
 }
 
@@ -3865,7 +3851,7 @@ form.search.search-full {
     box-shadow: none !important;
     
     position: relative !important;
-    z-index: 2 !important; /* Ensure button content is above pseudo-elements */
+    z-index: 2 !important;
     cursor: pointer !important;
     
     -webkit-appearance: none !important;
@@ -3875,7 +3861,6 @@ form.search.search-full {
   /* Wrapper styling for pseudo-elements */
   .search-button-wrapper {
     position: relative !important;
-    /* z-index: 1 !important;  */
     display: inline-block !important;
     border-radius: 6px !important;
     background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), 
@@ -3892,7 +3877,7 @@ form.search.search-full {
     bottom: -2px !important;
     border-radius: 8px !important;
     background: linear-gradient(180deg, #FA75F8, #9E6EE5) !important;
-    z-index: -1 !important; /* Behind the wrapper */
+    z-index: -1 !important;
   }
   
   /* Hover effect using ::after */
@@ -3975,7 +3960,7 @@ form.search.search-full input[name="commit"] {
   visibility: hidden !important;
 }
 
-/* Show when wrapped - make sure these selectors match exactly what's in your DOM */
+/* Show when wrapped - make sure these selectors match exactly what's in DOM */
 div.search-button-wrapper input[type="submit"],
 div.search-button-wrapper input[name="commit"],
 div.search-button-wrapper-sidebar input[type="submit"],
@@ -4047,7 +4032,7 @@ form.search.search-full.search-wrapped input[name="commit"] {
     text-shadow: none;
   }
   
-  /* Hide Zendesk's search elements we don't need */
+  /* Hide Zendesk's unneeded search elements */
   #sidebar .search-results,
   #sidebar .search-results-column,
   #sidebar .search-box-separator {
@@ -4144,7 +4129,6 @@ form.search.search-full.search-wrapped input[name="commit"] {
   width: 100% !important;
   display: block !important;
   border-radius: 4px !important;
-  /* overflow: hidden !important; */
 }
 
 /* Ensure no other buttons are visible */
@@ -4162,19 +4146,17 @@ form.search.search-full.search-wrapped input[name="commit"] {
     background: transparent;
     border: none;
     color: rgba(255, 255, 255, 0.7);
-    /* padding: 0 10px; */
   }
 
   @media (max-width: 767px) {
     /* Mobile view */
     .search-button-wrapper-sidebar {
-      top: auto; /* Reset the top property */
-      bottom: 0; /* Or adjust as needed to align with the mobile search bar */
+      top: auto;
+      bottom: 0;
     }
     
-    /* You might also need to adjust the parent container */
     form.search.search-full.sidebar-search.sm {
-      position: relative; /* Ensure the absolute positioning works correctly */
+      position: relative;
     }
   }
   
@@ -4185,8 +4167,8 @@ form.search.search-full.search-wrapped input[name="commit"] {
     top: 0;
     width: 100%;
     height: 100%;
-    opacity: 0;  /* Make it invisible */
-    z-index: 2;  /* Ensure it's on top and clickable */
+    opacity: 0; 
+    z-index: 2; 
     cursor: pointer;
   }
   
@@ -4209,7 +4191,7 @@ form.search.search-full.search-wrapped input[name="commit"] {
 #sidebar .search-full .search-button-wrapper-sidebar input[type="submit"] {
   display: block !important;
   visibility: visible !important;
-  opacity: 1 !important; /* For the wrapper, but the input should stay at 0 opacity */
+  opacity: 1 !important;
   width: auto !important;
   height: auto !important;
   position: relative !important;
@@ -4218,7 +4200,7 @@ form.search.search-full.search-wrapped input[name="commit"] {
 
 /* Keep the input invisible but functional */
 #sidebar .search-full .search-button-wrapper-sidebar input[type="submit"] {
-  opacity: 0 !important; /* Keep input invisible */
+  opacity: 0 !important;
 }
 
 /* Override the hiding rules */
@@ -4226,13 +4208,13 @@ form.search.search-full.search-wrapped input[name="commit"] {
     display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
-    width: 16px !important; /* Set explicit width */
-    height: 40px !important; /* Set explicit height */
+    width: 16px !important;
+    height: 40px !important;
     position: absolute !important;
     right: 12px !important;
     top: 0 !important;
     left: auto !important;
-    z-index: 10 !important; /* Ensure it's above other elements */
+    z-index: 10 !important;
   }
   
   /* Keep the input invisible but functional */
@@ -4299,15 +4281,15 @@ form.search.search-full.sidebar-search input[type="search"] {
     font-family: "Adelle Sans" !important;
     margin-top: 0 !important;
     z-index: 1000 !important;
-    width: 100% !important; /* Take full width of parent */
-    max-width: 100% !important; /* Ensure it doesn't exceed parent width */
-    left: 0 !important; /* Align with left edge */
-    right: 0 !important; /* Stretch to right edge */
+    width: 100% !important;
+    max-width: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
     overflow-x: hidden !important;
     box-sizing: border-box !important;
-    transform: none !important; /* Remove any transforms */
+    transform: none !important;
     position: absolute !important;
-    top: 42px !important; /* Position below search input */
+    top: 42px !important;
 }
 
 /* Hide the header */
@@ -4415,7 +4397,7 @@ form.search.search-full.sidebar-search input[type="search"] {
 }
 
 .pagination a, .pagination span {
-    color: #7f5af0; /* Purple color like in your screenshot */
+    color: #7f5af0;
     padding: 0 5px;
     text-decoration: none;
 }
@@ -4467,7 +4449,7 @@ form.search.search-full.sidebar-search input[type="search"] {
   }
   
   .custom-pagination span.current {
-    font-weight: 600; /* Make current page number bold - using 600 (semibold) since you have that weight defined */
+    font-weight: 600;
   }
   
   .custom-pagination .separator {
