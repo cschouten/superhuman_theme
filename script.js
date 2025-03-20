@@ -781,10 +781,7 @@ function fixNextPageButtons() {
   function initDarkTheme() {
     // Prevent this function from running multiple times
     // by redefining it as an empty function after first execution
-    initDarkTheme = function() {
-      // Do nothing on subsequent calls
-      console.log("Dark theme already initialized");
-    };
+    initDarkTheme = function() {};
   
     // PHASE 1: Handle critical UI updates first
     // ----------------------------------------
